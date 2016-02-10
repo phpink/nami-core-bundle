@@ -1,0 +1,20 @@
+# Registration
+emails:
+    registration:
+        subject: Benvenuto %username%!
+        message: |
+            Ciao %username%!
+
+            Per terminare la validazione del tuo account visita %confirmationUrl%
+
+            Saluti,
+            il Team.
+    resetting:
+        subject: Password reset
+        message: |
+            Ciao %username%!
+
+            Per resettare la password visita %confirmationUrl%
+
+            Saluti,
+            il Team.

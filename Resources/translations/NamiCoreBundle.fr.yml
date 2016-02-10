@@ -1,0 +1,21 @@
+# Registration
+emails:
+    registration:
+        subject: Bienvenue %username% !
+        message: |
+            Bonjour %username% !
+
+            Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%
+
+            Cordialement,
+            L'équipe.
+    resetting:
+        subject: Réinitialisation de votre mot de passe
+        message: |
+            Bonjour %username% !
+
+            Pour réinitialiser votre mot de passe, merci de vous rendre sur %confirmationUrl%
+
+            Cordialement,
+            L'équipe.
+

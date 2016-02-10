@@ -1,0 +1,12 @@
+{% trans_default_domain 'NamiCoreBundle' %}
+{% block subject %}
+    {% autoescape false %}
+    {{ 'emails.registration.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {% endautoescape %}
+{% endblock %}
+{% block body_text %}
+    {% autoescape false %}
+    {{ 'emails.registration.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {% endautoescape %}
+{% endblock %}
+{% block body_html %}{% endblock %}

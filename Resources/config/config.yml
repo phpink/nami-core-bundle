@@ -1,0 +1,58 @@
+# NOTE: Some configuration is set in DependencyInjection/Configuration.php
+
+# Twig
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+# Liip Imagine Configuration
+liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
+    filter_sets:
+        cache: ~
+        preview:
+            quality: 75
+            filters:
+                thumbnail: { size: [125, 125], mode: outbound, allow_upscale: true }
+        category:
+            quality: 75
+            filters:
+                thumbnail: { size: [360, 329], mode: outbound, allow_upscale: true }
+
+# NOTE: Some configuration is set in DependencyInjection/Configuration.php
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %nami_api.mailer_transport%
+    host: %nami_api.mailer_host%
+    port: %nami_api.mailer_port%
+    encryption: %nami_api.mailer_encryption%
+    username: %nami_api.mailer_username%
+    password: %nami_api.mailer_password%
+    spool:
+        type: file
+        path: %kernel.root_dir%/spool
+
+framework:
+    translator: { fallback: en }
+
+# HTTP Cache configuration
+# the controls section values are used in a call to Response::setCache();
+#fos_http_cache:
+#    cache_control:
+#        rules:
+#            -
+#                match:
+#                    path: ^/brands
+#                    methods: [GET, HEAD]
+#                headers:
+#                    cache_control: { public: true, max_age: 15, s_maxage: 30 }
+#                    last_modified: "-1 hour"
+#                    vary: [Accept-Encoding, Accept-Language]
+# Twig Configuration
+twig:
+    paths:
+        "%kernel.root_dir%/../plugins/PhpInkPlugin": PhpInkPlugin

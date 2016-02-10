@@ -1,0 +1,57 @@
+{
+    "name": "phpink/nami-core-bundle",
+    "description": "Nami CMS - CORE Bundle",
+    "type": "symfony-bundle",
+    "keywords": ["Nami", "CMS", "REST", "API"],
+    "homepage": "http://nami.php.ink",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Geoffroy Pierret",
+            "email": "geoffroy@php.ink"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/symfony": "2.7.*",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "sensio/distribution-bundle": "~4.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "twig/extensions": "~1.2",
+
+        "doctrine/orm": "^2.4.8",
+        "doctrine/doctrine-bundle": "~1.4",
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+        "stof/doctrine-extensions-bundle": "1.2.*@dev",
+
+        "jms/serializer-bundle": "^1.0",
+        "friendsofsymfony/rest-bundle": "^1.0",
+        "nelmio/api-doc-bundle": "^2.4",
+        "friendsofsymfony/http-cache-bundle": "^1.0",
+        "willdurand/hateoas-bundle": "^1.0",
+        "liip/imagine-bundle": "~1.0",
+        "lexik/jwt-authentication-bundle": "2.0.*@dev",
+        "gfreeau/get-jwt-bundle": "2.0.*@dev"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "~2.3",
+        "symfony/phpunit-bridge": "2.7.*",
+        "liip/functional-test-bundle": "1.4.x"
+    },
+    "suggest": {
+        "phpink/nami-front-bundle": "For the front section of your application",
+        "symfony/nami-admin-bundle": "For the back section of your application"
+    },
+    "autoload": {
+        "psr-4": { "PhpInk\\Nami\\CoreBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}

@@ -1,0 +1,20 @@
+# Registration
+emails:
+    registration:
+        subject: Welcome %username%!
+        message: |
+            Hello %username%!
+
+            To finish activating your account - please visit %confirmationUrl%
+
+            Regards,
+            the Team.
+    resetting:
+        subject: Reset Password
+        message: |
+            Hello %username%!
+
+            To reset your password - please visit %confirmationUrl%
+
+            Regards,
+            the Team.

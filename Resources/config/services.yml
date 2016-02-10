@@ -1,0 +1,95 @@
+parameters:
+  nami_api.resetting.email.template: NamiCoreBundle:Emails:resetting.txt.twig
+  nami_api.registration.confirmation.template: NamiCoreBundle:Emails:registration.txt.twig
+
+services:
+    # Controller listener
+    nami_core.controller_listener:
+        class: PhpInk\Nami\CoreBundle\EventListener\ControllerListener
+        factory_service: twig.extension.nami_api
+        arguments:
+            host: "%host%"
+            appDir: "%kernel.root_dir%"
+            env: "%kernel.environment%"
+            uploadDir: %nami_core.upload_dir%
+            pluginPath: %nami_core.plugin_path%
+            extension: @nami_api.twig_api_extensions
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    nami_core.user_provider:
+        class: PhpInk\Nami\CoreBundle\Security\UserProvider
+        arguments: [""]
+
+    nami_core.references_preserialize_subscriber:
+        class: PhpInk\Nami\CoreBundle\EventListener\RefPreSerializeSubscriber
+        arguments: [""]
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    nami_core.image_preserialize_subscriber:
+        class: PhpInk\Nami\CoreBundle\EventListener\ImagePreSerializeSubscriber
+        arguments: ["@liip_imagine.cache.manager", "%nami_core.upload_dir%"]
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    nami_core.plugin_registry:
+        class: PhpInk\Nami\CoreBundle\Plugin\Registry
+        arguments: ["%nami_core.plugin_path%"]
+
+    nami_core.plugin_routing_loader:
+        class: PhpInk\Nami\CoreBundle\Plugin\RoutingLoader
+        arguments: ["%nami_core.plugin_path%"]
+        tags:
+            - { name: routing.loader }
+
+    # FOS Rest body listener
+    # Removes extra params from the request for FormTypes
+    nami_api.json_decoder:
+      class: PhpInk\Nami\CoreBundle\Decoder\JsonDecoder
+
+    # Twig extension
+    nami_api.twig_api_extensions:
+      class: PhpInk\Nami\CoreBundle\Twig\ApiExtension
+      arguments: [@twig.loader]
+      tags:
+        - { name: twig.extension  }
+
+    # JWT listeners -> set user last_login,ip / return data on login
+    nami_api.authentication_success_listener:
+        class: PhpInk\Nami\CoreBundle\EventListener\AuthenticationSuccessListener
+        arguments: ["@jms_serializer"]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    nami_api.authentication_failure_listener:
+        class: PhpInk\Nami\CoreBundle\EventListener\AuthenticationFailureListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
+
+    nami_api.jwt_decoded_listener:
+        class: PhpInk\Nami\CoreBundle\EventListener\JWTDecodedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecodedResponse }
+
+    # Token generator for user password reset
+    nami_api.util.token_generator:
+        class: PhpInk\Nami\CoreBundle\Util\TokenGenerator
+        arguments: [@logger]
+
+    # Mailer
+    nami_api.mailer:
+        class: PhpInk\Nami\CoreBundle\Mailer\TwigSwiftMailer
+        arguments:
+            mailer: "@mailer"
+            templating: "@twig"
+            parameters:
+                url:
+                    confirmation: %nami_api.front_url_confirmation%
+                    resetting: %nami_api.front_url_resetting%
+                template:
+                    confirmation: %nami_api.registration.confirmation.template%
+                    resetting: %nami_api.resetting.email.template%
+                from_email:
+                    confirmation: %nami_api.mailer_from%
+                    resetting: %nami_api.mailer_from%

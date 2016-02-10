@@ -1,0 +1,20 @@
+# Registration
+emails:
+    registration:
+        subject: Willkommen %username%!
+        message: |
+            Hallo %username%!
+
+            Besuchen Sie bitte folgende Seite, um Ihr Benutzerkonto zu bestätigen: %confirmationUrl%
+
+            Mit besten Grüßen,
+            das Team.
+    resetting:
+        subject: Passwort zurücksetzen
+        message: |
+            Hallo %username%!
+
+            Besuchen Sie bitte folgende Seite, um Ihr Passwort zurückzusetzen: %confirmationUrl%
+
+            Mit besten Grüßen,
+            das Team.
