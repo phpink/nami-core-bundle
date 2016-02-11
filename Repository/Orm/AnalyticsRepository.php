@@ -2,7 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
-use PhpInk\Nami\CoreBundle\Repository\OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
 
 class AnalyticsRepository extends OrmRepository
 {

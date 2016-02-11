@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpInk\Nami\CoreBundle\Repository;
+namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
 use Symfony\Component\Validator\Constraints\DateTimeValidator;
 use Symfony\Component\Validator\Constraints\DateValidator;
@@ -10,15 +10,17 @@ use Doctrine\ODM\MongoDB\UnitOfWork;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
 use Doctrine\ORM\NoResultException;
-use PhpInk\Nami\CoreBundle\Model\Odm\Core\Document;
-use PhpInk\Nami\CoreBundle\Model\Odm\User;
+use PhpInk\Nami\CoreBundle\Repository\RepositoryInterface;
+use PhpInk\Nami\CoreBundle\Repository\Core\RepositoryTrait;
+use PhpInk\Nami\CoreBundle\Model\ModelInterface;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
  * Base repository with utility methods
  *
  * @package PhpInk\Nami\CoreBundle\Repository\Core
  */
-abstract class OdmRepository extends DocumentRepository
+abstract class AbstractRepository extends DocumentRepository implements RepositoryInterface
 {
     use RepositoryTrait;
 
@@ -44,7 +46,7 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Save/Persist an entity instance
      *
-     * @param Document|int $entityOrId The ID or document to remove.
+     * @param ModelInterface|int $entityOrId The ID or document to remove.
      *
      * @return void
      */
@@ -65,11 +67,11 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Save/Persist a entity instance
      *
-     * @param Document $entity The document to save.
+     * @param ModelInterface $entity The document to save.
      *
-     * @return Document
+     * @return ModelInterface
      */
-    public function saveModel(Document $entity)
+    public function saveModel(ModelInterface $entity)
     {
         $em = $this->getDocumentManager();
         $em->persist($entity);
@@ -81,12 +83,12 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Build the items query (join, filters)
      *
-     * @param QueryBuilder $query The doctrine query builder.
-     * @param User         $user  The user making the request.
+     * @param mixed         $query The doctrine query builder.
+     * @param UserInterface $user  The user making the request.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
-    public function buildItemsQuery(QueryBuilder $query, User $user = null)
+    public function buildItemsQuery($query, UserInterface $user = null)
     {
         return $query;
     }
@@ -95,15 +97,15 @@ abstract class OdmRepository extends DocumentRepository
      * Applies the correct addOrderBy to a query
      * Search for ASC/DESC order with '-' Prefix
      *
-     * @param QueryBuilder $query         The query to sort field on.
-     * @param string       $orderByField  The field name to sort.
-     * @param string       $orderByValue  The sort value : 0,1 for ASC,DESC.
-     * @param array        $allowedFields The checked fields.
+     * @param mixed  $query         The query to sort field on.
+     * @param string $orderByField  The field name to sort.
+     * @param string $orderByValue  The sort value : 0,1 for ASC,DESC.
+     * @param array  $allowedFields The checked fields.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
     public function addOrderByClause(
-        QueryBuilder $query, $orderByField, $orderByValue = null, $allowedFields = null
+        $query, $orderByField, $orderByValue = null, $allowedFields = null
     ) {
         $allowedFields = (!is_array($allowedFields)) ?
             $this->orderByFields : $allowedFields;
@@ -127,15 +129,15 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Adds a where clause to a query
      *
-     * @param QueryBuilder $query      The doctrine query builder.
-     * @param string       $field      The field name for the clause.
-     * @param mixed        $value      The field value for the clause.
-     * @param string       $expression The clause expression.
+     * @param mixed  $query      The doctrine query builder.
+     * @param string $field      The field name for the clause.
+     * @param mixed  $value      The field value for the clause.
+     * @param string $expression The clause expression.
      *
      * @return QueryBuilder
      */
     public function addWhereClause(
-        QueryBuilder $query, $field, $value = null, $expression = 'eq'
+        $query, $field, $value = null, $expression = 'eq'
     ) {
         $datePattern = DateValidator::PATTERN;
         $dateTimePattern = DateTimeValidator::PATTERN;
@@ -191,13 +193,13 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Paginate a query
      *
-     * @param QueryBuilder $query  The doctrine query builder.
-     * @param int          $offset The pagination offset.
-     * @param int          $limit  The pagination limit.
+     * @param mixed $query  The doctrine query builder.
+     * @param int   $offset The pagination offset.
+     * @param int   $limit  The pagination limit.
      *
-     * @return QueryBuilder
+     * @return mixed Paginated query
      */
-    public function paginateQuery(QueryBuilder $query, $offset = null, $limit = null)
+    public function paginateQuery($query, $offset = null, $limit = null)
     {
         if (is_null($offset)) {
             $offset = 0;
@@ -213,12 +215,12 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Item get_one returning an Document checking its accessibility
      *
-     * @param integer $id   The document ID.
-     * @param User    $user The user making the request.
+     * @param string    $id   The document ID.
+     * @param UserInterface $user The user making the request.
      *
-     * @return Document
+     * @return ModelInterface
      */
-    public function getItem($id, User $user = null)
+    public function getItem($id, UserInterface $user = null)
     {
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query, $user);
@@ -232,13 +234,11 @@ abstract class OdmRepository extends DocumentRepository
      * Fetch a single AbstractQuery result
      * Catches NoResultException
      *
-     * @param QueryBuilder $query The doctrine query builder.
+     * @param $query The doctrine query builder.
      *
-     * @return Document|bool
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return ModelInterface|bool
      */
-    public function fetchSingleResult(QueryBuilder $query)
+    public function fetchSingleResult($query)
     {
         $entity = false;
         try {
@@ -253,11 +253,11 @@ abstract class OdmRepository extends DocumentRepository
     /**
      * Count the total get_all items
      *
-     * @param User $user The user making the request.
+     * @param UserInterface $user The user making the request.
      *
      * @return int
      */
-    public function countItems(User $user = null)
+    public function countItems(UserInterface $user = null)
     {
         $countQuery = $this
             ->createQueryBuilder('this')

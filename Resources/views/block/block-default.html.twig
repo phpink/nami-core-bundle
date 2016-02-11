@@ -1,0 +1,8 @@
+<div class="block clearfix">
+    {% if block.getTitle() %}<h2>{{ block.getTitle() }}</h2>{% endif %}
+    {{ block.getContent() | raw }}
+
+    {% if block.hasImages() %}
+        <img class="img-responsive" src="{{ block.getFirstImageUrl() }}" alt="{{ block.getFirstImageName() }}">
+    {% endif %}
+</div>

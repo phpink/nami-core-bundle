@@ -2,16 +2,16 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
-use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
-use PhpInk\Nami\CoreBundle\Repository\OrmRepository;
-use PhpInk\Nami\CoreBundle\Model\Orm\User;
+use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\UserRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
  * Class UserRepository
  *
  * @package PhpInk\Nami\CoreBundle\Repository\Orm
  */
-class UserRepository extends OrmRepository
+class UserRepository extends OrmRepository implements UserRepositoryInterface
 {
     protected $orderByFields = array(
         'username' => 'this.username',
@@ -33,7 +33,7 @@ class UserRepository extends OrmRepository
      * @param string  $usernameOrEmail The email or username of the user.
      * @param boolean $filterActive    Retrieve only active users or all users.
      *
-     * @return User
+     * @return UserInterface
      */
     public function findUserByUsernameOrEmail(
         $usernameOrEmail, $filterActive = false
@@ -57,7 +57,7 @@ class UserRepository extends OrmRepository
      *
      * @param string $token The confirmation token of the user.
      *
-     * @return User
+     * @return UserInterface
      */
     public function findUserByConfirmationToken($token)
     {
@@ -75,7 +75,7 @@ class UserRepository extends OrmRepository
      *
      * @param int $id The id of the user.
      *
-     * @return User
+     * @return UserInterface
      */
     public function findUserById($id)
     {
@@ -95,7 +95,7 @@ class UserRepository extends OrmRepository
      * @param array $orderBy
      * @param array $filterBy
      *
-     * @return QueryBuilder
+     * @return object
      */
     public function getLoginAnalytics($offset = null, $limit = null, $orderBy = array(), $filterBy = array())
     {

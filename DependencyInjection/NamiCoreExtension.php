@@ -2,17 +2,16 @@
 
 namespace PhpInk\Nami\CoreBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
-use PhpInk\Nami\CoreBundle\Util\ContainerAwareTrait;
-use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
+use PhpInk\Nami\CoreBundle\Util\ContainerBuilderAwareTrait;
 
 class NamiCoreExtension extends Extension implements PrependExtensionInterface
 {
-    use ContainerAwareTrait;
+    use ContainerBuilderAwareTrait;
 
     /**
      * Required bundle dependencies
@@ -51,15 +50,8 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
 
         $container->setParameter(
             'jms_serializer.camel_case_naming_strategy.class',
-            'JMS\Serializer\PhpInkng\IdenticalPropertyPhpInkngStrategy'
+            'JMS\Serializer\Naming\IdenticalPropertyNamingStrategy'
         );
-
-        // Register plugins
-//        $pluginRegistry = PluginRegistry::getInstance(
-//            $container->getParameter('nami_core.plugin_path')
-//        );
-//        $pluginRegistry->scanPlugins();
-//        $pluginRegistry->registerConfig($container);
     }
 
     /**
@@ -170,6 +162,22 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 )
             )
         ));
+
+        /*
+         * Lexik JWT Configuration
+         */
+        $this->container->prependExtensionConfig('swiftmailer', [
+            'transport' =>  '%nami_api.mailer_transport%',
+            'host' =>       '%nami_api.mailer_host%',
+            'port' =>       '%nami_api.mailer_port%',
+            'encryption' => '%nami_api.mailer_encryption%',
+            'username' =>   '%nami_api.mailer_username%',
+            'password' =>   '%nami_api.mailer_password%',
+            'spool' => [
+                'type' => 'file',
+                'path' => '%kernel.root_dir%/spool',
+            ],
+        ]);
     }
 
     /**
@@ -177,22 +185,27 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
      */
     private function apiConfiguration()
     {
-
         /*
          * Symfony/Twig Configuration
          */
         $this->container->prependExtensionConfig('framework', array(
+            'translator' => array(
+                'fallback' => '%nami_core.locale%',
+            ),
+            'secret' => '%secret%',
             'form' => array(
                 'csrf_protection' => false,
+            ),
+            'validation' => array(
+                'enable_annotations' => true,
             ),
             'templating' => array(
                 'engines' => ['twig']
             ),
             'default_locale' => '%nami_core.locale%',
+            'trusted_proxies' => [],
             'session' => false,
             'fragments' => [],
-            'trusted_proxies' => [],
-            //'http_method_override' => false,
         ));
         $this->container->prependExtensionConfig('sensio_framework_extra', array(
             'view' => array(
@@ -200,7 +213,12 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
             )
         ));
         $this->container->prependExtensionConfig('twig', array(
-            'exception_controller' => 'FOS\RestBundle\Controller\ExceptionController::showAction'
+            'debug' => '%kernel.debug%',
+            'strict_variables' => '%kernel.debug%',
+            'exception_controller' => 'FOS\RestBundle\Controller\ExceptionController::showAction',
+            'paths' => [
+                '%kernel.root_dir%/../plugins/NamiPlugin' => 'NamiPlugin',
+            ]
         ));
 
         /*
@@ -279,6 +297,35 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
             'token_ttl' =>           '%nami_api.token_ttl%',
             'encoder_service' =>     'lexik_jwt_authentication.jwt_encoder',
             'user_identity_field' => 'username',
+        ]);
+
+        /*
+         * Liip Imagine Configuration
+         */
+        $this->container->prependExtensionConfig('liip_imagine', [
+            'resolvers' => [
+                'default' => [
+                    'web_path' => [],
+                ],
+            ],
+            'filter_sets' => [
+                'cache' => [],
+                'preview' => [
+                    'quality' => 75,
+                    'filters' => [
+                        'thumbnail' => [
+                            'size' => [125, 125],
+                            'mode' => 'outbound',
+                            'allow_upscale' => true,
+                        ],
+                        'category' => [
+                            'size' => [360, 329],
+                            'mode' => 'outbound',
+                            'allow_upscale' => true,
+                        ],
+                    ],
+                ],
+            ],
         ]);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpInk\Nami\CoreBundle\Repository;
+namespace PhpInk\Nami\CoreBundle\Repository\Core;
 
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 use PhpInk\Nami\CoreBundle\Util\PaginatedCollection;

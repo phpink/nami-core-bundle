@@ -4,26 +4,25 @@ parameters:
 
 services:
     # Controller listener
-    nami_core.controller_listener:
+    nami_core.listener:
         class: PhpInk\Nami\CoreBundle\EventListener\ControllerListener
-        factory_service: twig.extension.nami_api
         arguments:
             host: "%host%"
             appDir: "%kernel.root_dir%"
             env: "%kernel.environment%"
             uploadDir: %nami_core.upload_dir%
             pluginPath: %nami_core.plugin_path%
-            extension: @nami_api.twig_api_extensions
+            extension: @nami_core.twig_extensions
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     nami_core.user_provider:
         class: PhpInk\Nami\CoreBundle\Security\UserProvider
-        arguments: [""]
+        arguments: ["Requires @security.password_encoderby @security.encoder_factory  when Symfony < 2.6"]
 
     nami_core.references_preserialize_subscriber:
         class: PhpInk\Nami\CoreBundle\EventListener\RefPreSerializeSubscriber
-        arguments: [""]
+        arguments: ["Requires @security.token_storage by @security.context when Symfony < 2.6"]
         tags:
             - { name: jms_serializer.event_subscriber }
 
@@ -49,8 +48,8 @@ services:
       class: PhpInk\Nami\CoreBundle\Decoder\JsonDecoder
 
     # Twig extension
-    nami_api.twig_api_extensions:
-      class: PhpInk\Nami\CoreBundle\Twig\ApiExtension
+    nami_core.twig_extensions:
+      class: PhpInk\Nami\CoreBundle\Twig\TwigExtension
       arguments: [@twig.loader]
       tags:
         - { name: twig.extension  }

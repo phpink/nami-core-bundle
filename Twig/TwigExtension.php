@@ -4,7 +4,7 @@ namespace PhpInk\Nami\CoreBundle\Twig;
 
 use CG\Core\ClassUtils;
 
-class ApiExtension extends \Twig_Extension
+class TwigExtension extends \Twig_Extension
 {
     protected $loader;
     protected $controller;
@@ -26,7 +26,13 @@ class ApiExtension extends \Twig_Extension
     {
         return array(
             'code' => new \Twig_Function_Method($this, 'getCode', array('is_safe' => array('html'))),
+            'include_template' => new \Twig_Function_Method($this, 'includeTemplate', array('is_safe'=> array('all'))),
         );
+    }
+
+    public function includeTemplate($template)
+    {
+        return $this->loader->getSource($template);
     }
 
     public function getCode($template)

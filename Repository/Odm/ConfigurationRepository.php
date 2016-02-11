@@ -2,9 +2,10 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
-use PhpInk\Nami\CoreBundle\Repository\OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Odm\AbstractRepository as OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\ConfigurationRepositoryInterface;
 
-class ConfigurationRepository extends OdmRepository
+class ConfigurationRepository extends OdmRepository implements ConfigurationRepositoryInterface
 {
     protected $orderByFields = array(
         'id' => 'id',
@@ -19,6 +20,7 @@ class ConfigurationRepository extends OdmRepository
      */
     public function getValues($names)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this');
         $query->select('name', 'value')
             ->field('name')->in($names)

@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use PhpInk\Nami\CoreBundle\Util\Globals;
-use PhpInk\Nami\CoreBundle\Twig\ApiExtension;
+use PhpInk\Nami\CoreBundle\Twig\TwigExtension;
 
 class ControllerListener
 {
@@ -26,7 +26,7 @@ class ControllerListener
      */
     protected $em;
 
-    public function __construct($host, $appDir, $env, $uploadDir, $pluginPath, ApiExtension $extension)
+    public function __construct($host, $appDir, $env, $uploadDir, $pluginPath, TwigExtension $extension)
     {
         $this->host = $host;
         $this->applicationDir = $appDir;

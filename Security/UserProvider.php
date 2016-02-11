@@ -175,9 +175,9 @@ class UserProvider implements UserProviderInterface
 
     protected function getEncodedPassword(UserInterface $user, $password)
     {
-        return ($this->encoderFactory instanceof PasswordEncoderInterface) ?
-            $this->encoderFactory->encodePassword($password, $user->getSalt()) :
-            $this->encoderFactory->getEncoder($user)->encodePassword($password, $user->getSalt());
+        return (!$this->encoder instanceof PasswordEncoderInterface) ?
+            $this->encoder->encodePassword($user, $password, $user->getSalt()) :
+            $this->encoder->getEncoder($user)->encodePassword($password, $user->getSalt());
     }
 
     /**
@@ -187,7 +187,7 @@ class UserProvider implements UserProviderInterface
     {
         if (0 !== strlen($password = $user->getPlainPassword())) {
             $user->setPassword(
-                $this->encoder->getEncodedPassword($user, $password)
+                $this->getEncodedPassword($user, $password)
             );
             $user->eraseCredentials();
         }

@@ -10,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 class Registry
 {
-    const PLUGIN_NAMESPACE = 'PhpInkPlugin';
+    const PLUGIN_NAMESPACE = 'NamiPlugin';
     const CONFIG_FILENAME = 'config.yml';
     const ROUTES_FILENAME = 'routing.yml';
     const BLOCK_PLUGIN_FILENAME = 'BlockPlugin';
@@ -121,10 +121,11 @@ class Registry
                 );
                 foreach ($pluginFiles as $pluginFile) {
                     $filename = $pluginFile->getFilename();
+                    // Search for config files
                     if ($filename === self::CONFIG_FILENAME) {
                         $this->plugins[$key][self::CONFIG_FILENAME] =
                             $pluginFile->getPath();
-
+                    // Search for routing files
                     } else if ($filename === self::ROUTES_FILENAME) {
                         $this->plugins[$key][self::ROUTES_FILENAME] =
                             $pluginFile->getPath();
@@ -146,21 +147,6 @@ class Registry
                     new FileLocator($plugin[self::CONFIG_FILENAME])
                 );
                 $loader->load(self::CONFIG_FILENAME);
-            }
-        }
-    }
-
-    public function registerRoutes()
-    {
-        foreach ($this->plugins as $plugin) {
-            if (array_key_exists(self::ROUTES_FILENAME, $plugin)) {
-
-                $loader = new \Symfony\Component\Routing\Loader\YamlFileLoader(
-                    new FileLocator($plugin[self::ROUTES_FILENAME])
-                );
-                $routes = new RouteCollection();
-                $collection = $loader->load(self::ROUTES_FILENAME);
-                $routes->addCollection($collection);
             }
         }
     }

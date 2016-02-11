@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="fr" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{{ page.getTitle() }}</title>
+    <meta name="description" content="{{ page.getMetaDescription() }}">
+    <meta name="keywords" content="{{ page.getMetaKeywords() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="header">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            {% include 'NamiFrontBundle:partials:menu.html.twig' %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% for block in page.getBlocks() %}
+        {%  if block.getType() == 'default' %}
+            {% include 'NamiFrontBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
+        {% else %}
+            {{ block.getPlugin().getOutput()|raw }}
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="footer">
+    <div class="container">
+        <p class="pull-right"><span class="glyphicon glyphicon-pencil"></span> Nami CMS - <a href="http://www.php.ink" target="_blank">Php Ink</a></p>
+    </div>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

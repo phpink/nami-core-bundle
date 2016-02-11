@@ -2,11 +2,11 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
-use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
-use PhpInk\Nami\CoreBundle\Repository\OdmRepository;
-use PhpInk\Nami\CoreBundle\Model\User;
+use PhpInk\Nami\CoreBundle\Repository\Odm\AbstractRepository as OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\UserRepositoryInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserRepository extends OdmRepository
+class UserRepository extends OdmRepository implements UserRepositoryInterface
 {
     protected $orderByFields = array(
         'username' => 'username',
@@ -27,10 +27,11 @@ class UserRepository extends OdmRepository
      *
      * @param string  $usernameOrEmail
      * @param boolean $filterActive
-     * @return User
+     * @return UserInterface
      */
     public function findUserByUsernameOrEmail($usernameOrEmail, $filterActive = false)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query);
         $query->field('username')->equals($usernameOrEmail);
@@ -56,10 +57,11 @@ class UserRepository extends OdmRepository
      *
      * @param string $token
      *
-     * @return User
+     * @return UserInterface
      */
     public function findUserByConfirmationToken($token)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query);
         $query
@@ -74,10 +76,11 @@ class UserRepository extends OdmRepository
      *
      * @param int $id
      *
-     * @return User
+     * @return UserInterface
      */
     public function findUserById($id)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query);
         $query
@@ -94,7 +97,7 @@ class UserRepository extends OdmRepository
      * @param array $orderBy
      * @param array $filterBy
      *
-     * @return QueryBuilder
+     * @return object
      */
     public function getLoginAnalytics($offset = null, $limit = null, $orderBy = array(), $filterBy = array())
     {

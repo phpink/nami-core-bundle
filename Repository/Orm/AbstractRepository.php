@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpInk\Nami\CoreBundle\Repository;
+namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
 use Symfony\Component\Validator\Constraints\DateTimeValidator;
 use Symfony\Component\Validator\Constraints\DateValidator;
@@ -8,10 +8,11 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\NoResultException;
-use PhpInk\Nami\CoreBundle\Model\Orm\Core\Entity;
-use PhpInk\Nami\CoreBundle\Model\Orm\User;
+use PhpInk\Nami\CoreBundle\Repository\RepositoryInterface;
+use PhpInk\Nami\CoreBundle\Repository\Core\RepositoryTrait;
+use PhpInk\Nami\CoreBundle\Model\ModelInterface;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
  * Base repository with utility methods
@@ -19,7 +20,7 @@ use PhpInk\Nami\CoreBundle\Model\Orm\User;
  * @package PhpInk\Nami\CoreBundle\Repository\Core
  * @author  Geoffroy Pierret <geofrwa@yandex.com>
  */
-abstract class OrmRepository extends EntityRepository
+abstract class AbstractRepository extends EntityRepository implements RepositoryInterface
 {
     use RepositoryTrait;
 
@@ -43,14 +44,14 @@ abstract class OrmRepository extends EntityRepository
     /**
      * Save/Persist a entity instance
      *
-     * @param Entity|int $entityOrId The entity or its id.
+     * @param ModelInterface|int $entityOrId The entity or its id.
      *
      * @return void
      */
     public function removeModel($entityOrId)
     {
         $em = $this->getEntityManager();
-        // If the param is not an Entity but an id
+        // If the param is not an ModelInterface but an id
         if (is_int($entityOrId)) {
             // Retrieves it
             $entityOrId = $this->getModelById($entityOrId);
@@ -64,11 +65,11 @@ abstract class OrmRepository extends EntityRepository
     /**
      * Save/Persist a entity instance
      *
-     * @param Entity $entity The entity to save.
+     * @param ModelInterface $entity The entity to save.
      *
-     * @return Entity
+     * @return ModelInterface
      */
-    public function saveModel(Entity $entity)
+    public function saveModel(ModelInterface $entity)
     {
         $em = $this->getEntityManager();
         $em->persist($entity);
@@ -78,14 +79,14 @@ abstract class OrmRepository extends EntityRepository
     }
 
     /**
-     * Build the items query (join, filters)
+s     * Build the items query (join, filters)
      *
-     * @param QueryBuilder $query The doctrine query builder.
-     * @param User         $user  The user who made the request.
+     * @param mixed         $query The doctrine query builder.
+     * @param UserInterface $user  The user who made the request.
      *
      * @return QueryBuilder
      */
-    public function buildItemsQuery(QueryBuilder $query, User $user = null)
+    public function buildItemsQuery($query, UserInterface $user = null)
     {
         return $query;
     }
@@ -94,15 +95,15 @@ abstract class OrmRepository extends EntityRepository
      * Applies the correct addOrderBy to a query
      * Search for ASC/DESC order with '-' Prefix
      *
-     * @param QueryBuilder $query         The query builder to sort field on.
-     * @param string       $orderByField  Field name.
-     * @param string       $orderByValue  Sort value : 0,1 for ASC,DESC.
-     * @param array        $allowedFields Checked fields.
+     * @param mixed  $query         The query builder to sort field on.
+     * @param string $orderByField  Field name.
+     * @param string $orderByValue  Sort value : 0,1 for ASC,DESC.
+     * @param array  $allowedFields Checked fields.
      *
      * @return QueryBuilder
      */
     public function addOrderByClause(
-        QueryBuilder $query, $orderByField,
+        $query, $orderByField,
         $orderByValue = null, $allowedFields = null
     ) {
         $allowedFields = (!is_array($allowedFields)) ?
@@ -120,15 +121,15 @@ abstract class OrmRepository extends EntityRepository
     /**
      * Adds a where clause to a query
      *
-     * @param QueryBuilder $query      The query builder for the where clause
-     * @param string       $field      The field for the where clause.
-     * @param mixed        $value      The value of the where clause.
-     * @param string       $expression The expression of the where clause.
+     * @param mixed  $query      The query builder for the where clause
+     * @param string $field      The field for the where clause.
+     * @param mixed  $value      The value of the where clause.
+     * @param string $expression The expression of the where clause.
      *
      * @return QueryBuilder
      */
     public function addWhereClause(
-        QueryBuilder $query, $field, $value = null, $expression = 'eq'
+        $query, $field, $value = null, $expression = 'eq'
     ) {
         $datePattern = DateValidator::PATTERN;
         $dateTimePattern = DateTimeValidator::PATTERN;
@@ -184,14 +185,14 @@ abstract class OrmRepository extends EntityRepository
     }
 
     /**
-     * Item get_one returning an Entity checking its accessibility
+     * Item get_one returning a ModelInterface checking its accessibility
      *
-     * @param int  $id   The entity id.
-     * @param User $user The user making the request.
+     * @param int           $id   The entity id.
+     * @param UserInterface $user The user making the request.
      *
-     * @return Entity
+     * @return ModelInterface
      */
-    public function getItem($id, User $user = null)
+    public function getItem($id, UserInterface $user = null)
     {
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query, $user);
@@ -207,13 +208,13 @@ abstract class OrmRepository extends EntityRepository
      * Fetch a single AbstractQuery result
      * Catches NoResultException
      *
-     * @param QueryBuilder $query The doctrine query builder.
+     * @param mixed $query The doctrine query builder.
      *
-     * @return Entity|bool
+     * @return ModelInterface|bool
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function fetchSingleResult(QueryBuilder $query)
+    public function fetchSingleResult($query)
     {
         $entity = false;
         try {
@@ -230,11 +231,11 @@ abstract class OrmRepository extends EntityRepository
     /**
      * Count the total get_all items
      *
-     * @param User $user The user making the request.
+     * @param UserInterface $user The user making the request.
      *
      * @return int
      */
-    public function countItems(User $user = null)
+    public function countItems(UserInterface $user = null)
     {
         $countQuery = $this
             ->createQueryBuilder('this')
@@ -248,13 +249,13 @@ abstract class OrmRepository extends EntityRepository
     /**
      * Paginate a query
      *
-     * @param QueryBuilder $query  The dquery builder to paginate.
+     * @param QueryBuilder $query  The query builder to paginate.
      * @param int          $offset The pagination offset [optional].
      * @param int          $limit  The pagination limit [optional].
      *
-     * @return Paginator
+     * @return mixed Paginated query
      */
-    public function paginateQuery(QueryBuilder $query, $offset = null, $limit = null)
+    public function paginateQuery($query, $offset = null, $limit = null)
     {
         if (is_null($offset)) {
             $offset = 0;
@@ -273,7 +274,7 @@ abstract class OrmRepository extends EntityRepository
      * for a given column name exists in the database
      *
      * @param mixed    $value  Value to check.
-     * @param int|null $id     Entity ID to exclude.
+     * @param int|null $id     Model ID to exclude.
      * @param string   $column Column name to check [optional].
      *
      * @return bool

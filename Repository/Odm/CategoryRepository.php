@@ -2,19 +2,18 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
-use PhpInk\Nami\CoreBundle\Model\UserInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\UnitOfWork;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
-use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use PhpInk\Nami\CoreBundle\Repository\OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Odm\AbstractRepository as OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Util\Collection;
-use PhpInk\Nami\CoreBundle\Model\Odm\Category;
-use PhpInk\Nami\CoreBundle\Model\Odm\User;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
+use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
 
-class CategoryRepository extends OdmRepository
+class CategoryRepository extends OdmRepository implements CategoryRepositoryInterface
 {
     protected $orderByFields = array(
         'default' => array('path', 'position')
@@ -47,13 +46,14 @@ class CategoryRepository extends OdmRepository
      * Item get_one returning an Document
      * checking its accessibility
      *
-     * @param int  $id
-     * @param User $user
+     * @param int           $id
+     * @param UserInterface $user
      *
-     * @return Category
+     * @return CategoryInterface
      */
-    public function getItem($id, User $user = null)
+    public function getItem($id, UserInterface $user = null)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query, $user);
         // Get category with children
@@ -71,7 +71,7 @@ class CategoryRepository extends OdmRepository
         return $category;
     }
 
-    public function getCategoryTree(User $user = null, $orderBy = array(), $filterBy = array())
+    public function getCategoryTree(UserInterface $user = null, $orderBy = array(), $filterBy = array())
     {
         $categories = $this->getItemsQuery(
             $user, $orderBy, $filterBy
@@ -82,13 +82,14 @@ class CategoryRepository extends OdmRepository
 
     public function getMenu()
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->getItemsQuery();
         $query->field('pages.active')->equals(true);
         $menu = $query->getQuery()->toArray();
         return $menu;
     }
 
-    public function getCategoryTreePaginated(User $user = null, $orderBy = array(), $filterBy = array())
+    public function getCategoryTreePaginated(UserInterface $user = null, $orderBy = array(), $filterBy = array())
     {
         return new Collection(
             new ArrayCollection(
@@ -109,7 +110,7 @@ class CategoryRepository extends OdmRepository
     public function buildCategoryTree(array $categories, $rootId = null)
     {
         foreach ($categories as $key => $category) {
-            /** @var Category $category */
+            /** @var CategoryInterface $category */
             if ($category->getParent() &&  (!$rootId || $category->getId() !== $rootId)) {
                 $parent = $this->findParentRecursively($categories, $category->getParent());
                 if ($parent) {
@@ -131,7 +132,7 @@ class CategoryRepository extends OdmRepository
     {
         $parentFound = null;
         foreach ($categories as $category) {
-            /** @var Category $category */
+            /** @var CategoryInterface $category */
             if ($category->getId() === $parent->getId()) {
                 $parentFound = $category;
             } elseif ($category->getItems()) {
@@ -151,6 +152,7 @@ class CategoryRepository extends OdmRepository
     public function applyRoleFiltering($query, UserInterface $user = null)
     {
         if (!$user || !$user->isAdmin()) {
+            /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
             $query = $this->addWhereClause(
                 $query, 'active', 'true'
             );
@@ -213,6 +215,7 @@ class CategoryRepository extends OdmRepository
 
     public function getCategoryRoutes()
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this
             ->createQueryBuilder('this')
             ->field('level')->equals(0)
@@ -225,6 +228,7 @@ class CategoryRepository extends OdmRepository
 
     public function getCategoryFromSlug($slug)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this')
             ->field('level')->equals(0)
             ->field('slug')->equals($slug);

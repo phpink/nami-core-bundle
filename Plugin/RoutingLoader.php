@@ -22,7 +22,7 @@ class RoutingLoader extends Loader
 
     public function supports($resource, $type = null)
     {
-        return $type === 'plugin';
+        return $type === 'namiplugin';
     }
 
     public function load($resource, $type = null)
@@ -35,12 +35,10 @@ class RoutingLoader extends Loader
 
         // Add the plugin routes
         $routes   = new RouteCollection();
-        $pluginRegistry = Registry::getInstance($this->pluginPath);
-        $pluginRegistry->scanPlugins();
-        $plugins = $pluginRegistry->getRoutedPlugins();
-        foreach ($plugins as $name => $routeFile) {
+        $plugins = Registry::getInstance($this->pluginPath)->getRoutedPlugins();
+        foreach ($plugins as $plugin => $routerFile) {
             $routes->addCollection(
-                $this->import($routeFile, 'yaml')
+                $this->import($routerFile)
             );
         }
         $this->loaded = true;

@@ -2,12 +2,13 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
-use PhpInk\Nami\CoreBundle\Model\Orm\User;
-use PhpInk\Nami\CoreBundle\Repository\OrmRepository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
+use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
-class PageRepository extends OrmRepository
+class PageRepository extends OrmRepository implements PageRepositoryInterface
 {
     protected $orderByFields = array(
         'blocks.position' => 'blocks.position',
@@ -24,12 +25,12 @@ class PageRepository extends OrmRepository
     /**
      * Build the items query (join, filters)
      *
-     * @param QueryBuilder $query
-     * @param User         $user
+     * @param mixed         $query The doctrine query builder.
+     * @param UserInterface $user  The user who made the request.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
-    public function buildItemsQuery(QueryBuilder $query, User $user = null)
+    public function buildItemsQuery($query, UserInterface $user = null)
     {
         $alias = 'this';
         $query->addSelect(

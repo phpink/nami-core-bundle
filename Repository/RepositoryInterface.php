@@ -2,8 +2,6 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use PhpInk\Nami\CoreBundle\Model\ModelInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
@@ -36,41 +34,41 @@ interface RepositoryInterface
     /**
      * Build the items query (join, filters)
      *
-     * @param QueryBuilder  $query The doctrine query builder.
+     * @param mixed         $query The doctrine query builder.
      * @param UserInterface $user  The user who made the request.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
-    public function buildItemsQuery(QueryBuilder $query, UserInterface $user = null);
+    public function buildItemsQuery($query, UserInterface $user = null);
 
     /**
      * Applies the correct addOrderBy to a query
      * Search for ASC/DESC order with '-' Prefix
      *
-     * @param QueryBuilder $query         The query builder to sort field on.
-     * @param string       $orderByField  Field name.
-     * @param string       $orderByValue  Sort value : 0,1 for ASC,DESC.
-     * @param array        $allowedFields Checked fields.
+     * @param mixed  $query         The query builder to sort field on.
+     * @param string $orderByField  Field name.
+     * @param string $orderByValue  Sort value : 0,1 for ASC,DESC.
+     * @param array  $allowedFields Checked fields.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
     public function addOrderByClause(
-        QueryBuilder $query, $orderByField,
+        $query, $orderByField,
         $orderByValue = null, $allowedFields = null
     );
 
     /**
      * Adds a where clause to a query
      *
-     * @param QueryBuilder $query      The query builder for the where clause
-     * @param string       $field      The field for the where clause.
-     * @param mixed        $value      The value of the where clause.
-     * @param string       $expression The expression of the where clause.
+     * @param mixed  $query      The query builder for the where clause
+     * @param string $field      The field for the where clause.
+     * @param mixed  $value      The value of the where clause.
+     * @param string $expression The expression of the where clause.
      *
-     * @return QueryBuilder
+     * @return mixed
      */
     public function addWhereClause(
-        QueryBuilder $query, $field, $value = null, $expression = 'eq'
+        $query, $field, $value = null, $expression = 'eq'
     );
 
     /**
@@ -87,13 +85,13 @@ interface RepositoryInterface
      * Fetch a single AbstractQuery result.
      * Catches NoResultException
      *
-     * @param QueryBuilder $query The doctrine query builder.
+     * @param mixed $query The doctrine query builder.
      *
      * @return ModelInterface|bool
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function fetchSingleResult(QueryBuilder $query);
+    public function fetchSingleResult($query);
 
     /**
      * Count the total get_all items
@@ -107,13 +105,13 @@ interface RepositoryInterface
     /**
      * Paginate a query
      *
-     * @param QueryBuilder $query  The dquery builder to paginate.
-     * @param int          $offset The pagination offset [optional].
-     * @param int          $limit  The pagination limit [optional].
+     * @param mixed $query  The dquery builder to paginate.
+     * @param int   $offset The pagination offset [optional].
+     * @param int   $limit  The pagination limit [optional].
      *
-     * @return Paginator
+     * @return mixed Paginated query
      */
-    public function paginateQuery(QueryBuilder $query, $offset = null, $limit = null);
+    public function paginateQuery($query, $offset = null, $limit = null);
 
     /**
      * Check that an existing entity with a given value
@@ -201,7 +199,7 @@ interface RepositoryInterface
      * @param string $filterValue   Value filtered.
      * @param array  $allowedFields Checked fields.
      *
-     * @return mixed The QueryBuilder object.
+     * @return mixed The query builder object.
      */
     public function addFilterByClause(
         $query, $filterField, $filterValue, $allowedFields = null

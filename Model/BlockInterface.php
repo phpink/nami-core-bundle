@@ -165,7 +165,7 @@ interface BlockInterface
     /**
      * Set the value of page.
      *
-     * @param Page $page
+     * @param PageInterface $page
      * @return BlockInterface
      */
     public function setPage($page);
@@ -181,4 +181,11 @@ interface BlockInterface
     public function getReferences(UserInterface $user = null, $groups = array());
 
     public function __toString();
+
+    /**
+     * Set the value of plugin
+     * @param mixed $plugin
+     * @return BlockInterface
+     */
+    public function setPlugin($plugin);
 }

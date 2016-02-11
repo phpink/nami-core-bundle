@@ -2,18 +2,17 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
-use PhpInk\Nami\CoreBundle\Model\UserInterface;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\QueryBuilder;
 use Gedmo\Mapping\Annotation as Gedmo;
-use PhpInk\Nami\CoreBundle\Repository\OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Util\Collection;
-use PhpInk\Nami\CoreBundle\Model\Orm\Category;
-use PhpInk\Nami\CoreBundle\Model\Orm\User;
+use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
+use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
-class CategoryRepository extends OrmRepository
+class CategoryRepository extends OrmRepository implements CategoryRepositoryInterface
 {
     protected $orderByFields = array(
         'default' => array('this.path', 'this.position')
@@ -48,12 +47,12 @@ class CategoryRepository extends OrmRepository
      * Item get_one returning an Document
      * checking its accessibility
      *
-     * @param int  $id
-     * @param User $user
+     * @param int           $id
+     * @param UserInterface $user
      *
-     * @return Category
+     * @return CategoryInterface
      */
-    public function getItem($id, User $user = null)
+    public function getItem($id, UserInterface $user = null)
     {
         $query = $this->createQueryBuilder('this');
         $query = $this->buildItemsQuery($query, $user);
@@ -74,7 +73,7 @@ class CategoryRepository extends OrmRepository
         return $category;
     }
 
-    public function getCategoryTree(User $user = null, $orderBy = array(), $filterBy = array())
+    public function getCategoryTree(UserInterface $user = null, $orderBy = array(), $filterBy = array())
     {
         $categories = $this->getItemsQuery(
             $user, $orderBy, $filterBy
@@ -93,7 +92,7 @@ class CategoryRepository extends OrmRepository
         return $menu;
     }
 
-    public function getCategoryTreePaginated(User $user = null, $orderBy = array(), $filterBy = array())
+    public function getCategoryTreePaginated(UserInterface $user = null, $orderBy = array(), $filterBy = array())
     {
         return new Collection(
             new ArrayCollection(
@@ -114,7 +113,7 @@ class CategoryRepository extends OrmRepository
     public function buildCategoryTree(array $categories, $rootId = null)
     {
         foreach ($categories as $key => $category) {
-            /** @var Category $category */
+            /** @var CategoryInterface $category */
             if ($category->getParent() &&  (!$rootId || $category->getId() !== $rootId)) {
                 $parent = $this->findParentRecursively($categories, $category->getParent());
                 if ($parent) {
@@ -136,7 +135,7 @@ class CategoryRepository extends OrmRepository
     {
         $parentFound = null;
         foreach ($categories as $category) {
-            /** @var Category $category */
+            /** @var CategoryInterface $category */
             if ($category->getId() === $parent->getId()) {
                 $parentFound = $category;
             } elseif ($category->getItems()) {

@@ -3,9 +3,10 @@
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
 use Doctrine\ORM\AbstractQuery;
-use PhpInk\Nami\CoreBundle\Repository\OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\ConfigurationRepositoryInterface;
 
-class ConfigurationRepository extends OrmRepository
+class ConfigurationRepository extends OrmRepository implements ConfigurationRepositoryInterface
 {
     protected $orderByFields = array(
         'id' => 'this.id',

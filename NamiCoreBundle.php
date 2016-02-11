@@ -2,17 +2,19 @@
 
 namespace PhpInk\Nami\CoreBundle;
 
+use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\PluginScanCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\ServiceDefinitionCompilerPass;
+use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\SecurityCompatibilityPass;
+use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\DoctrineManagerCompilerPass;
 
 class NamiCoreBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(
-            new ServiceDefinitionCompilerPass()
-        );
+        $container->addCompilerPass(new SecurityCompatibilityPass());
+        $container->addCompilerPass(new DoctrineManagerCompilerPass());
+        $container->addCompilerPass(new PluginScanCompilerPass());
     }
 }

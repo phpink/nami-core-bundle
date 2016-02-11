@@ -2,7 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
-use PhpInk\Nami\CoreBundle\Repository\OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Odm\AbstractRepository as OdmRepository;
 
 class AnalyticsRepository extends OdmRepository
 {

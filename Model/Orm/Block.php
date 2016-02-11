@@ -157,7 +157,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of id.
      *
      * @param string
-     * @return Block
+     * @return BlockInterface
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of active.
      *
      * @param boolean $active
-     * @return Block
+     * @return BlockInterface
      */
     public function setActive($active)
     {
@@ -202,7 +202,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of title.
      *
      * @param string $title
-     * @return Block
+     * @return BlockInterface
      */
     public function setTitle($title)
     {
@@ -224,7 +224,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of content.
      *
      * @param string $content
-     * @return Block
+     * @return BlockInterface
      */
     public function setContent($content)
     {
@@ -246,7 +246,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of type.
      *
      * @param string $type
-     * @return Block
+     * @return BlockInterface
      */
     public function setType($type)
     {
@@ -258,7 +258,7 @@ class Block extends Core\Entity implements BlockInterface
      * Remove a block image
      *
      * @param ImageInterface $image
-     * @return Block
+     * @return BlockInterface
      */
     public function removeImage(ImageInterface $image)
     {
@@ -271,7 +271,7 @@ class Block extends Core\Entity implements BlockInterface
      * Add a block image
      *
      * @param ImageInterface $image
-     * @return Block
+     * @return BlockInterface
      */
     public function addImage(ImageInterface $image)
     {
@@ -370,7 +370,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of template.
      *
      * @param mixed $template
-     * @return Block
+     * @return BlockInterface
      */
     public function setTemplate($template)
     {
@@ -381,7 +381,7 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Get the value of page.
      *
-     * @return Page
+     * @return PageInterface
      */
     public function getPage()
     {
@@ -402,8 +402,8 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Set the value of page.
      *
-     * @param Page $page
-     * @return Block
+     * @param PageInterface $page
+     * @return BlockInterface
      */
     public function setPage($page)
     {
@@ -450,7 +450,7 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Set the value of plugin
      * @param mixed $plugin
-     * @return Block
+     * @return BlockInterface
      */
     public function setPlugin($plugin)
     {

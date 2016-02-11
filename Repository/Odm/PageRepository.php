@@ -2,9 +2,10 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Odm;
 
-use PhpInk\Nami\CoreBundle\Repository\OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Odm\AbstractRepository as OdmRepository;
+use PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface;
 
-class PageRepository extends OdmRepository
+class PageRepository extends OdmRepository implements PageRepositoryInterface
 {
     protected $orderByFields = array(
         'blocks.position' => 'blocks.position',
@@ -20,6 +21,7 @@ class PageRepository extends OdmRepository
 
     public function getPageRoutes()
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this
             ->createQueryBuilder('this')
             ->select('slug', 'category')
@@ -31,6 +33,7 @@ class PageRepository extends OdmRepository
 
     public function getPageFromSlug($slug)
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this')
             ->field('active')->equals(true)
             ->field('slug')->equals($slug)
@@ -43,6 +46,7 @@ class PageRepository extends OdmRepository
 
     public function getLastUpdate()
     {
+        /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->createQueryBuilder('this')
             ->select('updatedAt')
             ->sort('updatedAt', 'desc')
