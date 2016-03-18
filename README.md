@@ -13,6 +13,15 @@ It contains the dependencies configuration, *Doctrine ORM/ODM* mapping and *FOSR
 Run the following command to install the bundle :
 
     composer require phpink/nami-core-bundle
+    
+To get NAMI working with MongoDB, add the following line to your composer.json :
+    
+            "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+            
+Then, add the following line to your AppKernel.php :
+            
+            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
+
 
 ### Generate new RSA keys \[optional\]
 Run the following OpenSSL commands to generate RSA keys for JSON Web Token authentication :

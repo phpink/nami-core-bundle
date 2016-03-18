@@ -28,7 +28,6 @@
         "friendsofsymfony/http-cache-bundle": "^1.0",
         "willdurand/hateoas-bundle": "^1.0",
         "doctrine/mongodb-odm": "1.0.*@dev",
-        "doctrine/mongodb-odm-bundle": "3.0.*@dev",
         "stof/doctrine-extensions-bundle": "1.2.*@dev",
         "twig/extensions": "~1.2",
         "liip/imagine-bundle": "~1.0",
