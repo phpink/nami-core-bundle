@@ -167,12 +167,12 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
          * Lexik JWT Configuration
          */
         $this->container->prependExtensionConfig('swiftmailer', [
-            'transport' =>  '%nami_api.mailer_transport%',
-            'host' =>       '%nami_api.mailer_host%',
-            'port' =>       '%nami_api.mailer_port%',
-            'encryption' => '%nami_api.mailer_encryption%',
-            'username' =>   '%nami_api.mailer_username%',
-            'password' =>   '%nami_api.mailer_password%',
+            'transport' =>  '%nami_core.mailer_transport%',
+            'host' =>       '%nami_core.mailer_host%',
+            'port' =>       '%nami_core.mailer_port%',
+            'encryption' => '%nami_core.mailer_encryption%',
+            'username' =>   '%nami_core.mailer_username%',
+            'password' =>   '%nami_core.mailer_password%',
             'spool' => [
                 'type' => 'file',
                 'path' => '%kernel.root_dir%/spool',
@@ -283,7 +283,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 'json' => true,
             ),
             'body_listener' => array(
-                'decoders' => array('json' => 'nami_api.json_decoder'),
+                'decoders' => array('json' => 'nami_core.json_decoder'),
             ),
         ));
 
@@ -291,10 +291,10 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
          * Lexik JWT Configuration
          */
         $this->container->prependExtensionConfig('lexik_jwt_authentication', [
-            'private_key_path' =>    '%nami_api.private_key_path%',
-            'public_key_path' =>     '%nami_api.public_key_path%',
-            'pass_phrase' =>         '%nami_api.ssh_passphrase%',
-            'token_ttl' =>           '%nami_api.token_ttl%',
+            'private_key_path' =>    '%nami_core.private_key_path%',
+            'public_key_path' =>     '%nami_core.public_key_path%',
+            'pass_phrase' =>         '%nami_core.ssh_passphrase%',
+            'token_ttl' =>           '%nami_core.token_ttl%',
             'encoder_service' =>     'lexik_jwt_authentication.jwt_encoder',
             'user_identity_field' => 'username',
         ]);
