@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "php": ">=5.4.0",
         "symfony/symfony": "2.7.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
@@ -36,7 +37,8 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "2.7.*",
-        "liip/functional-test-bundle": "1.4.x"
+        "liip/functional-test-bundle": "1.4.x",
+        "doctrine/doctrine-fixtures-bundle": "2.2.x-dev"
     },
     "suggest": {
         "symfony/nami-admin-bundle": "For the back section of your application"
