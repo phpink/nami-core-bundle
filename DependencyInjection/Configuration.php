@@ -32,27 +32,22 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('plugin_path')->defaultValue('%kernel.root_dir%/../plugins')->end()
                 ->scalarNode('cache_host')->defaultValue('localhost')->end()
                 ->integerNode('cache_port')->defaultValue(27017)->end()
-            ->end();
-
-        $rootNode = $treeBuilder->root('nami_api');
-        $rootNode
-            ->children()
-            ->scalarNode('mailer_to')->defaultValue('admin@localhost')->end()
-            ->scalarNode('mailer_from')->defaultValue('no-reply@localhost')->end()
-            ->scalarNode('mailer_transport')->defaultValue('smtp')->end()
-            ->scalarNode('mailer_host')->defaultValue('localhost')->end()
-            ->integerNode('mailer_port')->defaultValue(25)->end()
-            ->scalarNode('mailer_username')->defaultValue(null)->end()
-            ->scalarNode('mailer_password')->defaultValue(null)->end()
-            ->scalarNode('mailer_encryption')->defaultValue(null)->end()
-            ->scalarNode('public_key_path')->defaultValue('%kernel.root_dir%/../vendor/phpink/nami-core-bundle/Resources/config/jwt/public.pem')->end()
-            ->scalarNode('private_key_path')->defaultValue('%kernel.root_dir%/../vendor/phpink/nami-core-bundle/Resources/config/jwt/private.pem')->end()
-            ->scalarNode('ssh_passphrase')->defaultValue('')->end()
-            ->integerNode('token_ttl')->defaultValue(86400)->end()
-            ->integerNode('reset_token_ttl')->defaultValue(86400)->end()
-            ->scalarNode('front_url')->defaultValue('%host%')->end()
-            ->scalarNode('front_url_confirmation')->defaultValue('%nami_api.front_url%/user/confirm/{token}')->end()
-            ->scalarNode('front_url_resetting')->defaultValue('%nami_api.front_url%/user/reset/{token}')->end()
+                ->scalarNode('mailer_to')->defaultValue('admin@localhost')->end()
+                ->scalarNode('mailer_from')->defaultValue('no-reply@localhost')->end()
+                ->scalarNode('mailer_transport')->defaultValue('smtp')->end()
+                ->scalarNode('mailer_host')->defaultValue('localhost')->end()
+                ->integerNode('mailer_port')->defaultValue(25)->end()
+                ->scalarNode('mailer_username')->defaultValue(null)->end()
+                ->scalarNode('mailer_password')->defaultValue(null)->end()
+                ->scalarNode('mailer_encryption')->defaultValue(null)->end()
+                ->scalarNode('public_key_path')->defaultValue('%kernel.root_dir%/../vendor/phpink/nami-core-bundle/Resources/config/jwt/public.pem')->end()
+                ->scalarNode('private_key_path')->defaultValue('%kernel.root_dir%/../vendor/phpink/nami-core-bundle/Resources/config/jwt/private.pem')->end()
+                ->scalarNode('ssh_passphrase')->defaultValue('')->end()
+                ->integerNode('token_ttl')->defaultValue(86400)->end()
+                ->integerNode('reset_token_ttl')->defaultValue(86400)->end()
+                ->scalarNode('front_url')->defaultValue('%host%')->end()
+                ->scalarNode('front_url_confirmation')->defaultValue('%nami_api.front_url%/user/confirm/{token}')->end()
+                ->scalarNode('front_url_resetting')->defaultValue('%nami_api.front_url%/user/reset/{token}')->end()
             ->end();
 
         return $treeBuilder;

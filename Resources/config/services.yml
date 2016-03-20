@@ -1,6 +1,6 @@
 parameters:
-  nami_api.resetting.email.template: NamiCoreBundle:Emails:resetting.txt.twig
-  nami_api.registration.confirmation.template: NamiCoreBundle:Emails:registration.txt.twig
+  nami_core.resetting.email.template: NamiCoreBundle:Emails:resetting.txt.twig
+  nami_core.registration.confirmation.template: NamiCoreBundle:Emails:registration.txt.twig
 
 services:
     # Controller listener
@@ -44,7 +44,7 @@ services:
 
     # FOS Rest body listener
     # Removes extra params from the request for FormTypes
-    nami_api.json_decoder:
+    nami_core.json_decoder:
       class: PhpInk\Nami\CoreBundle\Decoder\JsonDecoder
 
     # Twig extension
@@ -55,40 +55,40 @@ services:
         - { name: twig.extension  }
 
     # JWT listeners -> set user last_login,ip / return data on login
-    nami_api.authentication_success_listener:
+    nami_core.authentication_success_listener:
         class: PhpInk\Nami\CoreBundle\EventListener\AuthenticationSuccessListener
         arguments: ["@jms_serializer"]
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
 
-    nami_api.authentication_failure_listener:
+    nami_core.authentication_failure_listener:
         class: PhpInk\Nami\CoreBundle\EventListener\AuthenticationFailureListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
 
-    nami_api.jwt_decoded_listener:
+    nami_core.jwt_decoded_listener:
         class: PhpInk\Nami\CoreBundle\EventListener\JWTDecodedListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecodedResponse }
 
     # Token generator for user password reset
-    nami_api.util.token_generator:
+    nami_core.util.token_generator:
         class: PhpInk\Nami\CoreBundle\Util\TokenGenerator
         arguments: [@logger]
 
     # Mailer
-    nami_api.mailer:
+    nami_core.mailer:
         class: PhpInk\Nami\CoreBundle\Mailer\TwigSwiftMailer
         arguments:
             mailer: "@mailer"
             templating: "@twig"
             parameters:
                 url:
-                    confirmation: %nami_api.front_url_confirmation%
-                    resetting: %nami_api.front_url_resetting%
+                    confirmation: %nami_core.front_url_confirmation%
+                    resetting: %nami_core.front_url_resetting%
                 template:
-                    confirmation: %nami_api.registration.confirmation.template%
-                    resetting: %nami_api.resetting.email.template%
+                    confirmation: %nami_core.registration.confirmation.template%
+                    resetting: %nami_core.resetting.email.template%
                 from_email:
-                    confirmation: %nami_api.mailer_from%
-                    resetting: %nami_api.mailer_from%
+                    confirmation: %nami_core.mailer_from%
+                    resetting: %nami_core.mailer_from%
