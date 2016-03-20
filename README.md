@@ -3,6 +3,8 @@ Nami CMS : CoreBundle
 
 Welcome to the NamiCoreBundle repository - a Symfony 2.7 bundle.
 
+![Nami Logo](https://github.com/phpink/nami-core-bundle/raw/master/Docs/namiLogo.png)
+
 **PhpInk\Nami\CoreBundle** is the main bundle of a Nami CMS application.
 It contains the dependencies configuration, *Doctrine ORM/ODM* mapping and *FOSRest* controllers to provide an API.
 
