@@ -2,11 +2,11 @@
 
 namespace PhpInk\Nami\CoreBundle;
 
-use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\PluginScanCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\SecurityCompatibilityPass;
 use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\DoctrineManagerCompilerPass;
+use PhpInk\Nami\CoreBundle\DependencyInjection\Compiler\PluginScanCompilerPass;
 
 class NamiCoreBundle extends Bundle
 {

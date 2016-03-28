@@ -29,7 +29,7 @@
         "willdurand/hateoas-bundle": "^1.0",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "stof/doctrine-extensions-bundle": "1.2.*@dev",
-        "twig/extensions": "~1.2",
+        "twig/extensions": "1.1.0",
         "liip/imagine-bundle": "~1.0",
         "lexik/jwt-authentication-bundle": "2.0.*@dev",
         "gfreeau/get-jwt-bundle": "2.0.*@dev"

@@ -16,7 +16,8 @@ Run the following command to install the bundle :
 
     composer require phpink/nami-core-bundle
     
-To get NAMI working with MongoDB, add the following line to your composer.json :
+To get NAMI working with MongoDB, after specifying the configuration driver to ''odm''' instead of '''orm''',
+add the following line to your composer.json :
     
             "doctrine/mongodb-odm-bundle": "3.0.*@dev",
             
