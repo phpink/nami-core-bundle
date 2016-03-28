@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Controller;
 
+use PhpInk\Nami\CoreBundle\Model\ModelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -263,7 +264,7 @@ class UserController extends AbstractController
     /**
      * {@inheritDoc}
      */
-    protected function checkUserAccess($type = 'create', UserInterface $entity = null)
+    protected function checkUserAccess($type = 'create', ModelInterface $entity = null)
     {
         switch ($type) {
             case 'get_one':

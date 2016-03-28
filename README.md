@@ -37,7 +37,7 @@ Run the following OpenSSL commands to generate RSA keys for JSON Web Token authe
 
 All available endpoints are available in a [Postman][3] dump
     
-    nami.postman_dump
+    nami.postman_collection
  
 Some http client you can run to test the API :
 

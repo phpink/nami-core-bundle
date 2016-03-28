@@ -44,11 +44,11 @@ class ImagePreSerializeSubscriber implements EventSubscriberInterface
     {
         $model = $event->getObject();
         Globals::setUploadDir($this->uploadDir);
-        if ($model instanceof ImageInterface) {
-            $model->generateThumbs(
-                $this->liipManager
-            );
-        }
+//        if ($model instanceof ImageInterface) {
+//            $model->generateThumbs(
+//                $this->liipManager
+//            );
+//        }
     }
 
 
