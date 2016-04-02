@@ -1,143 +1,25 @@
 {
-	"id": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
+	"id": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
 	"name": "Nami",
 	"description": "Endpoints for the demo Nami API",
 	"order": [
-		"b2c4dc91-1a45-69eb-9502-b5969372d023",
-		"dabe9a0b-861a-cb24-abf3-bab12d5c0749",
-		"1ec983c3-2447-4a58-c09d-5785ce23e055",
-		"71232354-a86f-0c38-9b2f-e061b728381d",
-		"5f0204ec-b6bd-c095-1eb0-ad69932b222a",
-		"04596934-50c1-35df-a7a5-6ceaaddd80ec",
-		"849ccf07-7ab0-bbc2-3b1c-aa7dda626835"
+		"f5d04780-9896-5242-5245-63eb4e7ac487",
+		"7148596b-8eb3-e366-7f53-279ee2f8df35",
+		"a1577d65-5d49-08e7-8ee0-8ad46992ae76",
+		"bd791f2a-0544-263c-5998-0f302dd5471c",
+		"e0a5b154-5483-41ab-b5dc-2b5e42e8f000",
+		"c5cda47f-884a-4144-c403-f193dd7de190",
+		"20df92c5-7085-8afa-534d-d9b33c2ae7cc",
+		"f2876201-f38d-99fe-d4f8-44b9d330a56d"
 	],
 	"folders": [],
 	"timestamp": 1459180599057,
-	"owner": 0,
+	"owner": "452264",
 	"remoteLink": "",
 	"public": false,
 	"requests": [
 		{
-			"id": "04596934-50c1-35df-a7a5-6ceaaddd80ec",
-			"headers": "username: admin\n",
-			"url": "http://nami.dev/api/users/reset",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
-			"data": [
-				{
-					"key": "username",
-					"value": "admin",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "password",
-					"value": "pass",
-					"type": "text",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"name": "/api/users/reset",
-			"description": "API users reset password : token retrieval from username",
-			"descriptionFormat": "html",
-			"time": 1459181968713,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
-		},
-		{
-			"id": "1ec983c3-2447-4a58-c09d-5785ce23e055",
-			"headers": "Authorization: Bearer {{token}}\n",
-			"url": "http://nami.dev/api/pages",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
-			"data": [],
-			"dataMode": "params",
-			"name": "/api/pages",
-			"description": "API pages collection",
-			"descriptionFormat": "html",
-			"time": 1459181004077,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
-		},
-		{
-			"id": "5f0204ec-b6bd-c095-1eb0-ad69932b222a",
-			"headers": "Authorization: Bearer {{token}}\n",
-			"url": "http://nami.dev/api/users",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
-			"data": [
-				{
-					"key": "username",
-					"value": "admin",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "password",
-					"value": "pass",
-					"type": "text",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"name": "/api/users",
-			"description": "API users collection",
-			"descriptionFormat": "html",
-			"time": 1459181873108,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
-		},
-		{
-			"id": "71232354-a86f-0c38-9b2f-e061b728381d",
-			"headers": "Authorization: Bearer {{token}}\n",
-			"url": "http://nami.dev/api/categories",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
-			"data": [
-				{
-					"key": "username",
-					"value": "admin",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "password",
-					"value": "pass",
-					"type": "text",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"name": "/api/categories",
-			"description": "API categories collection",
-			"descriptionFormat": "html",
-			"time": 1459181837694,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
-		},
-		{
-			"id": "849ccf07-7ab0-bbc2-3b1c-aa7dda626835",
+			"id": "20df92c5-7085-8afa-534d-d9b33c2ae7cc",
 			"headers": "username: admin\n",
 			"url": "http://nami.dev/api/users/reset",
 			"preRequestScript": "",
@@ -165,30 +47,11 @@
 			"time": 1459182126978,
 			"name": "/api/users/reset",
 			"description": "API users reset password: reset password from token",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
 			"responses": []
 		},
 		{
-			"id": "b2c4dc91-1a45-69eb-9502-b5969372d023",
-			"headers": "",
-			"url": "http://nami.dev/api/",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1459181012039,
-			"name": "/api/",
-			"description": "API index (ping)",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
-			"responses": []
-		},
-		{
-			"id": "dabe9a0b-861a-cb24-abf3-bab12d5c0749",
+			"id": "7148596b-8eb3-e366-7f53-279ee2f8df35",
 			"headers": "",
 			"url": "http://nami.dev/api/users/token",
 			"preRequestScript": "",
@@ -216,7 +79,164 @@
 			"time": 1459181337899,
 			"name": "/api/login",
 			"description": "API login: Token retrieval (user, password POST)",
-			"collectionId": "e24d1920-cf99-90a7-2211-9f7e3fec8b49",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"responses": []
+		},
+		{
+			"id": "a1577d65-5d49-08e7-8ee0-8ad46992ae76",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"url": "http://nami.dev/api/pages",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"data": [],
+			"dataMode": "params",
+			"name": "/api/pages",
+			"description": "API pages collection",
+			"descriptionFormat": "html",
+			"time": 1459181004077,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "bd791f2a-0544-263c-5998-0f302dd5471c",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"url": "http://nami.dev/api/categories",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"data": [
+				{
+					"key": "username",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "pass",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "/api/categories",
+			"description": "API categories collection",
+			"descriptionFormat": "html",
+			"time": 1459181837694,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "c5cda47f-884a-4144-c403-f193dd7de190",
+			"headers": "username: admin\n",
+			"url": "http://nami.dev/api/users/reset",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"data": [
+				{
+					"key": "username",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "pass",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "/api/users/reset",
+			"description": "API users reset password : token retrieval from username",
+			"descriptionFormat": "html",
+			"time": 1459181968713,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "e0a5b154-5483-41ab-b5dc-2b5e42e8f000",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"url": "http://nami.dev/api/users",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"data": [
+				{
+					"key": "username",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "pass",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "/api/users",
+			"description": "API users collection",
+			"descriptionFormat": "html",
+			"time": 1459181873108,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "f2876201-f38d-99fe-d4f8-44b9d330a56d",
+			"headers": "Authorization: Bearer {{token}}\n",
+			"url": "http://nami.dev/api/plugins",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1459603950464,
+			"name": "/api/plugins",
+			"description": "API plugins collection",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
+			"responses": []
+		},
+		{
+			"id": "f5d04780-9896-5242-5245-63eb4e7ac487",
+			"headers": "",
+			"url": "http://nami.dev/api/",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1459181012039,
+			"name": "/api/",
+			"description": "API index (ping)",
+			"collectionId": "73d2cdd5-90d3-6d8e-f4e8-65fc0313bfb4",
 			"responses": []
 		}
 	]

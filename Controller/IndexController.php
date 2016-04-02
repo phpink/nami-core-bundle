@@ -8,6 +8,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Index Rest controller (Ping, Login)
@@ -149,11 +150,11 @@ class IndexController extends AbstractController
     public function getPluginsAction()
     {
         $this->checkIsAdmin();
-        $pluginRegistry = PluginRegistry::getInstance(
-            $this->container->getParameter('nami_core.plugin_path')
+        return View::create(
+            PluginRegistry::getInstance(
+                $this->getParameter('nami_core.plugin_path')
+            )->getPlugins()
         );
-        $plugins = $pluginRegistry->registerPlugins();
-        return View::create($plugins);
     }
 
     /**
@@ -173,5 +174,36 @@ class IndexController extends AbstractController
             $size += $file->getSize();
         }
         return round($size / 1024 / 1024, 2);
+    }
+
+    /**
+     * Read plugins from the directory
+     *
+     * @Annotations\Delete("/cache")
+     * @ApiDoc(
+     *   description = "Clear the application cache.",
+     *   resource = false,
+     *   statusCodes = {
+     *     200 = "Returned when cache has been cleared"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function cacheClearAction()
+    {
+        $this->checkIsAdmin();
+        $kernel = $this->get('kernel');
+        $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
+        $application->setAutoExit(false);
+        $options = array(
+            'command' => 'cache:clear',
+            "--env" => 'prod',
+            '--no-warmup' => true
+        );
+        return new JsonResponse([
+            'cache' =>
+                $application->run(new \Symfony\Component\Console\Input\ArrayInput($options))
+        ]);
     }
 }

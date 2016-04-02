@@ -87,7 +87,7 @@ class FrontendController extends Controller
     protected function processPlugin(Request $request, $block)
     {
         $pluginRegistry = PluginRegistry::getInstance();
-        $pluginRegistry->scanPlugins();
+        //$pluginRegistry->scanPlugins();
         $pluginDetails = $pluginRegistry->getPlugin(
             $block->getType()
         );
