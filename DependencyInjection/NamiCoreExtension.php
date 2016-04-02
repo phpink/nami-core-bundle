@@ -318,8 +318,13 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                             'mode' => 'outbound',
                             'allow_upscale' => true,
                         ],
-                        'category' => [
-                            'size' => [360, 329],
+                    ],
+                ],
+                'category' => [
+                    'quality' => 75,
+                    'filters' => [
+                        'thumbnail' => [
+                            'size' => [125, 125],
                             'mode' => 'outbound',
                             'allow_upscale' => true,
                         ],
