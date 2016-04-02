@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\EventListener;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ORM\EntityManager;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -57,18 +58,18 @@ class AuthenticationSuccessListener
         if ($user->getIp() !== $event->getRequest()->getClientIp()) {
             $user->setIp($event->getRequest()->getClientIp());
         }
-//        $this->em->persist($user);
-//        $this->em->flush();
-//
-//        // Register a new login hit
-//        $userAgent = $event->getRequest()->headers->get('user-agent');
-//        if ($this->em instanceof DocumentManager) {
-//            $newHit = new OdmLoginAnalytics($user, $userAgent);
-//        } else {
-//            $newHit = new OrmLoginAnalytics($user, $userAgent);
-//        }
-//        $this->em->persist($newHit);
-//        $this->em->flush();
+        $this->em->persist($user);
+        $this->em->flush();
+
+        // Register a new login hit
+        $userAgent = $event->getRequest()->headers->get('user-agent');
+        if ($this->em instanceof DocumentManager) {
+            $newHit = new OdmLoginAnalytics($user, $userAgent);
+        } else {
+            $newHit = new OrmLoginAnalytics($user, $userAgent);
+        }
+        $this->em->persist($newHit);
+        $this->em->flush();
     }
 
     /**

@@ -39,8 +39,8 @@ class DoctrineManagerCompilerPass implements CompilerPassInterface
             'nami_core.controller_listener', // CORE //
             'nami_core.user_provider',
 
-            'nami_api.json_decoder',         // API  //
-            'nami_api.authentication_success_listener',
+            'nami_core.json_decoder',         // API  //
+            'nami_core.authentication_success_listener',
         );
 
         foreach ($services as $service) {
