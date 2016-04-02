@@ -47,7 +47,7 @@ class CategoryController extends AbstractController
      */
     public function getCategoriesAction(ParamFetcherInterface $paramFetcher)
     {
-        /** @var \PhpInk\Nami\CoreBundle\Repository\CategoryRepository $categoryRepo */
+        /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
         $categoryRepo = $this->getRepository();
         $categories = $categoryRepo->getCategoryTreePaginated(
             $this->getLoggedUser(),
@@ -55,6 +55,29 @@ class CategoryController extends AbstractController
             $paramFetcher->get('filterBy')
         );
         return $this->restView($categories);
+    }
+
+    /**
+     * List all categories with the associated pages.
+     *
+     * @ApiDoc(
+     *   description = "Get the collection of categories with the associated pages.",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @Annotations\Get("/categories/menu")
+     *
+     * @return array
+     */
+    public function getCategoryMenuAction()
+    {
+        /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
+        $categoryRepo = $this->getRepository();
+        $menu = $categoryRepo->getMenu();
+        return $this->restView($menu);
     }
 
     /**
@@ -198,7 +221,7 @@ class CategoryController extends AbstractController
 
         // If the submitted data is valid
         if ($form->isValid()) {
-            /** @var \PhpInk\Nami\CoreBundle\Repository\CategoryRepository $categoryRepo */
+            /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
             $categoryRepo = $this->getRepository();
             // Form data is saved
             $categoryRepo->sortCategories($categories);
@@ -214,48 +237,5 @@ class CategoryController extends AbstractController
             $view = View::create($form, 400);
         }
         return $view;
-    }
-
-    /**
-     * Get Category Banners
-     *
-     * @ApiDoc(
-     *   description = "Get the Banners associated to a specific Category.",
-     *   resource = true,
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category\CategoryBanner>",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     404 = "Returned when the category is not found"
-     *   }
-     * )
-     *
-     * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
-     * @Annotations\QueryParam(name="limit", requirements="\d+", default="10", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
-     *
-     **
-     * @param ParamFetcherInterface $paramFetcher The param fetcher
-     * @param int                   $id           The category id
-     *
-     * @return array
-     *
-     * @throws NotFoundHttpException when supplier not exist
-     */
-    public function getCategoryBannersAction(ParamFetcherInterface $paramFetcher, $id)
-    {
-        return $this->restView(
-            new PaginatedCollection(
-                $this->getRepository('Banner')->findBannersFromType(
-                    'category', $id,
-                    $paramFetcher->get('offset'),
-                    $paramFetcher->get('limit'),
-                    $paramFetcher->get('orderBy'),
-                    $paramFetcher->get('filterBy')
-                ),
-                'nami_api_get_category_banners',
-                $id
-            )
-        );
     }
 }
