@@ -8,6 +8,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
+use PhpInk\Nami\CoreBundle\Util\Globals;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -153,7 +154,7 @@ class IndexController extends AbstractController
         return View::create(
             PluginRegistry::getInstance(
                 $this->getParameter('nami_core.plugin_path')
-            )->getPlugins()
+            )->scanPlugins()
         );
     }
 
@@ -198,7 +199,7 @@ class IndexController extends AbstractController
         $application->setAutoExit(false);
         $options = array(
             'command' => 'cache:clear',
-            "--env" => 'prod',
+            "--env" => Globals::getEnv(),
             '--no-warmup' => true
         );
         return new JsonResponse([

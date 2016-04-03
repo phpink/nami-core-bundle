@@ -101,7 +101,9 @@ class FrontendController extends Controller
             $plugin = new $pluginDetails['block'](
                 $this, $request, $block
             );
-            $plugin->process();
+            $plugin->process(
+                $this->container
+            );
         }
     }
 
