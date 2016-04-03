@@ -50,7 +50,7 @@ class Block
      */
     public function getParameter($key)
     {
-        return $this->controller->container->getParameter($key);
+        return $this->getContainer()->getParameter($key);
     }
 
     /**

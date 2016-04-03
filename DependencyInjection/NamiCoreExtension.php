@@ -217,7 +217,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
             'strict_variables' => '%kernel.debug%',
             'exception_controller' => 'FOS\RestBundle\Controller\ExceptionController::showAction',
             'paths' => [
-                '%kernel.root_dir%/../plugins/NamiPlugin' => 'NamiPlugin',
+                '%kernel.root_dir%/../plugins' => 'NamiPlugin',
             ]
         ));
 

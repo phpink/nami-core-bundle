@@ -86,8 +86,12 @@ class FrontendController extends Controller
      */
     protected function processPlugin(Request $request, $block)
     {
-        $pluginRegistry = PluginRegistry::getInstance();
-        //$pluginRegistry->scanPlugins();
+        $pluginRegistry = PluginRegistry::getInstance(
+            $this->getParameter('nami_core.plugin_path')
+        );
+        if (!$pluginRegistry->getPlugins()) {
+            $pluginRegistry->scanPlugins();
+        }
         $pluginDetails = $pluginRegistry->getPlugin(
             $block->getType()
         );

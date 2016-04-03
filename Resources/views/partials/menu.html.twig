@@ -1,32 +1,39 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-<div class="navbar-header">
+            <a class="navbar-brand" href="{{ path('nami_front_homepage') }}">Nami</a>
+        </div>
 
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-    </button>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% for category in menu %}
+                    <li{% if (app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == category.getSlug()) or (category.hasPages()) %}
+                        class="{% if app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == category.getSlug() %}active {% endif %}{% if category.hasPages() %}dropdown{% endif %}"
+                            {% endif %}>
+                        <a href="{{ path('nami_front_page', { 'slug': category.getSlug() }) }}" title="{{ category.getTitle() }}"{% if category.hasPages() %} class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"{% endif %}>{{ category.getName() }}{% if category.hasPages() %} <span class="caret"></span></a>{% endif %}</a>
+                        {% if category.hasPages() %}
+                            <ul class="dropdown-menu">
+                                {% for page in category.getPages() %}
+                                    <li{% if app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == page.getSlug() %} class="active"{% endif %}><a href="{{ path('nami_front_page', { 'slug': page.getSlug() }) }}" title="{{ page.getHeader() }}">{{ page.getTitle() }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
 
-    <a class="navbar-brand" href="{{ path('nami_front_homepage') }}">Nami</a>
-</div>
 
-<div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-    <ul class="nav navbar-nav {{ app.request.attributes.get('slug') }}">
-        {% for category in menu %}
-            <li{% if (app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == category.getSlug()) or (category.hasPages()) %}
-                class="{% if app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == category.getSlug() %}active {% endif %}{% if category.hasPages() %}dropdown{% endif %}"
-                    {% endif %}>
-                <a href="{{ path('nami_front_page', { 'slug': category.getSlug() }) }}" title="{{ category.getTitle() }}"{% if category.hasPages() %} class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"{% endif %}>{{ category.getName() }}{% if category.hasPages() %} <span class="caret"></span></a>{% endif %}</a>
-                {% if category.hasPages() %}
-                    <ul class="dropdown-menu">
-                        {% for page in category.getPages() %}
-                            <li{% if app.request.attributes.get('_route') == 'nami_front_page' and app.request.attributes.get('slug') == page.getSlug() %} class="active"{% endif %}><a href="{{ path('nami_front_page', { 'slug': page.getSlug() }) }}" title="{{ page.getHeader() }}">{{ page.getTitle() }}</a></li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+                {% for page in pages %}
+                {% endfor %}
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

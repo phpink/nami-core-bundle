@@ -1,8 +1,17 @@
-<div class="block clearfix">
-    {% if block.getTitle() %}<h2>{{ block.getTitle() }}</h2>{% endif %}
-    {{ block.getContent() | raw }}
-
-    {% if block.hasImages() %}
-        <img class="img-responsive" src="{{ block.getFirstImageUrl() }}" alt="{{ block.getFirstImageName() }}">
+<div class="block block-default clearfix">
+    {% if block.getTitle() %}
+    <div class="page-header">
+        <h1>{{ block.getTitle() }}</h1>
+    </div>
     {% endif %}
+
+    <div class="well">
+        {{ block.getContent() | raw }}
+
+        {% if block.hasImages() %}
+            <div class="thumbnail">
+                <img class="img-responsive" src="{{ block.getFirstImage().getPath(false) | imagine_filter('category') }}" alt="{{ block.getFirstImageName() }}">
+            </div>
+        {% endif %}
+    </div>
 </div>

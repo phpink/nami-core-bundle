@@ -89,9 +89,7 @@ class Registry
 
     public function scanPlugins()
     {
-        $directory = new \DirectoryIterator(
-            $this->pluginPath. '/'. self::PLUGIN_NAMESPACE
-        );
+        $directory = new \DirectoryIterator($this->pluginPath);
         foreach ($directory as $dirChild) {
             if ($dirChild->isDir() && !$dirChild->isDot()) {
                 $name = $dirChild->getFilename();

@@ -1,8 +1,11 @@
 <div class="block block-front jumbotron">
     {% if block.getTitle() %}<h2>{{ block.getTitle() }}</h2>{% endif %}
-    {{ block.getContent() | raw }}
 
     {% if block.hasImages() %}
-        <img class="image-responsive" src="{{ block.getFirstImageUrl() }}" alt="{{ block.getFirstImageName() }}">
+        <div class="text-center m-b">
+            <img class="image-responsive" src="{{ block.getFirstImage().getPath(false) }}" alt="{{ block.getFirstImageName() }}">
+        </div>
     {% endif %}
+
+    {{ block.getContent() | raw }}
 </div>
