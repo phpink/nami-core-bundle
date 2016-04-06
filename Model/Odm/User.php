@@ -272,7 +272,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of id.
      *
      * @param string
-     * @return User
+     * @return $this
      */
     public function setId($id)
     {
@@ -294,7 +294,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of username.
      *
      * @param string $username
-     * @return User
+     * @return $this
      */
     public function setUsername($username)
     {
@@ -318,7 +318,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of salt.
      *
      * @param string $salt
-     * @return User
+     * @return $this
      */
     public function setSalt($salt)
     {
@@ -341,7 +341,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the encrypted password.
      *
      * @param string $password
-     * @return User
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -364,7 +364,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the plain password.
      *
      * @param string $password
-     * @return User
+     * @return $this
      */
     public function setPlainPassword($password)
     {
@@ -377,7 +377,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Sets the user ip
      *
      * @param string $ip
-     * @return User
+     * @return $this
      */
     public function setIp($ip)
     {
@@ -416,7 +416,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Sets the last login time.
      *
      * @return \DateTime|null $time
-     * @return User
+     * @return $this
      */
     public function setLastLogin(\DateTime $time = null)
     {
@@ -440,7 +440,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Sets the value of confirmationToken.
      *
      * @param string
-     * @return User
+     * @return $this
      */
     public function setConfirmationToken($confirmationToken)
     {
@@ -477,7 +477,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
     /**
      * @param boolean $active
      *
-     * @return User
+     * @return $this
      */
     public function setActive($active)
     {
@@ -494,7 +494,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of newsletter.
      *
      * @param boolean $newsletter
-     * @return Company
+     * @return $this
      */
     public function setNewsletter($newsletter)
     {
@@ -518,7 +518,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set firstName
      *
      * @param string $firstName
-     * @return User
+     * @return $this
      */
     public function setFirstName($firstName)
     {
@@ -541,7 +541,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set lastName
      *
      * @param string $lastName
-     * @return User
+     * @return $this
      */
     public function setLastName($lastName)
     {
@@ -575,7 +575,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Sets the value of locked.
      *
      * @param bool
-     * @return User
+     * @return $this
      */
     public function setLocked($boolean)
     {
@@ -588,7 +588,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value for passwordRequestedAt.
      *
      * @param \DateTime
-     * @return User
+     * @return $this
      */
     public function setPasswordRequestedAt(\DateTime $date = null)
     {
@@ -620,7 +620,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set male
      *
      * @param boolean $male
-     * @return User
+     * @return $this
      */
     public function setMale($male)
     {
@@ -653,7 +653,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Sets the ADMIN ROLE.
      *
      * @param $boolean
-     * @return User
+     * @return $this
      */
     public function setAdmin($boolean)
     {
@@ -683,7 +683,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Remove a user role
      *
      * @param string $role The role
-     * @return User
+     * @return $this
      */
     public function removeRole($role)
     {
@@ -699,7 +699,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Add a user role
      *
      * @param string $role The role
-     * @return User
+     * @return $this
      */
     public function addRole($role)
     {
@@ -720,7 +720,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the user roles
      *
      * @param array $roles The roles
-     * @return User
+     * @return $this
      */
     public function setRoles(array $roles)
     {
@@ -752,7 +752,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of phone
      *
      * @param string $phone
-     * @return Phone
+     * @return $this
      */
     public function setPhone($phone)
     {
@@ -775,7 +775,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of email
      *
      * @param string $email
-     * @return User
+     * @return $this
      */
     public function setEmail($email)
     {
@@ -798,7 +798,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of address.
      *
      * @param string $address
-     * @return Company
+     * @return $this
      */
     public function setAddress($address)
     {
@@ -821,7 +821,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of addressExtra.
      *
      * @param string $addressExtra
-     * @return Company
+     * @return $this
      */
     public function setAddressExtra($addressExtra)
     {
@@ -844,7 +844,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of zipcode.
      *
      * @param string $zipcode
-     * @return Company
+     * @return $this
      */
     public function setZipcode($zipcode)
     {
@@ -867,7 +867,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of city.
      *
      * @param string $city
-     * @return Company
+     * @return $this
      */
     public function setCity($city)
     {
@@ -890,7 +890,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of website.
      *
      * @param string $website
-     * @return Company
+     * @return $this
      */
     public function setWebsite($website)
     {
@@ -913,7 +913,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of presentation.
      *
      * @param string $presentation
-     * @return Company
+     * @return $this
      */
     public function setPresentation($presentation)
     {
@@ -944,7 +944,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
      * Set the value of avatar.
      *
      * @param ImageInterface $avatar
-     * @return User
+     * @return $this
      */
     public function setAvatar(ImageInterface $avatar)
     {

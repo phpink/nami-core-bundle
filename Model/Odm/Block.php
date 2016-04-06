@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 use PhpInk\Nami\CoreBundle\Model\ImageInterface;
+use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
@@ -153,7 +154,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of id.
      *
      * @param string
-     * @return BlockInterface
+     * @return $this
      */
     public function setId($id)
     {
@@ -165,7 +166,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of active.
      *
      * @param boolean $active
-     * @return BlockInterface
+     * @return $this
      */
     public function setActive($active)
     {
@@ -198,7 +199,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of title.
      *
      * @param string $title
-     * @return BlockInterface
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -220,7 +221,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of content.
      *
      * @param string $content
-     * @return BlockInterface
+     * @return $this
      */
     public function setContent($content)
     {
@@ -242,7 +243,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of type.
      *
      * @param string $type
-     * @return BlockInterface
+     * @return $this
      */
     public function setType($type)
     {
@@ -366,7 +367,7 @@ class Block extends Core\Document implements BlockInterface
      * Set the value of template.
      *
      * @param mixed $template
-     * @return BlockInterface
+     * @return $this
      */
     public function setTemplate($template)
     {

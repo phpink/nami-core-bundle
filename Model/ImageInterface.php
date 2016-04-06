@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 /**
- * Document\Image interface
+ * Image interface
  */
 interface ImageInterface
 {
@@ -49,7 +49,7 @@ interface ImageInterface
      * Set filename
      *
      * @param string $filename
-     * @return Image
+     * @return ImageInterface
      */
     public function setFilename($filename);
 
@@ -64,7 +64,7 @@ interface ImageInterface
      * Set name
      *
      * @param string $name
-     * @return Image
+     * @return ImageInterface
      */
     public function setName($name);
 
@@ -79,7 +79,7 @@ interface ImageInterface
      * Set folder
      *
      * @param string $folder
-     * @return Image
+     * @return ImageInterface
      */
     public function setFolder($folder);
 
@@ -125,7 +125,7 @@ interface ImageInterface
      * Set the value of master.
      *
      * @param boolean
-     * @return Image
+     * @return ImageInterface
      */
     public function setMaster($master);
 
@@ -134,7 +134,7 @@ interface ImageInterface
      * with LiipImageService
      *
      * @param CacheManager $liipManager
-     * @return Image
+     * @return ImageInterface
      */
     public function generateThumbs(CacheManager $liipManager);
 

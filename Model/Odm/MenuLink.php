@@ -2,7 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Model\Odm;
 
-use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
+use PhpInk\Nami\CoreBundle\Model\MenuLinkInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,11 +11,11 @@ use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
 
 /**
- * Document\Category
+ * Document\MenuLink
  *
  * @ODM\Document(
- *     collection="categories",
- *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\CategoryRepository"
+ *     collection="menu",
+ *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\MenuRepository"
  * )
  * @ODM\HasLifecycleCallbacks
  *
@@ -24,11 +24,10 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
  *     "id", "active", "parent", "position",
- *     "locales", "items",
- *     "createdAt", "updatedAt", "createdBy", "updatedBy"
+ *     "items", "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  */
-class Category extends Core\Document implements CategoryInterface
+class MenuLink extends Core\Document implements MenuInterface
 {
     use Core\SortableItemTrait;
 
@@ -64,9 +63,9 @@ class Category extends Core\Document implements CategoryInterface
     private $path;
 
     /**
-     * @var Category
+     * @var MenuLink
      * @Gedmo\TreeParent
-     * @ODM\ReferenceOne(targetDocument="Category")
+     * @ODM\ReferenceOne(targetDocument="MenuLink")
      * @JMS\Expose
      * @JMS\Type("string")
      * @JMS\Accessor("getParentId")
@@ -82,19 +81,6 @@ class Category extends Core\Document implements CategoryInterface
     /**
      * @var string
      * @ODM\String
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/")
-     *      })
-     * }, fields={"name"}, unique=true)
-     * @JMS\Expose
-     */
-    private $slug;
-
-    /**
-     * @var string
-     * @ODM\String
      * @JMS\Expose
      */
     protected $title;
@@ -104,53 +90,23 @@ class Category extends Core\Document implements CategoryInterface
      * @ODM\String
      * @JMS\Expose
      */
-    protected $header;
+    protected $link;
 
     /**
-     * @var string
-     * @ODM\String
+     * @var Collection<MenuLink>
      * @JMS\Expose
-     */
-    protected $metaDescription;
-
-    /**
-     * @var string
-     * @ODM\String
-     * @JMS\Expose
-     */
-    protected $metaKeywords;
-
-    /**
-     * @var string
-     * @ODM\String
-     * @JMS\Expose
-     */
-    protected $content;
-
-    /**
-     * @var Collection<Category>
-     * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\MenuLinkInterface>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;
 
     /**
-     * @var ArrayCollection<Page>
-     * @ODM\ReferenceMany(targetDocument="Page",
-     * mappedBy="category", orphanRemoval=true,
-     * cascade={"persist", "remove"})
-     */
-    protected $pages;
-
-    /**
-     * Category constructor
+     * Menu constructor
      */
     public function __construct()
     {
         $this->active = false;
         $this->items = new ArrayCollection();
-        $this->pages = new ArrayCollection();
     }
 
     /**
@@ -250,7 +206,7 @@ class Category extends Core\Document implements CategoryInterface
     }
 
     /**
-     * Get the id of the parent category.
+     * Get the id of the parent Menu.
      *
      * @return string
      */
@@ -261,12 +217,12 @@ class Category extends Core\Document implements CategoryInterface
     }
 
     /**
-     * Set parent Category (one to one).
+     * Set parent Menu (one to one).
      *
-     * @param CategoryInterface $parent
+     * @param MenuLinkInterface $parent
      * @return $this
      */
-    public function setParent(CategoryInterface $parent = null)
+    public function setParent(MenuLinkInterface $parent = null)
     {
         $this->parent = $parent;
 
@@ -274,7 +230,7 @@ class Category extends Core\Document implements CategoryInterface
     }
 
     /**
-     * Get parent Category (one to one).
+     * Get parent Menu (one to one).
      *
      * @return $this
      */
@@ -352,96 +308,30 @@ class Category extends Core\Document implements CategoryInterface
     }
 
     /**
-     * Get the value of header.
+     * Get the value of link.
      *
      * @return string
      */
-    public function getHeader()
+    public function getLink()
     {
-        return $this->header;
+        return $this->link;
     }
 
     /**
-     * Set the value of header.
+     * Set the value of link.
      *
-     * @param string $header
+     * @param string $link
      * @return $this
      */
-    public function setHeader($header)
+    public function setLink($link)
     {
-        $this->header = $header;
+        $this->link = $link;
         return $this;
     }
 
-    /**
-     * Get the value of metaKeywords.
-     *
-     * @return string
-     */
-    public function getMetaKeywords()
+    public function addItem(MenuLinkInterface $Menu)
     {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * Set the value of metaKeywords.
-     *
-     * @param string $keywords
-     * @return $this
-     */
-    public function setMetaKeywords($keywords)
-    {
-        $this->metaKeywords = $keywords;
-        return $this;
-    }
-
-    /**
-     * Get the value of metaDescription.
-     *
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
-
-    /**
-     * Get the value of content.
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set the value of content.
-     *
-     * @param string $content
-     * @return $this
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * Set the value of metaDescription.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function setMetaDescription($description)
-    {
-        $this->metaDescription = $description;
-        return $this;
-    }
-
-    public function addItem(CategoryInterface $category)
-    {
-        $this->items[] = $category;
+        $this->items[] = $Menu;
 
         return $this;
     }
@@ -469,40 +359,6 @@ class Category extends Core\Document implements CategoryInterface
     {
         $pageCount = $this->pages->count();
         return $pageCount > 0;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getPages()
-    {
-        return $this->pages;
-    }
-
-    /**
-     * @param ArrayCollection $pages
-     */
-    public function setPages($pages)
-    {
-        $this->pages = $pages;
-    }
-
-    public function generatePage()
-    {
-        $block = new Block(
-            $this->getHeader(),
-            $this->getContent()
-        );
-
-        $page = new Page();
-        $page->setTitle($this->getName())
-            ->setSlug($this->getSlug())
-            ->setHeader($this->getHeader())
-            ->setMetaKeywords($this->getMetaKeywords())
-            ->setMetaDescription($this->getMetaDescription())
-            ->addBlock($block);
-
-        return $page;
     }
 
     public function __toString()

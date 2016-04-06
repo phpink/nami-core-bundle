@@ -8,16 +8,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
-use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
-use PhpInk\Nami\CoreBundle\Model\Orm\Block;
-use PhpInk\Nami\CoreBundle\Model\Orm\Page;
+use PhpInk\Nami\CoreBundle\Model\MenuLinkInterface;
 
 /**
- * Entity\Category
+ * Entity\Menu
  *
- * @ORM\Entity(repositoryClass="PhpInk\Nami\CoreBundle\Repository\Orm\CategoryRepository")
+ * @ORM\Entity(repositoryClass="PhpInk\Nami\CoreBundle\Repository\Orm\MenuRepository")
  * @ORM\Table(
- *     name="category"
+ *     name="menu"
  * )
  * @ORM\HasLifecycleCallbacks
  *
@@ -26,18 +24,17 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
  *     "id", "active", "parent", "position",
- *     "locales", "items",
- *     "createdAt", "updatedAt", "createdBy", "updatedBy"
+ *     "items", "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  * @Hateoas\Relation(
  *   "self",
  *   href = @Hateoas\Route(
- *     "nami_api_get_category",
+ *     "nami_api_get_menu",
  *     parameters = {"id" = "expr(object.getId())"}
  *   )
  * )
  */
-class Category extends Core\Entity implements CategoryInterface
+class MenuLink extends Core\Entity implements MenuLinkInterface
 {
     use Core\SortableItemTrait,
         Core\CreatedUpdatedAtTrait,
@@ -77,9 +74,9 @@ class Category extends Core\Entity implements CategoryInterface
     private $path;
 
     /**
-     * @var Category
+     * @var MenuLink
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="MenuLink")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Expose
      * @JMS\Type("integer")
@@ -96,19 +93,6 @@ class Category extends Core\Entity implements CategoryInterface
 
     /**
      * @var string
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/")
-     *      })
-     * }, fields={"name"})
-     * @ORM\Column(name="slug", type="string", length=255)
-     * @JMS\Expose
-     */
-    private $slug;
-
-    /**
-     * @var string
      * @ORM\Column(name="title", type="string", length=255)
      * @JMS\Expose
      */
@@ -116,56 +100,26 @@ class Category extends Core\Entity implements CategoryInterface
 
     /**
      * @var string
-     * @ORM\Column(name="header", type="string", length=255)
+     * @ORM\Column(name="link", type="string", length=255)
      * @JMS\Expose
      */
-    protected $header;
+    protected $link;
 
     /**
-     * @var string
-     * @ORM\Column(name="meta_description", type="string", length=255)
+     * @var Collection<Menu>
      * @JMS\Expose
-     */
-    protected $metaDescription;
-
-    /**
-     * @var string
-     * @ORM\Column(name="meta_keywords", type="string", length=255)
-     * @JMS\Expose
-     */
-    protected $metaKeywords;
-
-    /**
-     * @var string
-     * @ORM\Column(name="content", type="text")
-     * @JMS\Expose
-     */
-    protected $content;
-
-    /**
-     * @var Collection<Category>
-     * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Menu>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;
 
     /**
-     * @var ArrayCollection<Page>
-     * @ORM\OneToMany(targetEntity="Page",
-     * mappedBy="category", orphanRemoval=true,
-     * cascade={"persist", "remove"})
-     */
-    protected $pages;
-
-    /**
-     * Category constructor
+     * Menu constructor
      */
     public function __construct()
     {
         $this->active = false;
         $this->items = new ArrayCollection();
-        $this->pages = new ArrayCollection();
     }
 
     /**
@@ -265,7 +219,7 @@ class Category extends Core\Entity implements CategoryInterface
     }
 
     /**
-     * Get the id of the parent category.
+     * Get the id of the parent Menu.
      *
      * @return integer
      */
@@ -276,12 +230,12 @@ class Category extends Core\Entity implements CategoryInterface
     }
 
     /**
-     * Set parent Category (one to one).
+     * Set parent Menu (one to one).
      *
-     * @param CategoryInterface $parent
+     * @param MenuLinkInterface $parent
      * @return $this
      */
-    public function setParent(CategoryInterface $parent = null)
+    public function setParent(MenuLinkInterface $parent = null)
     {
         $this->parent = $parent;
 
@@ -289,9 +243,9 @@ class Category extends Core\Entity implements CategoryInterface
     }
 
     /**
-     * Get parent Category (one to one).
+     * Get parent Menu (one to one).
      *
-     * @return Category
+     * @return $this
      */
     public function getParent()
     {
@@ -322,29 +276,6 @@ class Category extends Core\Entity implements CategoryInterface
     }
 
     /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return $this
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of slug.
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
      * Get the value of title.
      *
      * @return string
@@ -367,96 +298,30 @@ class Category extends Core\Entity implements CategoryInterface
     }
 
     /**
-     * Get the value of header.
+     * Get the value of link.
      *
      * @return string
      */
-    public function getHeader()
+    public function getLink()
     {
-        return $this->header;
+        return $this->link;
     }
 
     /**
-     * Set the value of header.
+     * Set the value of link.
      *
-     * @param string $header
+     * @param string $link
      * @return $this
      */
-    public function setHeader($header)
+    public function setLink($link)
     {
-        $this->header = $header;
+        $this->link = $link;
         return $this;
     }
 
-    /**
-     * Get the value of metaKeywords.
-     *
-     * @return string
-     */
-    public function getMetaKeywords()
+    public function addItem(MenuLinkInterface $menu)
     {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * Set the value of metaKeywords.
-     *
-     * @param string $keywords
-     * @return $this
-     */
-    public function setMetaKeywords($keywords)
-    {
-        $this->metaKeywords = $keywords;
-        return $this;
-    }
-
-    /**
-     * Get the value of metaDescription.
-     *
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
-
-    /**
-     * Get the value of content.
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set the value of content.
-     *
-     * @param string $content
-     * @return $this
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * Set the value of metaDescription.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function setMetaDescription($description)
-    {
-        $this->metaDescription = $description;
-        return $this;
-    }
-
-    public function addItem(CategoryInterface $category)
-    {
-        $this->items[] = $category;
+        $this->items[] = $menu;
 
         return $this;
     }
@@ -475,49 +340,6 @@ class Category extends Core\Entity implements CategoryInterface
     public function getItems()
     {
         return $this->items;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPages()
-    {
-        $pageCount = $this->pages->count();
-        return $pageCount > 0;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getPages()
-    {
-        return $this->pages;
-    }
-
-    /**
-     * @param ArrayCollection $pages
-     */
-    public function setPages($pages)
-    {
-        $this->pages = $pages;
-    }
-
-    public function generatePage()
-    {
-        $block = new Block(
-            $this->getHeader(),
-            $this->getContent()
-        );
-
-        $page = new Page();
-        $page->setTitle($this->getName())
-            ->setSlug($this->getSlug())
-            ->setHeader($this->getHeader())
-            ->setMetaKeywords($this->getMetaKeywords())
-            ->setMetaDescription($this->getMetaDescription())
-            ->addBlock($block);
-
-        return $page;
     }
 
     public function __toString()

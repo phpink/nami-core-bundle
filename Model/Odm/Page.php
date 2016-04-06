@@ -201,7 +201,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of id.
      *
      * @param string
-     * @return Page
+     * @return $this
      */
     public function setId($id)
     {
@@ -213,7 +213,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of active.
      *
      * @param boolean $active
-     * @return Page
+     * @return $this
      */
     public function setActive($active)
     {
@@ -246,7 +246,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of title.
      *
      * @param string $title
-     * @return Page
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -268,7 +268,7 @@ class Page extends Core\Document implements PageInterface
      * Set slug
      *
      * @param string $slug
-     * @return Page
+     * @return $this
      */
     public function setSlug($slug)
     {
@@ -291,7 +291,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of header.
      *
      * @param string $header
-     * @return Page
+     * @return $this
      */
     public function setHeader($header)
     {
@@ -313,7 +313,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of metaKeywords.
      *
      * @param string $keywords
-     * @return Page
+     * @return $this
      */
     public function setMetaKeywords($keywords)
     {
@@ -335,7 +335,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of metaDescription.
      *
      * @param string $description
-     * @return Page
+     * @return $this
      */
     public function setMetaDescription($description)
     {
@@ -357,7 +357,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of content.
      *
      * @param string $content
-     * @return Page
+     * @return $this
      */
     public function setContent($content)
     {
@@ -369,7 +369,7 @@ class Page extends Core\Document implements PageInterface
      * Remove a block block
      *
      * @param BlockInterface $block
-     * @return Page
+     * @return $this
      */
     public function removeBlock(BlockInterface $block)
     {
@@ -382,7 +382,7 @@ class Page extends Core\Document implements PageInterface
      * Add a block block
      *
      * @param BlockInterface $block
-     * @return Page
+     * @return $this
      */
     public function addBlock(BlockInterface $block)
     {
@@ -406,7 +406,7 @@ class Page extends Core\Document implements PageInterface
      * Add a block block
      *
      * @param Collection $blocks
-     * @return Page
+     * @return $this
      */
     public function setBlocks(Collection $blocks)
     {
@@ -432,7 +432,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of template.
      *
      * @param string $template
-     * @return Page
+     * @return $this
      */
     public function setTemplate($template)
     {
@@ -466,7 +466,7 @@ class Page extends Core\Document implements PageInterface
      * Set background Page (one to one).
      *
      * @param ImageInterface $background
-     * @return Page
+     * @return $this
      */
     public function setBackground(ImageInterface $background = null)
     {
@@ -478,7 +478,7 @@ class Page extends Core\Document implements PageInterface
     /**
      * Get background Page (one to one).
      *
-     * @return Page
+     * @return string
      */
     public function getBackground()
     {
@@ -512,7 +512,7 @@ class Page extends Core\Document implements PageInterface
      * Set category Page (one to one).
      *
      * @param CategoryInterface $category
-     * @return Page
+     * @return $this
      */
     public function setCategory(CategoryInterface $category = null)
     {
@@ -524,7 +524,7 @@ class Page extends Core\Document implements PageInterface
     /**
      * Get category Page (one to one).
      *
-     * @return Page
+     * @return $this
      */
     public function getCategory()
     {
@@ -545,7 +545,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of backgroundColor.
      *
      * @param string $backgroundColor
-     * @return Page
+     * @return $this
      */
     public function setBackgroundColor($backgroundColor)
     {
@@ -567,7 +567,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of borderColor.
      *
      * @param string $borderColor
-     * @return Page
+     * @return $this
      */
     public function setBorderColor($borderColor)
     {
@@ -589,7 +589,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of footerColor.
      *
      * @param string $footerColor
-     * @return Page
+     * @return $this
      */
     public function setFooterColor($footerColor)
     {
@@ -611,7 +611,7 @@ class Page extends Core\Document implements PageInterface
      * Set the value of negativeText.
      *
      * @param boolean $negativeText
-     * @return Page
+     * @return $this
      */
     public function setNegativeText($negativeText)
     {

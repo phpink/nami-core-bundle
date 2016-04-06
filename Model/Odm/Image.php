@@ -123,7 +123,7 @@ class Image extends Core\Document implements ImageInterface
      * Set the value of id.
      *
      * @param string
-     * @return Image
+     * @return $this
      */
     public function setId($id)
     {
@@ -153,6 +153,8 @@ class Image extends Core\Document implements ImageInterface
 
     /**
      * Manages the copying of the file to the relevant place on the server
+     * @throws EmptyFileException when no file has been uploaded
+     * @return $this
      */
     public function upload()
     {
@@ -190,6 +192,8 @@ class Image extends Core\Document implements ImageInterface
 
         // file property cleaned, not needed anymore
         $this->setFile(null);
+
+        return $this;
     }
 
     /**
@@ -233,7 +237,7 @@ class Image extends Core\Document implements ImageInterface
      * Set filename
      *
      * @param string $filename
-     * @return Image
+     * @return $this
      */
     public function setFilename($filename)
     {
@@ -256,7 +260,7 @@ class Image extends Core\Document implements ImageInterface
      * Set name
      *
      * @param string $name
-     * @return Image
+     * @return $this
      */
     public function setName($name)
     {
@@ -279,7 +283,7 @@ class Image extends Core\Document implements ImageInterface
      * Set folder
      *
      * @param string $folder
-     * @return Image
+     * @return $this
      */
     public function setFolder($folder)
     {
@@ -357,7 +361,7 @@ class Image extends Core\Document implements ImageInterface
      * Set the value of master.
      *
      * @param boolean
-     * @return Image
+     * @return $this
      */
     public function setMaster($master)
     {
@@ -371,7 +375,7 @@ class Image extends Core\Document implements ImageInterface
      * with LiipImageService
      *
      * @param CacheManager $liipManager
-     * @return Image
+     * @return $this
      */
     public function generateThumbs(CacheManager $liipManager)
     {

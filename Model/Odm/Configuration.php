@@ -64,7 +64,7 @@ class Configuration extends Core\Document
      * Set the value of id.
      *
      * @param string
-     * @return Configuration
+     * @return $this
      */
     public function setId($id)
     {
@@ -76,7 +76,7 @@ class Configuration extends Core\Document
      * Set the value of name.
      *
      * @param string $name
-     * @return Configuration
+     * @return $this
      */
     public function setName($name)
     {
@@ -99,7 +99,7 @@ class Configuration extends Core\Document
      * Set the value of value.
      *
      * @param string $value
-     * @return Configuration
+     * @return $this
      */
     public function setValue($value)
     {

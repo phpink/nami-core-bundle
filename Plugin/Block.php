@@ -44,25 +44,6 @@ class Block
     }
 
     /**
-     * Get a parameter from the container
-     * @param string $key
-     * @return string
-     */
-    public function getParameter($key)
-    {
-        return $this->getContainer()->getParameter($key);
-    }
-
-    /**
-     * Get the value of container
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
      * Get the value of controller
      * @return Controller
      */

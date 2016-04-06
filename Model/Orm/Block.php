@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 use PhpInk\Nami\CoreBundle\Model\ImageInterface;
+use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
@@ -157,7 +158,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of id.
      *
      * @param string
-     * @return BlockInterface
+     * @return $this
      */
     public function setId($id)
     {
@@ -169,7 +170,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of active.
      *
      * @param boolean $active
-     * @return BlockInterface
+     * @return $this
      */
     public function setActive($active)
     {
@@ -202,7 +203,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of title.
      *
      * @param string $title
-     * @return BlockInterface
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -224,7 +225,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of content.
      *
      * @param string $content
-     * @return BlockInterface
+     * @return $this
      */
     public function setContent($content)
     {
@@ -246,7 +247,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of type.
      *
      * @param string $type
-     * @return BlockInterface
+     * @return $this
      */
     public function setType($type)
     {
@@ -258,7 +259,7 @@ class Block extends Core\Entity implements BlockInterface
      * Remove a block image
      *
      * @param ImageInterface $image
-     * @return BlockInterface
+     * @return $this
      */
     public function removeImage(ImageInterface $image)
     {
@@ -271,7 +272,7 @@ class Block extends Core\Entity implements BlockInterface
      * Add a block image
      *
      * @param ImageInterface $image
-     * @return BlockInterface
+     * @return $this
      */
     public function addImage(ImageInterface $image)
     {
@@ -370,7 +371,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of template.
      *
      * @param mixed $template
-     * @return BlockInterface
+     * @return $this
      */
     public function setTemplate($template)
     {
@@ -403,7 +404,7 @@ class Block extends Core\Entity implements BlockInterface
      * Set the value of page.
      *
      * @param PageInterface $page
-     * @return BlockInterface
+     * @return $this
      */
     public function setPage($page)
     {
@@ -416,7 +417,7 @@ class Block extends Core\Entity implements BlockInterface
      * with related entities data
      *
      * @param UserInterface|null $user
-     * @param array     $groups
+     * @param array              $groups
      * @return array
      */
     public function getReferences(UserInterface $user = null, $groups = array())
@@ -450,7 +451,7 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Set the value of plugin
      * @param mixed $plugin
-     * @return BlockInterface
+     * @return $this
      */
     public function setPlugin($plugin)
     {

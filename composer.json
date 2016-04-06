@@ -14,7 +14,6 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/symfony": "2.7.*",
-        "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -32,9 +31,14 @@
         "twig/extensions": "1.1.0",
         "liip/imagine-bundle": "~1.0",
         "lexik/jwt-authentication-bundle": "2.0.*@dev",
-        "gfreeau/get-jwt-bundle": "2.0.*@dev"
+        "gfreeau/get-jwt-bundle": "2.0.*@dev",
+        "knplabs/knp-menu-bundle": "^2.0"
     },
     "require-dev": {
+        "doctrine/orm": "^2.4.8",
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "2.7.*",
         "liip/functional-test-bundle": "1.4.x"
