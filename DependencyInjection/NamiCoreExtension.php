@@ -352,11 +352,55 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 ],
             ],
         ]);
-//        $this->container->prependExtensionConfig('sonata_admin', [
+        $this->container->prependExtensionConfig('twig', [
+            'form' => [
+                'resources' => ['SonataFormatterBundle:Form:formatter.html.twig'],
+            ],
+        ]);
+        $this->container->prependExtensionConfig('sonata_formatter', [
+            'formatters' => [
+                'markdown' => [
+                    'service' => 'sonata.formatter.text.markdown',
+                    'extensions' => [
+                        'sonata.formatter.twig.control_flow',
+                        'sonata.formatter.twig.gist',
+                    ]
+                ],
+                'text' => [
+                    'service' => 'sonata.formatter.text.text',
+                    'extensions' => [
+                        'sonata.formatter.twig.control_flow',
+                        'sonata.formatter.twig.gist',
+                    ]
+                ],
+                'rawhtml' => [
+                    'service' => 'sonata.formatter.text.raw',
+                    'extensions' => [
+                        'sonata.formatter.twig.control_flow',
+                        'sonata.formatter.twig.gist',
+                    ]
+                ],
+                'richhtml' => [
+                    'service' => 'sonata.formatter.text.raw',
+                    'extensions' => [
+                        'sonata.formatter.twig.control_flow',
+                        'sonata.formatter.twig.gist',
+                    ]
+                ],
+                'twig' => [
+                    'service' => 'sonata.formatter.text.twigengine',
+                    'extensions' => []
+                ],
+            ],
+        ]);
+        $this->container->prependExtensionConfig('sonata_admin', [
+            'templates' => [
+                'layout' =>'SonataAdminBundle::layout.html.twig',
+            ],
 //            'security' => [
 //                'handler' => 'sonata.admin.security.handler.role',
 //            ],
-//        ]);
+        ]);
     }
 
     /**

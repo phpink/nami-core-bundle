@@ -13,11 +13,33 @@ class PageAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('title', 'text', array(
-                'label' => 'Page Title',
+                'label' => 'Title',
                 'required' => false
             ))
             ->add('slug', 'text', array(
                 'label' => 'Slug',
+                'required' => false
+            ))
+//            ->add('active', 'boolean', array(
+//                'label' => 'Active'
+//            ))
+            ->add('category', 'sonata_type_model', array(
+                'label' => 'Category',
+                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Category',
+                'property' => 'name',
+                'required' => false
+            ))
+            ->add('header', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml',
+                'required' => false
+            ))
+            ->add('content', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml',
+                'required' => false
+            ))
+            ->add('metaDescription', 'textarea', array('required' => false))
+            ->add('metaKeywords', 'textarea', array('required' => false))
+            ->add('createdAt', 'datetime', array(
                 'required' => false
             ))
             ->add('createdBy', 'sonata_type_model', array(
@@ -26,16 +48,6 @@ class PageAdmin extends AbstractAdmin
                 'property' => 'username',
                 'required' => false
             ))
-            ->add('category', 'sonata_type_model', array(
-                'label' => 'Category',
-                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Category',
-                'property' => 'name',
-                'required' => false
-            ))
-            ->add('header', 'textarea', array('required' => false)) //if no type is specified, SonataAdminBundle tries to guess it
-            ->add('content')
-            ->add('metaDescription', 'textarea', array('required' => false))
-            ->add('metaKeywords', 'textarea', array('required' => false))
         ;
     }
 
@@ -56,7 +68,7 @@ class PageAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('title')
             ->add('slug')
-            ->add('createdBy')
+            ->add('createdAt')
         ;
     }
 }

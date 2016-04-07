@@ -32,7 +32,8 @@
         "liip/imagine-bundle": "~1.0",
         "lexik/jwt-authentication-bundle": "2.0.*@dev",
         "gfreeau/get-jwt-bundle": "2.0.*@dev",
-        "sonata-project/admin-bundle": "2.0.*@dev"
+        "sonata-project/admin-bundle": "2.0.*@dev",
+        "sonata-project/formatter-bundle": "2.0.*@dev"
 
     },
     "require-dev": {
