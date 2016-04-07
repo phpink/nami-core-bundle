@@ -20,7 +20,7 @@ class PageAdmin extends AbstractAdmin
                 'label' => 'Slug',
                 'required' => false
             ))
-//            ->add('active', 'boolean', array(
+//            ->add('active', 'checkbox', array(
 //                'label' => 'Active'
 //            ))
             ->add('category', 'sonata_type_model', array(
@@ -56,8 +56,8 @@ class PageAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('title')
-            ->add('createdBy')
-            ->add('slug')
+             ->add('slug')
+            ->add('active', 'boolean')
             ->add('category')
         ;
     }
@@ -68,6 +68,7 @@ class PageAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('title')
             ->add('slug')
+            ->add('active', 'boolean')
             ->add('createdAt')
         ;
     }
