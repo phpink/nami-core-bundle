@@ -1,0 +1,36 @@
+services:
+    # Page admin
+    sonata.admin.page:
+        class: PhpInk\Nami\CoreBundle\Admin\Orm\PageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Page" }
+        arguments:
+            - ~
+            - PhpInk\Nami\CoreBundle\Model\Orm\Page
+            - ~
+        calls:
+            - [ setTranslationDomain, [AcmeThemeBundle]]
+
+    # Page admin
+    sonata.admin.user:
+        class: PhpInk\Nami\CoreBundle\Admin\Orm\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "User" }
+        arguments:
+            - ~
+            - PhpInk\Nami\CoreBundle\Model\Orm\User
+            - ~
+        calls:
+            - [ setTranslationDomain, [AcmeThemeBundle]]
+
+    # Category admin
+    sonata.admin.category:
+        class: PhpInk\Nami\CoreBundle\Admin\Orm\CategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Category" }
+        arguments:
+            - ~
+            - PhpInk\Nami\CoreBundle\Model\Orm\Category
+            - ~
+        calls:
+            - [ setTranslationDomain, [AcmeThemeBundle]]

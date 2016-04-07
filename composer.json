@@ -32,12 +32,16 @@
         "liip/imagine-bundle": "~1.0",
         "lexik/jwt-authentication-bundle": "2.0.*@dev",
         "gfreeau/get-jwt-bundle": "2.0.*@dev",
-        "knplabs/knp-menu-bundle": "^2.0"
+        "sonata-project/admin-bundle": "2.0.*@dev"
+
     },
     "require-dev": {
         "doctrine/orm": "^2.4.8",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+        "doctrine/phpcr-bundle": "1.0.*@dev",
+        "sonata-project/doctrine-mongodb-admin-bundle": "2.0.*@dev",
+        "sonata-project/doctrine-phpcr-admin-bundle": "2.0.*@dev",
 
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "2.7.*",

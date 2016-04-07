@@ -35,6 +35,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
         $this->checkRequiredBundles();
         $this->coreConfiguration();
         $this->apiConfiguration();
+        $this->adminConfiguration();
     }
 
     /**
@@ -47,6 +48,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('admin.yml');
 
         $container->setParameter(
             'jms_serializer.camel_case_naming_strategy.class',
@@ -332,6 +334,29 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Configures API services
+     */
+    private function adminConfiguration()
+    {
+        /*
+         * Sonata admin Configuration
+         */
+        $this->container->prependExtensionConfig('sonata_block', [
+            'default_contexts' => ['cms'],
+            'blocks' => [
+                'sonata.admin.block.admin_list' => [
+                    'contexts' => ['admin'],
+                ],
+            ],
+        ]);
+//        $this->container->prependExtensionConfig('sonata_admin', [
+//            'security' => [
+//                'handler' => 'sonata.admin.security.handler.role',
+//            ],
+//        ]);
     }
 
     /**
