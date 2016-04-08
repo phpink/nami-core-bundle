@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Admin\Orm;
 
+use PhpInk\Nami\CoreBundle\Model\Orm\Block;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -67,5 +68,12 @@ class BlockAdmin extends AbstractAdmin
             ->add('page')
             ->add('createdAt')
         ;
+    }
+
+    public function toString($object)
+    {
+        return $object instanceof Block
+            ? $object->getTitle()
+            : 'Block'; // shown in the breadcrumb on the create view
     }
 }

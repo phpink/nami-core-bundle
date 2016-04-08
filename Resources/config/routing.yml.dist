@@ -12,7 +12,7 @@ nami_api_doc:
   resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
   prefix:   /api-doc
 
-admin:
+nami_admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
     prefix: /admin
 
@@ -24,6 +24,12 @@ _sonata_admin:
 nami_front_homepage:
     path:     /
     defaults: { _controller: NamiCoreBundle:Frontend:index }
+    requirements:
+        _method:  GET|POST
+
+nami_front_login:
+    path:     /login
+    defaults: { _controller: NamiCoreBundle:FrontendSecurity:login }
     requirements:
         _method:  GET|POST
 

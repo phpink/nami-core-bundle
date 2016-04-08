@@ -47,22 +47,24 @@
         <form class="form-horizontal" action="{{ path('nami_front_login') }}" method="post">
 
             <div class="form-group">
-                <label for="username">Username:</label>
+                <label for="username" class="col-sm-2 control-label">Username:</label>
                 <div class="col-sm-10">
-                    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password" class="col-sm-2 control-label">Password:</label>
                 <div class="col-sm-10">
-                    <input type="password" id="password" name="_password" />
+                    <input type="password" class="form-control" id="password" name="_password" />
                 </div>
             </div>
 
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
             </div>
 
             <input type="hidden" name="_target_path" value="{{ path('sonata_admin_dashboard') }}" />

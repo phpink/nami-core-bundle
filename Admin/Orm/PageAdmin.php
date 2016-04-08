@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Admin\Orm;
 
+use PhpInk\Nami\CoreBundle\Model\Orm\Page;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -85,5 +86,12 @@ class PageAdmin extends AbstractAdmin
             ->add('active')
             ->add('createdAt')
         ;
+    }
+
+    public function toString($object)
+    {
+        return $object instanceof Page
+            ? $object->getTitle()
+            : 'Page'; // shown in the breadcrumb on the create view
     }
 }

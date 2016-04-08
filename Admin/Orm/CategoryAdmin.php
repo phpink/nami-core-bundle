@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Admin\Orm;
 
+use PhpInk\Nami\CoreBundle\Model\Orm\Category;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -17,8 +18,14 @@ class CategoryAdmin extends AbstractAdmin
 //            ->add('active', 'boolean', array(
 //                'label' => 'Active'
 //            ))
-            ->add('header', 'textarea', array('required' => false)) //if no type is specified, SonataAdminBundle tries to guess it
-            ->add('content')
+            ->add('header', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml',
+                'required' => false
+            ))
+            ->add('content', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml',
+                'required' => false
+            ))
             ->add('metaDescription', 'textarea', array('required' => false))
             ->add('metaKeywords', 'textarea', array('required' => false))
             ->add('createdAt', 'datetime', array(
@@ -49,7 +56,13 @@ class CategoryAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('title')
-            ->add('slug')
-        ;
+            ->add('slug');
+    }
+
+    public function toString($object)
+    {
+        return $object instanceof Category
+            ? $object->getName()
+            : 'Category'; // shown in the breadcrumb on the create view
     }
 }
