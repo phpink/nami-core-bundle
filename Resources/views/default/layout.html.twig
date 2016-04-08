@@ -28,7 +28,7 @@
 <body>
 {% include 'AcmeThemeBundle:partials:menu.html.twig' %}
 
-    <div class="container"">
+    <div class="container">
         {% for block in page.getBlocks() %}
             {%  if block.getType() == 'default' %}
                 {% include 'AcmeThemeBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
