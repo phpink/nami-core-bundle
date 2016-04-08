@@ -12,42 +12,56 @@ class PageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('title', 'text', array(
-                'label' => 'Title',
-                'required' => false
+            ->tab('General') // the tab call is optional
+            ->with('Details', array(
+                //'class'       => 'col-md-8',
+                'box_class'   => 'box box-solid box-info',
+                'description' => 'Page details',
             ))
-            ->add('slug', 'text', array(
-                'label' => 'Slug',
-                'required' => false
+                ->add('title', 'text', array(
+                    'label' => 'Title',
+                    'required' => false
+                ))
+                ->add('slug', 'text', array(
+                    'label' => 'Slug',
+                    'required' => false
+                ))
+    //            ->add('active', 'checkbox', array(
+    //                'label' => 'Active'
+    //            ))
+                ->add('category', 'sonata_type_model', array(
+                    'label' => 'Category',
+                    'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Category',
+                    'property' => 'name',
+                    'required' => false
+                ))
+                ->add('header', 'sonata_simple_formatter_type', array(
+                    'format' => 'richhtml',
+                    'required' => false
+                ))
+                ->add('content', 'sonata_simple_formatter_type', array(
+                    'format' => 'richhtml',
+                    'required' => false
+                ))
+                ->add('metaDescription', 'textarea', array('required' => false))
+                ->add('metaKeywords', 'textarea', array('required' => false))
+                ->add('createdAt', 'datetime', array(
+                    'required' => false
+                ))
+                ->add('createdBy', 'sonata_type_model', array(
+                    'label' => 'Author',
+                    'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\User',
+                    'property' => 'username',
+                    'required' => false
+                ))
+            ->end()
+            ->with('Blocks', array(
+                //'class'       => 'col-md-8',
+                'box_class'   => 'box box-solid box-warning',
+                'description' => 'Blocks on the page',
             ))
-//            ->add('active', 'checkbox', array(
-//                'label' => 'Active'
-//            ))
-            ->add('category', 'sonata_type_model', array(
-                'label' => 'Category',
-                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Category',
-                'property' => 'name',
-                'required' => false
-            ))
-            ->add('header', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false
-            ))
-            ->add('content', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false
-            ))
-            ->add('metaDescription', 'textarea', array('required' => false))
-            ->add('metaKeywords', 'textarea', array('required' => false))
-            ->add('createdAt', 'datetime', array(
-                'required' => false
-            ))
-            ->add('createdBy', 'sonata_type_model', array(
-                'label' => 'Author',
-                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\User',
-                'property' => 'username',
-                'required' => false
-            ))
+                ->add('blocks')
+            ->end()
         ;
     }
 
@@ -56,8 +70,8 @@ class PageAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('title')
-             ->add('slug')
-            ->add('active', 'boolean')
+            ->add('slug')
+            ->add('active')
             ->add('category')
         ;
     }
@@ -68,7 +82,7 @@ class PageAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('title')
             ->add('slug')
-            ->add('active', 'boolean')
+            ->add('active')
             ->add('createdAt')
         ;
     }

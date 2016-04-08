@@ -6,7 +6,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class PageAdmin extends AbstractAdmin
+class BlockAdmin extends AbstractAdmin
 {
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper)
@@ -28,10 +28,10 @@ class PageAdmin extends AbstractAdmin
                 'label' => 'Plugin',
                 'required' => false
             ))
-            ->add('blocks', 'sonata_type_model', array(
-                'label' => 'Blocks',
-                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Block',
-                'property' => 'username',
+            ->add('page', 'sonata_type_model', array(
+                'label' => 'Page',
+                'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Page',
+                'property' => 'slug',
                 'required' => false
             ))
             ->add('createdAt', 'datetime', array(
@@ -51,8 +51,9 @@ class PageAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('title')
-            ->add('createdBy')
             ->add('slug')
+            ->add('page')
+            ->add('createdBy')
             ->add('category')
         ;
     }
@@ -63,6 +64,7 @@ class PageAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('title')
             ->add('slug')
+            ->add('page')
             ->add('createdAt')
         ;
     }
