@@ -55,6 +55,12 @@ class PageAdmin extends AbstractAdmin
                     'property' => 'username',
                     'required' => false
                 ))
+                ->add('background', 'sonata_type_model', array(
+                    'label' => 'Category',
+                    'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Image',
+                    'property' => 'name',
+                    'required' => false
+                ))
             ->end()
             ->with('Blocks', array(
                 //'class'       => 'col-md-8',

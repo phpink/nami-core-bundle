@@ -26,12 +26,12 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-{% include 'AcmeThemeBundle:partials:menu.html.twig' %}
+{% include 'NamiCoreBundle:partials:menu.html.twig' %}
 
     <div class="container">
         {% for block in page.getBlocks() %}
             {%  if block.getType() == 'default' %}
-                {% include 'AcmeThemeBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
+                {% include 'NamiCoreBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
             {% else %}
                 {{ block.getPlugin().getOutput()|raw }}
             {% endif %}
