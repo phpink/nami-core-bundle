@@ -44,6 +44,7 @@ class BlockAdmin extends AbstractAdmin
                 'property' => 'username',
                 'required' => false
             ))
+            ->add('images')
         ;
     }
 

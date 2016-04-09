@@ -35,6 +35,18 @@ services:
         calls:
             - [ setTranslationDomain, [AcmeThemeBundle]]
 
+    # Blocks admin
+    sonata.admin.image:
+        class: PhpInk\Nami\CoreBundle\Admin\Orm\ImageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Images" }
+        arguments:
+            - ~
+            - PhpInk\Nami\CoreBundle\Model\Orm\Image
+            - ~
+        calls:
+            - [ setTranslationDomain, [AcmeThemeBundle]]
+
     # Category admin
     sonata.admin.category:
         class: PhpInk\Nami\CoreBundle\Admin\Orm\CategoryAdmin

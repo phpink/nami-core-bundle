@@ -48,7 +48,8 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('admin.yml');
+        $dbAdapter = $this->container->getParameter('nami_core.database_adapter');
+        $loader->load('admin/'.$dbAdapter.'.yml');
 
         $container->setParameter(
             'jms_serializer.camel_case_naming_strategy.class',
@@ -348,6 +349,9 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
             'default_contexts' => ['cms'],
             'blocks' => [
                 'sonata.admin.block.admin_list' => [
+                    'contexts' => ['admin'],
+                ],
+                'sonata.admin.block.search_result' => [
                     'contexts' => ['admin'],
                 ],
             ],
