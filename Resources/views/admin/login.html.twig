@@ -44,7 +44,7 @@
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
-        <form class="form-horizontal" action="{{ path('nami_front_login') }}" method="post">
+        <form class="form-horizontal" action="{{ path('nami_admin_login') }}" method="post">
 
             <div class="form-group">
                 <label for="username" class="col-sm-2 control-label">Username:</label>

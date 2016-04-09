@@ -13,7 +13,7 @@ class Registry
     const PLUGIN_NAMESPACE = 'NamiPlugin';
     const CONFIG_FILENAME = 'config.yml';
     const ROUTES_FILENAME = 'routing.yml';
-    const BLOCK_PLUGIN_FILENAME = 'BlockPlugin';
+    const BLOCK_PLUGIN_FILENAME = 'Block';
 
     /**
      * Self instance

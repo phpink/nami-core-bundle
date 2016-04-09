@@ -13,12 +13,6 @@ security:
             id: nami_core.user_provider
 
     firewalls:
-        main:
-            anonymous: ~
-            form_login:
-                login_path: nami_front_login
-                check_path: nami_front_login
-
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -63,7 +57,18 @@ security:
                 throw_exceptions: false     # When an authentication failure occurs, return a 401 response immediately
                 create_entry_point: true    # When no authentication details are provided, create a default entry point that returns a 401 response
 
+        admin:
+            pattern:  ^/admin
+            anonymous: ~
+            form_login:
+                login_path: nami_admin_login
+                check_path: nami_admin_login
+            logout:
+                path:   nami_admin_logout
+                target: nami_admin_login
+
     access_control:
         - { path: ^/api-doc/, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN] }
         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin/login, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
         - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_SONATA_ADMIN] }

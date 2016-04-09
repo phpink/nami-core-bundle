@@ -5,7 +5,7 @@ namespace PhpInk\Nami\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class FrontendSecurityController extends Controller
+class AdminSecurityController extends Controller
 {
     public function loginAction(Request $request)
     {
@@ -18,12 +18,16 @@ class FrontendSecurityController extends Controller
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render(
-            'NamiCoreBundle:default:login.html.twig',
+            'NamiCoreBundle:admin:login.html.twig',
             array(
                 // last username entered by the user
                 'last_username' => $lastUsername,
-                'error'         => $error,
+                'error' => $error,
             )
         );
+    }
+
+    public function logoutAction(Request $request)
+    {
     }
 }

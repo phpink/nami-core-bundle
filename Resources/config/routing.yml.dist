@@ -21,21 +21,21 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
+nami_admin_login:
+    path:     /admin/login
+    defaults: { _controller: NamiCoreBundle:AdminSecurity:login }
+    requirements:
+        _method:  GET|POST
+
+nami_admin_logout:
+    path:     /admin/logout
+    defaults: { _controller: NamiCoreBundle:AdminSecurity:logout }
+    requirements:
+        _method:  GET
+
 nami_front_homepage:
     path:     /
     defaults: { _controller: NamiCoreBundle:Frontend:index }
-    requirements:
-        _method:  GET|POST
-
-nami_front_login:
-    path:     /login
-    defaults: { _controller: NamiCoreBundle:FrontendSecurity:login }
-    requirements:
-        _method:  GET|POST
-
-nami_front_extra:
-    path:     /test
-    defaults: { _controller: AcmeThemeBundle:Frontend:test }
     requirements:
         _method:  GET|POST
 
