@@ -399,7 +399,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
         ]);
         $this->container->prependExtensionConfig('sonata_admin', [
             'templates' => [
-                'layout' =>'SonataAdminBundle::layout.html.twig',
+                'layout' =>'SonataAdminBundle::standard_layout.html.twig',
             ],
 //            'security' => [
 //                'handler' => 'sonata.admin.security.handler.role',
