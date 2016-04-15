@@ -15,9 +15,9 @@ class UserAdmin extends AbstractAdmin
             ->add('username', 'text', array('label' => 'Username'))
             ->add('firstName', 'text', array('label' => 'First name'))
             ->add('lastName', 'text', array('label' => 'Last name'))
-/*            ->add('active', 'boolean', array(
+            ->add('active', 'boolean', array(
                 'label' => 'Active'
-            ))*/
+            ))
             ->add('active', 'boolean', array(
                 'label' => 'Active'
             ))

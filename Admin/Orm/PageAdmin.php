@@ -27,9 +27,9 @@ class PageAdmin extends AbstractAdmin
                     'label' => 'Slug',
                     'required' => false
                 ))
-    //            ->add('active', 'checkbox', array(
-    //                'label' => 'Active'
-    //            ))
+                ->add('active', 'checkbox', array(
+                    'label' => 'Active'
+                ))
                 ->add('category', 'sonata_type_model', array(
                     'label' => 'Category',
                     'class' => 'PhpInk\Nami\CoreBundle\Model\Orm\Category',

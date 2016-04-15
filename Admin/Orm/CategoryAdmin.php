@@ -15,9 +15,9 @@ class CategoryAdmin extends AbstractAdmin
         $formMapper
             ->add('name', 'text', array('label' => 'Name'))
             ->add('title', 'text', array('label' => 'Title'))
-//            ->add('active', 'boolean', array(
-//                'label' => 'Active'
-//            ))
+            ->add('active', 'boolean', array(
+                'label' => 'Active'
+            ))
             ->add('header', 'sonata_simple_formatter_type', array(
                 'format' => 'richhtml',
                 'required' => false
