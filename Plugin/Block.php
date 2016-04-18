@@ -3,7 +3,6 @@
 namespace PhpInk\Nami\CoreBundle\Plugin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 

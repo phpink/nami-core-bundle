@@ -5,226 +5,190 @@ namespace PhpInk\Nami\CoreBundle\Tests\Controller\Rest;
 use PhpInk\Nami\CoreBundle\Tests\ApiTestCase;
 
 /**
- * Tests for BrandController
+ * Tests for PageController
  *
  * @package PhpInk\Nami\CoreBundle\Tests\Controller\Rest
  */
-class BrandControllerTest extends ApiTestCase
+class PageControllerTest extends ApiTestCase
 {
 
     /**
-     * @covers BrandController::getBrandsAction
+     * @covers PageController::getPagesAction
      *
      * @param array $user user username/password
      * @param string $role user role
      *
      * @dataProvider getUsers
      */
-    public function testGetBrands($user, $role)
+    public function testGetPages($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('GET', $this->getUrl('nami_api_get_brands'));
+        $client->request('GET', $this->getUrl('nami_api_get_pages'));
 
         $response = $client->getResponse();
-        $content = $this->assertJsonHasPaginationResponse($response, 200);
-        $this->assertCount(10, $content['elements']);
+        if ($role === 'ROLE_ADMIN') {
+            $content = $this->assertJsonHasPaginationResponse($response, 200);
+            $this->assertCount(4, $content['elements']);
 
-        $firstEl = $content['elements'][0];
-        $this->assertArrayHasKey('id', $firstEl);
-        $this->assertArrayHasKey('name', $firstEl);
-        $this->assertArrayHasKey('logo', $firstEl);
-        $this->assertArrayHasKey('slug', $firstEl);
-        $this->assertArrayHasKey('locales', $firstEl);
-        $this->assertArrayNotHasKey('products', $firstEl);
-
-        // Check brand access
-        if ($role !== 'ROLE_MANAGER') {
-            // Check all brands are active
-            foreach ($content['elements'] as $element) {
-                $this->assertArrayNotHasKey('active', $element, "Inactive item found when not ROLE_MANAGER");
-            }
-        } else  {
-            // Search for laguiole inactive brand
-            $inactiveFound = false;
-            foreach ($content['elements'] as $element) {
-                if ($element['slug'] == 'laguiole') {
-                    $inactiveFound = true;
-                }
-            }
-            $this->assertTrue($inactiveFound, "Inactive item not found when ROLE_MANAGER");
+            $firstEl = $content['elements'][0];
+            $this->assertArrayHasKey('id', $firstEl);
+            $this->assertArrayHasKey('title', $firstEl);
+            $this->assertArrayHasKey('slug', $firstEl);
+            $this->assertArrayHasKey('header', $firstEl);
+            $this->assertArrayHasKey('content', $firstEl);
+            $this->assertArrayNotHasKey('foo', $firstEl);
+            
+        } else {
+            $this->assertJsonResponse($response, 401);
         }
     }
 
     /**
-     * @covers BrandController::getBrandAction
+     * @covers PageController::getPageAction
      *
      * @param array $user user username/password
      * @param string $role user role
      *
      * @dataProvider getUsers
      */
-    public function testGetBrand($user, $role)
+    public function testGetPage($user, $role)
     {
         // Retrieve a specific id from the get_all
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('GET', $this->getUrl('nami_api_get_brands'));
+        $client->request('GET', $this->getUrl('nami_api_get_pages'));
         $response = $client->getResponse();
-        $content = json_decode($response->getContent(), true);
-        $id = $content['elements'][0]['id'];
 
-        // Real test
-        $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('GET', $this->getUrl('nami_api_get_brand', array('id' => $id)));
-
-        $response = $client->getResponse();
-        $this->assertJsonResponse($response, 200);
-
-        $content = json_decode($response->getContent(), true);
-        $this->assertInternalType('array', $content);
-
-        $this->assertArrayHasKey('name', $content);
-        $this->assertArrayHasKey('logo', $content);
-        $this->assertArrayHasKey('slug', $content);
-        $this->assertArrayNotHasKey('products', $content);
-
-        // Check access
-        if ($role !== 'ROLE_MANAGER') {
-            $this->assertArrayNotHasKey('active', $content);
-
-            // Retrieve laguiole inactive brand id
-            $client = $this->createAuthenticatedClient('manager', 'manager');
-            $client->request('GET', $this->getUrl('nami_api_get_brands'));
-            $response = $client->getResponse();
+        if ($role === 'ROLE_ADMIN') {
             $content = json_decode($response->getContent(), true);
-            $inactiveId = null;
-            foreach ($content['elements'] as $element) {
-                if ($element['slug'] == 'laguiole') {
-                    $inactiveId = $element['id'];
-                }
-            }
-            $this->assertTrue(($inactiveId > 0), "Inactive item not found when ROLE_MANAGER");
+            $id = $content['elements'][0]['id'];
 
-            // Check access is restricted
+            // Real test
             $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-            $client->request('GET', $this->getUrl('nami_api_get_brand', array('id' => $inactiveId)));
+            $client->request('GET', $this->getUrl('nami_api_get_page', array('id' => $id)));
 
             $response = $client->getResponse();
-            $this->assertJsonResponse($response, 500);
+            $this->assertJsonResponse($response, 200);
+
             $content = json_decode($response->getContent(), true);
             $this->assertInternalType('array', $content);
 
-            $this->assertArrayHasKey('message', $content);
-            $this->assertEquals($content['message'], "Entity is inactive.");
+            $this->assertArrayHasKey('title', $content);
+            $this->assertArrayHasKey('slug', $content);
+            $this->assertArrayHasKey('header', $content);
+            $this->assertArrayHasKey('content', $content);
+            $this->assertArrayNotHasKey('foo', $content);
 
+        } else {
+            $this->assertJsonResponse($response, 401);
         }
     }
 
     /**
-     * @covers BrandController::postBrandsAction
+     * @covers PageController::postPagesAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
      */
-    public function testPostBrand($user, $role)
+    public function testPostPage($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $brand = array(
-            "name" => "Technics",
-            "active" => true,
-            "locales" => array(
-                "fr" => array(
-                    "id" => 1,
-                    "description" => "Technics est une entreprise japonaise de matériel électronique, de HiFi et d'instruments de musique, fondée en 1965.",
-                    "priceLabel" => null
+        $page = array(
+            'title' => 'Nami CMS Demo',
+            'slug' => '/demo',
+            'header' => 'NAMI <strong>CMS</strong> demo app',
+            'metaKeywords' => "nami, cms, symfony",
+            'metaDescription' => "Nami, a basic Content management system for Symfony",
+            'background' => null,
+            'category' => null,
+            'backgroundColor' => null,
+            'borderColor' => null,
+            'footerColor' => null,
+            'negativeText' => false,
+            'blocks' => array(
+                array(
+                    'title' => 'Nami CMS',
+                    'content' => '<p><span itemprop="description">Content management system</span> with Symfony 2.7</p>',
+                    'template' => 'front',
+                    'images' => array(),
+                    'type' => 'default',
                 ),
-                "en" => array(
-                    "id" => 1,
-                    "description" => "Technics is the brand of hi-fi audio products such as amplifiers,network audio players, speaker systems and music system solutions.",
-                    "priceLabel" => null
-                )
             ),
-            "logo" => null,
-            "supplier" => 1
         );
-        $brand = $this->cleanData($brand);
-        $client->request('POST', $this->getUrl('nami_api_post_brands'), $brand);
+        $page = $this->cleanData($page);
+        $client->request('POST', $this->getUrl('nami_api_post_pages'), $page);
 
         $response = $client->getResponse();
 
-        if ($role === 'ROLE_MANAGER') {
+        if ($role === 'ROLE_ADMIN') {
             $this->assertJsonResponse($response, 201, false);
         } else {
-            $this->assertJsonResponse($response, 403);
+            $this->assertJsonResponse($response, 401);
         }
     }
 
     /**
-     * @covers BrandController::putBrandAction
+     * @covers PageController::putPageAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
      */
-    public function testPutBrand($user, $role)
+    public function testPutPage($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
 
-        // Retrieve the first brand
-        $client->request('GET', $this->getUrl('nami_api_get_brands'));
-        $content = json_decode($client->getResponse()->getContent(), true);
-        $brand = $content['elements'][0];
+        // Retrieve the first Page
+        $client->request('GET', $this->getUrl('nami_api_get_pages'));
 
-        // Update some properties
-        $brand['name'] = 'The test brand';
-        $brand['locales']['fr']['description'] = 'Test brand locale FR';
-        $brand['locales']['en'] = array('description' => 'Test brand locale EN');
-        $brand = $this->cleanData($brand);
+        if ($role === 'ROLE_ADMIN') {
+            $content = json_decode($client->getResponse()->getContent(), true);
+            $page = $content['elements'][0];
 
-        $client->request(
-            'PUT', $this->getUrl(
-                'nami_api_put_brand',
-                array('id' => $brand['id'])
-            ), $brand
-        );
+            // Update some properties
+            $page['title'] = 'The test Page';
+            $page['header'] = 'Nami CMS DEMO';
+            $page = $this->cleanData($page);
 
-        $response = $client->getResponse();
+            $client->request(
+                'PUT', $this->getUrl(
+                    'nami_api_put_page',
+                    array('id' => $page['id'])
+                ), $page
+            );
 
-        if ($role === 'ROLE_RESELLER') {
-            $this->assertJsonResponse($response, 403); // Access denied
-
-        } elseif ($role === 'ROLE_MANAGER') {
+            $response = $client->getResponse();
             $output = $this->assertJsonResponse($response, 200);
-            $this->assertEquals('The test brand', $output['name']);
-            $this->assertEquals('the-test-brand', $output['slug']);
-            $this->assertEquals('Test brand locale FR', $output['locales']['fr']['description']);
-            $this->assertEquals('Test brand locale EN', $output['locales']['en']['description']);
+            $this->assertEquals('The test Page', $output['title']);
+            $this->assertEquals('the-test-Page', $output['slug']);
+            $this->assertEquals('Nami CMS DEMO', $output['header']);
 
         } else {
-            $this->assertJsonResponse($response, 403); // Access denied
+            $this->assertJsonResponse($client->getResponse(), 401); // Access denied
         }
     }
 
     /**
-     * @covers BrandController::deleteBrandAction
+     * @covers PageController::deletePageAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
      */
-    public function testDeleteBrand($user, $role)
+    public function testDeletePage($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('DELETE', $this->getUrl('nami_api_delete_brand', array('id' => 14)));
+        // Retrieve the first Page
+        $client->request('GET', $this->getUrl('nami_api_get_pages'));
 
-        $response = $client->getResponse();
+        if ($role === 'ROLE_ADMIN') {
+            $content = json_decode($client->getResponse()->getContent(), true);
+            $page = $content['elements'][0];
+            $client->request('DELETE', $this->getUrl('nami_api_delete_page', array('id' => $page['id'])));
+            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', array(), true)); // Page delete OK
 
-        if ($role === 'ROLE_RESELLER') {
-            $this->assertJsonResponse($response, 403); // Access denied
-        } elseif ($role === 'ROLE_MANAGER') {
-            $this->assertJsonResponse($response, 204, false, $this->getUrl('nami_api_get_brands', array(), true)); // Brand delete OK
         } else {
-            $this->assertJsonResponse($response, 404); // Brand not exits (but access denied was expected)
+            $this->assertJsonResponse($client->getResponse(), 401); // Access denied
         }
     }
 
@@ -234,9 +198,8 @@ class BrandControllerTest extends ApiTestCase
     public function getUsers()
     {
         return array(
-            array(array('username' => 'reseller', 'password' => 'reseller'), 'ROLE_RESELLER'),
-            array(array('username' => 'manager', 'password' => 'manager'), 'ROLE_MANAGER'),
-            array(array('username' => 'supplier', 'password' => 'supplier'), 'ROLE_SUPPLIER')
+            array(array('username' => 'admin', 'password' => 'pass'), 'ROLE_ADMIN'),
+            array(array('username' => 'admin', 'password' => 'wrongpass'), 'ROLE_WRONG'),
         );
     }
 }

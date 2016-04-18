@@ -5,17 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Basic Template</title>
+    <title>{{ page.getTitle() }}</title>
+    <meta name="description" content="{{ page.getMetaDescription() }}">
+    <meta name="keywords" content="{{ page.getMetaKeywords() }}">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
-
-    {#{% stylesheets filter="?yui_css"#}
-    {#'@AcmeThemeBundle/Resources/css/global.css'#}
-    {#%}#}
-    {#<link href='{{ asset_url }}' rel='stylesheet' type='text/css'>#}
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,22 +21,17 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-{% include 'AcmeThemeBundle:partials:menu.html.twig' %}
+{% include 'NamiCoreBundle:partials:menu.html.twig' %}
 
-    <div class="container"">
+    <div class="container">
         {% for block in page.getBlocks() %}
             {%  if block.getType() == 'default' %}
-                {% include 'AcmeThemeBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
+                {% include 'NamiCoreBundle:block:block-' ~ block.getTemplate() ~ '.html.twig' with {'block': block} %}
             {% else %}
                 {{ block.getPlugin().getOutput()|raw }}
             {% endif %}
         {% endfor %}
     </div>
-
-    {#{% javascripts filter="?yui_js" output="main.js"#}
-    {#'@AcmeThemeBundle/Resources/js/main.js'#}
-    {#%}#}
-    {#<script type="text/javascript" src="{{ asset_url }}"></script>#}
 
 </body>
 </html>

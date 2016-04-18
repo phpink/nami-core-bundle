@@ -17,8 +17,6 @@ interface CategoryInterface
 
     /**
      * Fill null collection properties
-     *
-     * @ODM\PostLoad
      */
     public function initialize();
 

@@ -56,8 +56,8 @@ class AuthenticationControllerTest extends ApiTestCase
     public function testLoginSuccess()
     {
         $data = array(
-            'username' => 'manager',
-            'password' => 'manager',
+            'username' => 'admin',
+            'password' => 'pass',
         );
         $this->client->request(
             'POST',

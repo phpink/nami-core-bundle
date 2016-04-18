@@ -70,11 +70,11 @@ class Page extends Core\Entity implements PageInterface
 
     /**
      * @var string
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="relationField", value="category"),
-     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/")
+     * Gedmo\Slug(handlers={
+     *      Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *          Gedmo\SlugHandlerOption(name="relationField", value="category"),
+     *          Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+     *          Gedmo\SlugHandlerOption(name="separator", value="/")
      *      })
      * }, fields={"title"})
      * @ORM\Column(type="string", length=255)

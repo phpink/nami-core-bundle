@@ -26,17 +26,17 @@ abstract class ApiTestCase extends LiipWebTestCase
      */
     public function setUp()
     {
-        /*$this->runCommand('doctrine:database:create');
+        $this->runCommand('doctrine:database:create');
         $this->runCommand('doctrine:schema:update', array('--force' => true));
         $this->runCommand('doctrine:fixtures:load', array(
             //'--purge-with-truncate' => true,
             '--no-interaction' => true
-        ));*/
+        ));
     }
 
     public function tearDown()
     {
-        //$this->runCommand('doctrine:database:drop', array('--force' => true));
+        $this->runCommand('doctrine:database:drop', array('--force' => true));
         parent::tearDown();
     }
 
@@ -48,7 +48,7 @@ abstract class ApiTestCase extends LiipWebTestCase
      *
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
-    protected function createAuthenticatedClient($username = 'john', $password = 'doe')
+    protected function createAuthenticatedClient($username = 'admin', $password = 'pass')
     {
         $client = static::createClient();
         $client->request(
@@ -62,10 +62,10 @@ abstract class ApiTestCase extends LiipWebTestCase
 
         $response = $client->getResponse();
         $data     = json_decode($response->getContent(), true);
-
         $client = static::createClient();
-        $client->setServerParameter('HTTP_Authorization', sprintf('%s %s', $this->authorizationHeaderPrefix, $data['token']));
-
+        if ($data && array_key_exists('token', $data)) {
+            $client->setServerParameter('HTTP_Authorization', sprintf('%s %s', $this->authorizationHeaderPrefix, $data['token']));
+        }
         return $client;
     }
 
@@ -159,11 +159,6 @@ abstract class ApiTestCase extends LiipWebTestCase
         return $content;
     }
 
-    private $locales = array(
-        'fr' => 1,
-        'en' => 2
-    );
-
     /**
      * Clean data array before sending a request
      * Used because the FOSRest.BodyListener is not called on testing
@@ -172,15 +167,6 @@ abstract class ApiTestCase extends LiipWebTestCase
      */
     public function cleanData(array $data)
     {
-        if (array_key_exists('locales', $data)) {
-            $locales = array();
-            foreach ($data['locales'] as $code => $localeItem) {
-                $locales[] = array_merge($localeItem, array(
-                    'locale' => $this->locales[$code]
-                ));
-            }
-            $data['locales'] = $locales;
-        }
         if (array_key_exists('_references', $data)) {
             unset($data['_references']); // Remove extra reference
         }

@@ -69,11 +69,11 @@ class Page extends Core\Document implements PageInterface
     /**
      * @var string
      * @ODM\String
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="relationField", value="category"),
-     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/")
+     * Gedmo\Slug(handlers={
+     *      Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *          Gedmo\SlugHandlerOption(name="relationField", value="category"),
+     *          Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+     *          Gedmo\SlugHandlerOption(name="separator", value="/")
      *      })
      * }, fields={"title"}, unique=true)
      * @JMS\Expose
