@@ -209,7 +209,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
         ));
         $this->container->prependExtensionConfig('sensio_framework_extra', array(
             'view' => array(
-                'annotations' => false,
+                'annotations' => true,
             )
         ));
         $this->container->prependExtensionConfig('twig', array(

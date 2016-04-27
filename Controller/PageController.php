@@ -48,12 +48,12 @@ class PageController extends AbstractController
      *     description="How many items to return."
      * )
      * @Annotations\QueryParam(
-     *     name="orderBy", array=true,
+     *     name="orderBy", map=true,
      *     requirements="[a-zA-Z0-9-\.]+",
      *     description="Sort by fields"
      * )
      * @Annotations\QueryParam(
-     *     name="filterBy", array=true,
+     *     name="filterBy", map=true,
      *     requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+",
      *     description="Filters"
      * )

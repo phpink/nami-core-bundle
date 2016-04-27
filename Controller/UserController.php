@@ -38,8 +38,8 @@ class UserController extends AbstractController
      *
      * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * ie: ?offset=2&limit=10&orderBy[createdAt]=0&filterBy[active]=true
      *
