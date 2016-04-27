@@ -133,6 +133,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
+     * @group test
      */
     public function testPutPage($user, $role)
     {
@@ -149,6 +150,7 @@ class PageControllerTest extends ApiTestCase
             $page['title'] = 'The test Page';
             $page['header'] = 'Nami CMS DEMO';
             $page = $this->cleanData($page);
+
 
             $client->request(
                 'PUT', $this->getUrl(

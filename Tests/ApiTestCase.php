@@ -167,11 +167,16 @@ abstract class ApiTestCase extends LiipWebTestCase
      */
     public function cleanData(array $data)
     {
-        if (array_key_exists('_references', $data)) {
-            unset($data['_references']); // Remove extra reference
-        }
-        if (array_key_exists('_links', $data)) {
-            unset($data['_links']); // Remove links
+        foreach ($data as $key => $item) {
+            if ($key === '_references') {
+                unset($data['_references']); // Remove extra reference
+
+            } elseif ($key === '_links') {
+                unset($data['_links']); // Remove links
+
+            } elseif (is_array($item) || $item instanceof \Traversable) {
+                $data[$key] = $this->cleanData($item);
+            }
         }
         return $data;
     }

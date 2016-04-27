@@ -15,12 +15,12 @@ use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
 class FrontendController extends Controller
 {
     /**
-     * @var PageRepositoryInterface
+     * @var \PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface
      */
     protected $pageRepo;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface
      */
     protected $categoryRepo;
 

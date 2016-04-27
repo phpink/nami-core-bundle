@@ -28,7 +28,7 @@ class PageRepository extends OrmRepository implements PageRepositoryInterface
      * @param mixed         $query The doctrine query builder.
      * @param UserInterface $user  The user who made the request.
      *
-     * @return mixed
+     * @return QueryBuilder
      */
     public function buildItemsQuery($query, UserInterface $user = null)
     {
@@ -73,7 +73,6 @@ class PageRepository extends OrmRepository implements PageRepositoryInterface
                 )
             )
             ->orderBy('blocks.position', 'asc');
-
         $entity = $this->fetchSingleResult($query);
         return $entity;
 

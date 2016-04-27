@@ -3,7 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class PageType
@@ -45,7 +45,7 @@ class PageType extends BaseType
                 'type' => 'model',
                 'options' => array(
                     'class' => 'NamiCoreBundle:Image',
-                    'property' => 'id',
+                    'choice_label' => 'id',
                     'required' => false
                 )
             ),
@@ -53,7 +53,7 @@ class PageType extends BaseType
                 'type' => 'model',
                 'options' => array(
                     'class' => 'NamiCoreBundle:Category',
-                    'property' => 'id',
+                    'choice_label' => 'id',
                     'required' => false
                 )
             ),
@@ -77,11 +77,11 @@ class PageType extends BaseType
     /**
      * Form type default options
      *
-     * @param OptionsResolverInterface $resolver The resolver.
+     * @param OptionsResolver $resolver The resolver.
      *
      * @return array
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $defaultOptions = array(
             'csrf_protection' => false,

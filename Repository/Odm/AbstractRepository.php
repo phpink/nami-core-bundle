@@ -86,7 +86,7 @@ abstract class AbstractRepository extends DocumentRepository implements Reposito
      * @param mixed         $query The doctrine query builder.
      * @param UserInterface $user  The user making the request.
      *
-     * @return mixed
+     * @return QueryBuilder
      */
     public function buildItemsQuery($query, UserInterface $user = null)
     {

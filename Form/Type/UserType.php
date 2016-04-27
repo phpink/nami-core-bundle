@@ -3,7 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class UserType
@@ -51,7 +51,7 @@ class UserType extends BaseType
                 'type' => 'model',
                 'options' => array(
                     'class' => 'NamiCoreBundle:Image',
-                    'property' => 'id',
+                    'choice_label' => 'id',
                     'required' => false
                 )
             ),
@@ -81,11 +81,11 @@ class UserType extends BaseType
     /**
      * Form type default options
      *
-     * @param OptionsResolverInterface $resolver The resolver.
+     * @param OptionsResolver $resolver The resolver.
      *
      * @return array
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $validationGroups = array('Default');
         $validationGroups[] = $this->isEditMode() ?

@@ -3,7 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class BlockType
@@ -31,7 +31,7 @@ class BlockType extends BaseType
         $builder = $this->addModel(
             'page', $builder, array(
                 'class' => 'NamiCoreBundle:Page',
-                'property' => 'id',
+                'choice_label' => 'id',
                 'required' => false
             )
         );
@@ -41,7 +41,8 @@ class BlockType extends BaseType
             'images', $builder, array(
                 'multiple' => true,
                 'class' => 'NamiCoreBundle:Image',
-                'property' => 'id',
+                'choices_as_values' => true,
+                'choice_label' => 'id',
                 'required' => false
             )
         );
@@ -53,11 +54,11 @@ class BlockType extends BaseType
     /**
      * Form type default options
      *
-     * @param OptionsResolverInterface $resolver The resolver.
+     * @param OptionsResolver $resolver The resolver.
      *
      * @return array
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
