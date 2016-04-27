@@ -27,7 +27,7 @@
         "nelmio/api-doc-bundle": "^2.4",
         "friendsofsymfony/http-cache-bundle": "2.0.*@dev",
         "willdurand/hateoas-bundle": "^1.0",
-        "stof/doctrine-extensions-bundle": "3.0.*@dev",
+        "stof/doctrine-extensions-bundle": "3.x",
         "twig/extensions": "1.1.0",
         "liip/imagine-bundle": "~1.0",
         "lexik/jwt-authentication-bundle": "2.0.*@dev",
@@ -48,5 +48,10 @@
     },
     "autoload": {
         "psr-4": { "PhpInk\\Nami\\CoreBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }
