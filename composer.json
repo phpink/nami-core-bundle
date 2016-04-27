@@ -48,10 +48,5 @@
     },
     "autoload": {
         "psr-4": { "PhpInk\\Nami\\CoreBundle\\": "" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1-dev"
-        }
     }
 }
