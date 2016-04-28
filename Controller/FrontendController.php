@@ -55,7 +55,7 @@ class FrontendController extends Controller
         $this->initRepositories();
         $slug = str_replace('.html', '', $slug);
         // Retrieve page or category from slug
-        $page = $this->searchPage($slug);
+        $page = $this->searchPage($request, $slug);
         $response = null;
         if (!$page) {
             $response = new Response();
@@ -111,7 +111,7 @@ class FrontendController extends Controller
      * @param $slug string Page slug
      * @return PageInterface
      */
-    protected function searchPage($slug)
+    protected function searchPage(Request $request, $slug)
     {
         $page = $this->pageRepo->getPageFromSlug($slug);
         if (!$page) {
@@ -123,8 +123,8 @@ class FrontendController extends Controller
             // Register analytics
             Analytics::registerPageHit(
                 $this->getManager(),
-                $this->getRequest()->getClientIp(),
-                $this->getRequest()->headers->get('user-agent'),
+                $request->getClientIp(),
+                $request->headers->get('user-agent'),
                 $page
             );
         }

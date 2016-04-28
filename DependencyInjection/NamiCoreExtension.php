@@ -80,11 +80,14 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
          */
         $dbAdapter = $this->container->getParameter('nami_core.database_adapter');
         $mappingsInfo = array(
-            'gedmo_tree' => array(
+
+            'tree' => array(
                 'type' => 'annotation',
-                'prefix' => 'Gedmo\Tree\Document',
-                'dir' => "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document",
-                'alias' => 'GedmoTree',
+                'prefix' => $dbAdapter === 'orm' ? 'Gedmo\Tree\Entity' : 'Gedmo\Tree\Document',
+                'dir' => $dbAdapter === 'orm' ?
+                    "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity" :
+                    "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document",
+                'alias' => 'Gedmo',
                 'is_bundle' => false,
             ),
             'NamiCoreBundle' => array(
@@ -162,22 +165,6 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 )
             )
         ));
-
-        /*
-         * Lexik JWT Configuration
-         */
-        $this->container->prependExtensionConfig('swiftmailer', [
-            'transport' =>  '%nami_core.mailer_transport%',
-            'host' =>       '%nami_core.mailer_host%',
-            'port' =>       '%nami_core.mailer_port%',
-            'encryption' => '%nami_core.mailer_encryption%',
-            'username' =>   '%nami_core.mailer_username%',
-            'password' =>   '%nami_core.mailer_password%',
-            'spool' => [
-                'type' => 'file',
-                'path' => '%kernel.root_dir%/spool',
-            ],
-        ]);
     }
 
     /**

@@ -226,7 +226,7 @@ class BaseType extends AbstractType
      *
      * @return string The form type name.
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         // Empty string to map all fields at top level
         return '';

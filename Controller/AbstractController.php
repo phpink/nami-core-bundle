@@ -4,6 +4,7 @@ namespace PhpInk\Nami\CoreBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception as CoreException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -12,8 +13,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
-use FOS\RestBundle\Util\Codes;
+
 use FOS\RestBundle\View\RouteRedirectView;
+use FOS\RestBundle\Context\Context;
 use PhpInk\Nami\CoreBundle\Model\ModelInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 use PhpInk\Nami\CoreBundle\Util\PaginatedCollection;
@@ -193,8 +195,8 @@ abstract class AbstractController extends FOSRestController
                         'update' => $update
                     ),
                     $update ?
-                    Codes::HTTP_ACCEPTED :
-                    Codes::HTTP_INTERNAL_SERVER_ERROR
+                        Response::HTTP_ACCEPTED :
+                        Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         );
@@ -217,7 +219,7 @@ abstract class AbstractController extends FOSRestController
         // see http://leedavis81.github.io/is-a-http-delete-requests-idempotent/
         $view = $this->routeRedirectView(
             'nami_api_get_'. strtolower($this->getModelName()) . 's',
-            array(), Codes::HTTP_NO_CONTENT
+            array(), Response::HTTP_NO_CONTENT
         );
         return $this->handleView($view);
     }
@@ -245,8 +247,8 @@ abstract class AbstractController extends FOSRestController
                         'delete' => $delete
                     ),
                     $delete ?
-                    Codes::HTTP_ACCEPTED :
-                    Codes::HTTP_INTERNAL_SERVER_ERROR
+                        Response::HTTP_ACCEPTED :
+                        Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         );
@@ -284,7 +286,7 @@ abstract class AbstractController extends FOSRestController
             $view = $onFormValid($form, $ids);
         } else {
             // Form errors are displayed
-            $view = View::create($form, Codes::HTTP_BAD_REQUEST);
+            $view = View::create($form, Response::HTTP_BAD_REQUEST);
         }
         return $view;
     }
@@ -309,14 +311,14 @@ abstract class AbstractController extends FOSRestController
     ) {
         $view = null;
         $statusCode = $model->getId() ?
-            Codes::HTTP_OK : Codes::HTTP_CREATED;
+            Response::HTTP_OK : Response::HTTP_CREATED;
 
         // Create the FormType
         $formType = $this->createFormType($formTypeOptions);
         $form = $this->createForm($formType, $model,  $formOptions);
 
         // Submit the form data
-        $form->submit($request);
+        $form->handleRequest($request);
 
         // If the submitted data is valid
         if ($form->isValid()) {
@@ -328,7 +330,7 @@ abstract class AbstractController extends FOSRestController
 
         } else {
             // Form errors are displayed
-            $view = View::create($form, Codes::HTTP_BAD_REQUEST);
+            $view = View::create($form, Response::HTTP_BAD_REQUEST);
         }
         return $view;
     }
@@ -354,8 +356,8 @@ abstract class AbstractController extends FOSRestController
             'nami_core.database_adapter'
         );
         $formTypeOptions['isORM'] = $dbAdapter !== 'odm';
-        $formType = new $formTypeClass($formTypeOptions);
-        return $formType;
+        //$formType = new $formTypeClass($formTypeOptions);
+        return $formTypeClass;
     }
 
     /**
@@ -371,7 +373,7 @@ abstract class AbstractController extends FOSRestController
     protected function saveModel(
         ModelInterface $model, $statusCode, $triggerHooks = true
     ) {
-        if ($statusCode === Codes::HTTP_CREATED && $triggerHooks) {
+        if ($statusCode === Response::HTTP_CREATED && $triggerHooks) {
             $this->onPreSave($model);
         } else {
             $this->onPreUpdate($model);
@@ -380,7 +382,7 @@ abstract class AbstractController extends FOSRestController
         // The ModelInterface is saved
         $this->persistModel($model);
 
-        if ($statusCode === Codes::HTTP_CREATED && $triggerHooks) {
+        if ($statusCode === Response::HTTP_CREATED && $triggerHooks) {
             $this->onPostSave($model);
         } else {
             $this->onPostUpdate($model);
@@ -431,10 +433,13 @@ abstract class AbstractController extends FOSRestController
         }
 
         $view = new View($data, $statusCode);
-        $view->getSerializationContext()
-            ->setSerializeNull(true)
-            ->enableMaxDepthChecks()
-            ->setGroups(array_merge(array('Default'), $groups));
+
+        $view->setContext(
+            (new Context())
+                ->setSerializeNull(true)
+                //->enableMaxDepthChecks()
+                ->addGroups(array_merge(array('Default'), $groups))
+        );
         return $view;
     }
 
