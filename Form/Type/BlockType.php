@@ -2,6 +2,9 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,12 +25,12 @@ class BlockType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'text');
-        $builder->add('active', 'checkbox');
-        $builder->add('position', 'integer');
-        $builder->add('title', 'text');
-        $builder->add('content', 'text');
-        $builder->add('position', 'integer');
+        $builder->add('id', TextType::class);
+        $builder->add('active', CheckboxType::class);
+        $builder->add('position', IntegerType::class);
+        $builder->add('title', TextType::class);
+        $builder->add('content', TextType::class);
+        $builder->add('position', IntegerType::class);
         $builder = $this->addModel(
             'page', $builder, array(
                 'class' => 'NamiCoreBundle:Page',
@@ -35,8 +38,8 @@ class BlockType extends BaseType
                 'required' => false
             )
         );
-        $builder->add('template', 'text', array('empty_data' => 'default'));
-        $builder->add('type', 'text');
+        $builder->add('template', TextType::class, array('empty_data' => 'default'));
+        $builder->add('type', TextType::class);
         $builder = $this->addModel(
             'images', $builder, array(
                 'multiple' => true,
@@ -46,7 +49,7 @@ class BlockType extends BaseType
                 'required' => false
             )
         );
-        $builder->add('uuid', 'text', array('mapped' => false));
+        $builder->add('uuid', TextType::class, ['mapped' => false]);
         $builder = $this->addCreatedUpdatedAt($builder);
         $builder = $this->addCreatedUpdatedBy($builder);
     }

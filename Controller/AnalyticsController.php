@@ -239,7 +239,7 @@ class AnalyticsController extends AbstractController
             $ch = curl_init();
             curl_setopt(
                 $ch, CURLOPT_URL,
-                'http://api.openweathermap.org/data/2.5/forecast/daily?q=bordeaux,fr&cnt=5&lang=fr_FR&mode=json'
+                'http://api.openweathermap.org/data/2.5/forecast/daily?q=bordeaux,fr&cnt=5&lang=fr_FR&mode=json&APPID=57a282fbc5ecb6a287dfafca1e7ec3f9'
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $data = curl_exec($ch);

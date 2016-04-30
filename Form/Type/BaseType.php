@@ -2,7 +2,10 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -131,7 +134,7 @@ class BaseType extends AbstractType
     ) {
         $builder->add(
             $field,
-            $this->isORM ? 'entity' : 'document',
+            EntityType::class,//$this->isORM ? 'entity' : 'document',
             $options
         );
         return $builder;
@@ -150,7 +153,7 @@ class BaseType extends AbstractType
         $field, FormBuilderInterface $builder, $options = array()
     ) {
         $builder->add(
-            $field, 'datetime', array_merge(
+            $field, DateTimeType::class, array_merge(
                 $options, array(
                     'widget' => 'single_text',
                     'input' => 'datetime',
@@ -170,8 +173,8 @@ class BaseType extends AbstractType
      */
     public function addCreatedUpdatedAt(FormBuilderInterface $builder)
     {
-        $builder->add('createdAt', 'text', array('mapped' => false));
-        $builder->add('updatedAt', 'text', array('mapped' => false));
+        $builder->add('createdAt', TextType::class, array('mapped' => false));
+        $builder->add('updatedAt', TextType::class, array('mapped' => false));
         return $builder;
     }
 
@@ -184,8 +187,8 @@ class BaseType extends AbstractType
      */
     public function addCreatedUpdatedBy(FormBuilderInterface $builder)
     {
-        $builder->add('createdBy', 'text', array('mapped' => false));
-        $builder->add('updatedBy', 'text', array('mapped' => false));
+        $builder->add('createdBy', TextType::class, array('mapped' => false));
+        $builder->add('updatedBy', TextType::class, array('mapped' => false));
         return $builder;
     }
 
@@ -201,7 +204,7 @@ class BaseType extends AbstractType
         FormBuilderInterface $builder, $options = array()
     ) {
         $builder->add(
-            'dateStart', 'datetime', array_merge(
+            'dateStart', DateTimeType::class, array_merge(
                 $options, array(
                     'widget' => 'single_text',
                     'input' => 'datetime',
@@ -210,7 +213,7 @@ class BaseType extends AbstractType
             )
         );
         $builder->add(
-            'dateEnd', 'datetime', array_merge(
+            'dateEnd', DateTimeType::class, array_merge(
                 $options, array(
                     'widget' => 'single_text',
                     'input' => 'datetime',

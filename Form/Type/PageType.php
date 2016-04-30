@@ -2,6 +2,10 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,28 +25,28 @@ class PageType extends BaseType
     {
         parent::__construct($options);
         $this->fields = array(
-            'id' => array('type' => 'unmappedText'),
-            'active' => array('type' => 'checkbox'),
-            'title' => array('type' => 'text'),
-            'header' => array('type' => 'text'),
-            'slug' => array('type' => 'text'),
-            'content' => array('type' => 'text'),
-            'metaDescription' => array('type' => 'text'),
-            'metaKeywords' => array('type' => 'text'),
+            'id' => array('type' => TextType::class, ['mapped' => false]),
+            'active' => array('type' => CheckboxType::class),
+            'title' => array('type' => TextType::class),
+            'header' => array('type' => TextType::class),
+            'slug' => array('type' => TextType::class),
+            'content' => array('type' => TextType::class),
+            'metaDescription' => array('type' => TextType::class),
+            'metaKeywords' => array('type' => TextType::class),
             'blocks' => array(
-                'type' => 'collection',
+                'type' => CollectionType::class,
                 'options' => array(
-                    'type' => new BlockType($this->getOptions()),
+                    'entry_type' => BlockType::class,//new BlockType($this->getOptions()),
                     'required' => false,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
-                    'cascade_validation' => true,
+                    //'cascade_validation' => true,
                     'mapped' => true
                 )
             ),
             'background' => array(
-                'type' => 'model',
+                'type' => EntityType::class,
                 'options' => array(
                     'class' => 'NamiCoreBundle:Image',
                     'choice_label' => 'id',
@@ -50,7 +54,7 @@ class PageType extends BaseType
                 )
             ),
             'category' => array(
-                'type' => 'model',
+                'type' => EntityType::class,
                 'options' => array(
                     'class' => 'NamiCoreBundle:Category',
                     'choice_label' => 'id',
@@ -58,19 +62,19 @@ class PageType extends BaseType
                 )
             ),
             'template' => array(
-                'type' => 'text',
+                'type' => TextType::class,
                 'options' => array(
                     'empty_data' => 'default'
                 )
             ),
-            'backgroundColor' => array('type' => 'text'),
-            'footerColor' => array('type' => 'text'),
-            'borderColor' => array('type' => 'text'),
-            'negativeText' => array('type' => 'checkbox'),
-            'createdAt' => array('type' => 'unmappedText'),
-            'updatedAt' => array('type' => 'unmappedText'),
-            'createdBy' => array('type' => 'unmappedText'),
-            'updatedBy' => array('type' => 'unmappedText')
+            'backgroundColor' => array('type' => TextType::class),
+            'footerColor' => array('type' => TextType::class),
+            'borderColor' => array('type' => TextType::class),
+            'negativeText' => array('type' => CheckboxType::class),
+            'createdAt' => array('type' => TextType::class, ['mapped' => false]),
+            'updatedAt' => array('type' => TextType::class, ['mapped' => false]),
+            'createdBy' => array('type' => TextType::class, ['mapped' => false]),
+            'updatedBy' => array('type' => TextType::class, ['mapped' => false])
         );
     }
 

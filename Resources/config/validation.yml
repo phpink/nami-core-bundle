@@ -34,23 +34,3 @@ PhpInk\Nami\CoreBundle\Model\User:
         locale:
             - NotBlank: ~
 
-
-PhpInk\Nami\CoreBundle\Model\Image:
-    properties:
-        name:
-            - NotBlank: ~
-        file:
-            - NotBlank: ~PhpInk\Nami\CoreBundle\Model\Category:
-    properties:
-        locales:
-            - NotBlank: ~
-
-
-PhpInk\Nami\CoreBundle\Model\Category\CategoryLocale:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:  { fields: [name, locale] }
-    properties:
-        name:
-            - NotBlank: ~
-        locale:
-            - NotBlank: ~
