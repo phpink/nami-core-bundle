@@ -103,18 +103,21 @@ abstract class ApiTestCase extends LiipWebTestCase
         $content = null;
         $this->assertEquals(
             $statusCode, $response->getStatusCode(),
-            $response->getContent()
+            sprintf(
+                "Status code is not expected %d, got %d instead\n%s",
+                $statusCode, $response->getStatusCode(), $response->getContent()
+            )
         );
         // If content-type is an URL, check for Location header (DELETE)
         if (strpos($contentType, '://') === false) {
             $this->assertTrue(
                 $response->headers->contains('Content-Type', $contentType),
-                $response->headers
+                sprintf('No "Content-Type" header set to %s', $contentType)
             );
         } else {
             $this->assertTrue(
                 $response->headers->contains('Location', $contentType),
-                $response->headers
+                sprintf('No "Location" header set to %s', $contentType)
             );
         }
 

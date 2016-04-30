@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Tests\Controller\Rest;
 
 use PhpInk\Nami\CoreBundle\Tests\ApiTestCase;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Tests for PageController
@@ -133,7 +134,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group test
+     * @group fail
      */
     public function testPutPage($user, $role)
     {
@@ -187,7 +188,7 @@ class PageControllerTest extends ApiTestCase
             $content = json_decode($client->getResponse()->getContent(), true);
             $page = $content['elements'][0];
             $client->request('DELETE', $this->getUrl('nami_api_delete_page', array('id' => $page['id'])));
-            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', array(), true)); // Page delete OK
+            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', [], UrlGenerator::ABSOLUTE_URL)); // Page delete OK
 
         } else {
             $this->assertJsonResponse($client->getResponse(), 401); // Access denied
