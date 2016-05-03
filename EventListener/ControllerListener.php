@@ -17,15 +17,15 @@ class ControllerListener
     protected $applicationDir;
     protected $environment;
     protected $uploadDir;
-
-    /**
-     * @var string $host
-     * @var string $appDir
-     * @var string $env
-     * @var string $uploadDir
-     */
+    
     protected $em;
 
+    /**
+     * @param string $host
+     * @param string $appDir
+     * @param string $env
+     * @param string $uploadDir
+     */
     public function __construct($host, $appDir, $env, $uploadDir, $pluginPath, TwigExtension $extension)
     {
         $this->host = $host;

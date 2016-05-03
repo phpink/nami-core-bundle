@@ -330,7 +330,7 @@ abstract class AbstractController extends FOSRestController
 
         } else {
             // Form errors are displayed
-            $view = View::create($form, Response::HTTP_BAD_REQUEST);
+            $view = View::create($form->getErrors(), Response::HTTP_BAD_REQUEST);
         }
         return $view;
     }

@@ -15,6 +15,6 @@ class NamiCoreBundle extends Bundle
         parent::build($container);
         $container->addCompilerPass(new SecurityCompatibilityPass());
         $container->addCompilerPass(new DoctrineManagerCompilerPass());
-        $container->addCompilerPass(new PluginScanCompilerPass());
+        //$container->addCompilerPass(new PluginScanCompilerPass());
     }
 }

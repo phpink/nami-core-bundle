@@ -3,24 +3,26 @@
 namespace PhpInk\Nami\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PhpInk\Nami\CoreBundle\Util\Analytics;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
-use PhpInk\Nami\CoreBundle\Repository\CategoryRepositoryInterface;
-use PhpInk\Nami\CoreBundle\Repository\PageRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Event\BlockRenderEvent;
 use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
 
 class FrontendController extends Controller
 {
     /**
-     * @var \PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface
+     * @var PageRepositoryInterface
      */
     protected $pageRepo;
 
     /**
-     * @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
     protected $categoryRepo;
 
@@ -65,9 +67,10 @@ class FrontendController extends Controller
         // Plugins processing
         if ($page) {
             foreach ($page->getBlocks() as $block) {
-                if ($block->getType() !== 'default') {
-                    $this->processPlugin($request, $block);
-                }
+                $event = new BlockRenderEvent($block, $request);
+                /** @var EventDispatcher $dispatcher */
+                $dispatcher = $this->get('event_dispatcher');
+                $dispatcher->dispatch(BlockRenderEvent::NAME, $event);
             }
         }
         return $this->render(
