@@ -6,25 +6,25 @@ use PhpInk\Nami\CoreBundle\Tests\ApiTestCase;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * Tests for PageController
+ * Tests for CategoryController
  *
  * @package PhpInk\Nami\CoreBundle\Tests\Controller\Rest
  */
-class PageControllerTest extends ApiTestCase
+class CategoryControllerTest extends ApiTestCase
 {
 
     /**
-     * @covers PageController::getPagesAction
+     * @covers CategoryController::getCategoriesAction
      *
      * @param array $user user username/password
      * @param string $role user role
      *
      * @dataProvider getUsers
      */
-    public function testGetPages($user, $role)
+    public function testGetCategories($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('GET', $this->getUrl('nami_api_get_pages'));
+        $client->request('GET', $this->getUrl('nami_api_get_categories'));
 
         $response = $client->getResponse();
         if ($role === 'ROLE_ADMIN') {
@@ -33,6 +33,7 @@ class PageControllerTest extends ApiTestCase
 
             $firstEl = $content['elements'][0];
             $this->assertArrayHasKey('id', $firstEl);
+            $this->assertArrayHasKey('name', $firstEl);
             $this->assertArrayHasKey('title', $firstEl);
             $this->assertArrayHasKey('slug', $firstEl);
             $this->assertArrayHasKey('header', $firstEl);
@@ -45,18 +46,18 @@ class PageControllerTest extends ApiTestCase
     }
 
     /**
-     * @covers PageController::getPageAction
+     * @covers CategoryController::getCategoryAction
      *
      * @param array $user user username/password
      * @param string $role user role
      *
      * @dataProvider getUsers
      */
-    public function testGetPage($user, $role)
+    public function testGetCategory($user, $role)
     {
         // Retrieve a specific id from the get_all
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $client->request('GET', $this->getUrl('nami_api_get_pages'));
+        $client->request('GET', $this->getUrl('nami_api_get_categories'));
         $response = $client->getResponse();
 
         if ($role === 'ROLE_ADMIN') {
@@ -65,7 +66,7 @@ class PageControllerTest extends ApiTestCase
 
             // Real test
             $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-            $client->request('GET', $this->getUrl('nami_api_get_page', array('id' => $id)));
+            $client->request('GET', $this->getUrl('nami_api_get_category', array('id' => $id)));
 
             $response = $client->getResponse();
             $this->assertJsonResponse($response, 200);
@@ -73,8 +74,9 @@ class PageControllerTest extends ApiTestCase
             $content = json_decode($response->getContent(), true);
             $this->assertInternalType('array', $content);
 
-            $this->assertArrayHasKey('title', $content);
+            $this->assertArrayHasKey('name', $content);
             $this->assertArrayHasKey('slug', $content);
+            $this->assertArrayHasKey('title', $content);
             $this->assertArrayHasKey('header', $content);
             $this->assertArrayHasKey('content', $content);
             $this->assertArrayNotHasKey('foo', $content);
@@ -85,40 +87,27 @@ class PageControllerTest extends ApiTestCase
     }
 
     /**
-     * @covers PageController::postPagesAction
+     * @covers CategoryController::postCategoriesAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group fail
+     * @group category
      */
-    public function testPostPage($user, $role)
+    public function testPostCategory($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        $page = array(
-            'title' => 'Nami CMS Demo',
-            'slug' => '/demo',
-            'header' => 'NAMI <strong>CMS</strong> demo app',
-            'metaKeywords' => "nami, cms, symfony",
-            'metaDescription' => "Nami, a basic Content management system for Symfony",
-            'background' => null,
-            'category' => null,
-            'backgroundColor' => null,
-            'borderColor' => null,
-            'footerColor' => null,
-            'negativeText' => false,
-            'blocks' => array(
-                array(
-                    'title' => 'Nami CMS',
-                    'content' => '<p><span itemprop="description">Content management system</span> with Symfony 2.7</p>',
-                    'template' => 'front',
-                    'images' => array(),
-                    'type' => 'default',
-                ),
-            ),
-        );
-        $page = $this->cleanData($page);
-        $client->request('POST', $this->getUrl('nami_api_post_pages'), $page);
+        $category = [
+            'position' =>  3,
+            'parent' => null,
+            'name' => 'Test 2',
+            'title' => 'Test 2 category',
+            'header' => 'Test 2',
+            'metaKeywords' => 'test2,category,db',
+            'metaDescription' => 'Test 2 category SEO',
+            'content' => '<p>Test 2 category description</p>>'
+        ];
+        $client->request('POST', $this->getUrl('nami_api_post_categories'), $category);
 
         $response = $client->getResponse();
 
@@ -130,40 +119,41 @@ class PageControllerTest extends ApiTestCase
     }
 
     /**
-     * @covers PageController::putPageAction
+     * @covers CategoryController::putCategoryAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group fail
+     * @group category
      */
-    public function testPutPage($user, $role)
+    public function testPutCategory($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
 
-        // Retrieve the first Page
-        $client->request('GET', $this->getUrl('nami_api_get_pages'));
+        // Retrieve the first Category
+        $client->request('GET', $this->getUrl('nami_api_get_categories'));
 
         if ($role === 'ROLE_ADMIN') {
             $content = json_decode($client->getResponse()->getContent(), true);
-            $page = $content['elements'][0];
+            $category = $content['elements'][0];
 
             // Update some properties
-            $page['title'] = 'The test Page';
-            $page['header'] = 'Nami CMS DEMO';
-            $page = $this->cleanData($page);
+            $category['name'] = 'The test 3 Category!';
+            $category['header'] = 'Nami CMS DEMO';
+            $category = $this->cleanData($category);
 
 
             $client->request(
                 'PUT', $this->getUrl(
-                    'nami_api_put_page',
-                    array('id' => $page['id'])
-                ), $page
+                    'nami_api_put_category',
+                    array('id' => $category['id'])
+                ), $category
             );
 
             $response = $client->getResponse();
             $output = $this->assertJsonResponse($response, 200);
-            $this->assertEquals('The test Page', $output['title']);
+            $this->assertEquals('The test 3 Category!', $output['name']);
+            $this->assertEquals('the-test-3-category', $output['slug']);
             $this->assertEquals('Nami CMS DEMO', $output['header']);
 
         } else {
@@ -172,27 +162,27 @@ class PageControllerTest extends ApiTestCase
     }
 
     /**
-     * @covers PageController::deletePageAction
+     * @covers CategoryController::deleteCategoryAction
      *
      * @param array $user
      *
      * @dataProvider getUsers
      */
-    public function testDeletePage($user, $role)
+    public function testDeleteCategory($user, $role)
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
-        // Retrieve the first Page
-        $client->request('GET', $this->getUrl('nami_api_get_pages'));
+        // Retrieve the first Category
+        $client->request('GET', $this->getUrl('nami_api_get_categories'));
 
         if ($role === 'ROLE_ADMIN') {
             // test response & redirection
             $content = json_decode($client->getResponse()->getContent(), true);
-            $page = $content['elements'][0];
-            $client->request('DELETE', $this->getUrl('nami_api_delete_page', array('id' => $page['id'])));
-            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', [], UrlGenerator::ABSOLUTE_URL)); // Page delete OK
+            $category = $content['elements'][0];
+            $client->request('DELETE', $this->getUrl('nami_api_delete_category', array('id' => $category['id'])));
+            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_categories', [], UrlGenerator::ABSOLUTE_URL)); // Category delete OK
             
-            // test that the page has been deleted
-            $client->request('GET', $this->getUrl('nami_api_get_page', array('id' => $page['id'])));
+            // test that the category has been deleted
+            $client->request('GET', $this->getUrl('nami_api_get_category', array('id' => $category['id'])));
             $this->assertJsonResponse($client->getResponse(), 404); // Not found
 
         } else {

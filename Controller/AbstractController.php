@@ -117,25 +117,19 @@ abstract class AbstractController extends FOSRestController
      * Creates a new entity from the submitted data.
      *
      * @param Request $request         The request object
-     * @param array   $formTypeOptions The formType options
-     * @param array   $formOptions     The form options
      *
      * @return View
      */
     protected function postItem(
-        Request $request, $formTypeOptions = array(),
-        $formOptions = array()
+        Request $request
     ) {
         $this->checkUserAccess('create');
         $model = $this->getRepository()->createModel();
         return $this->processForm(
-            $request, $model,
-            array_merge(
-                $formTypeOptions, array(
-                    'isEdit' => false
-                )
-            ),
-            $formOptions
+            $request, $model, [
+                'isEdit' => false,
+                'isFilter' => false,
+            ]
         );
     }
 
@@ -145,27 +139,21 @@ abstract class AbstractController extends FOSRestController
      *
      * @param Request $request         The request object.
      * @param integer $id              The entity id.
-     * @param array   $formTypeOptions The form type options.
-     * @param array   $formOptions     The form options.
      *
      * @return View
      *
      * @throws NotFoundHttpException when entity not exist
      */
     protected function putItem(
-        Request $request, $id, $formTypeOptions = array(),
-        $formOptions = array()
+        Request $request, $id
     ) {
         $model = $this->getModelById($id);
         $this->checkUserAccess('update', $model);
         return $this->processForm(
-            $request, $model,
-            array_merge(
-                $formTypeOptions, array(
-                    'isEdit' => true
-                )
-            ),
-            $formOptions
+            $request, $model, [
+                'isEdit' => true,
+                'isFilter' => false,
+            ]
         );
     }
 
@@ -237,7 +225,7 @@ abstract class AbstractController extends FOSRestController
     {
         $this->checkUserAccess('delete_all');
         return $this->processBulkForm(
-            $request, false,
+            $request, $this->getFormType(),
             function ($form, $ids) {
 
                 $delete = $this->getRepository()->deleteItems($ids);
@@ -267,15 +255,16 @@ abstract class AbstractController extends FOSRestController
         Request $request, $modelType, \Closure $onFormValid
     ) {
         // Create the form
-        $formType = $this->createFormType(
-            array(
+        $form = $this->createFormFromType(
+            'Bulk', null, array(
                 'model' => $this->getModelName(),
-                'modelType' => $modelType
-            ), 'Bulk'
+                'modelType' => $modelType,
+                'isEdit' => true,
+                'isFilter' => true
+            )
         );
-        $form = $this->createForm($formType);
         // Submit the form data
-        $form->submit($request);
+        $form->handleRequest($request);
         // If the submitted data is valid
         if ($form->isValid()) {
             // Update items
@@ -299,14 +288,13 @@ abstract class AbstractController extends FOSRestController
      * @param Request        $request         The request object.
      * @param ModelInterface $model           The form entity.
      * @param array          $formTypeOptions The form type options.
-     * @param array          $formOptions     The form options/
      * @param boolean        $triggerHooks    Trigger or not model hooks.
      *
      * @return View
      */
     protected function processForm(
         Request $request, ModelInterface $model,
-        $formTypeOptions = array(), $formOptions = array(),
+        $formTypeOptions = array(),
         $triggerHooks = true
     ) {
         $view = null;
@@ -314,8 +302,7 @@ abstract class AbstractController extends FOSRestController
             Response::HTTP_OK : Response::HTTP_CREATED;
 
         // Create the FormType
-        $formType = $this->createFormType($formTypeOptions);
-        $form = $this->createForm($formType, $model,  $formOptions);
+        $form = $this->createFormFromType(null, $model, $formTypeOptions);
 
         // Submit the form data
         $form->handleRequest($request);
@@ -339,13 +326,14 @@ abstract class AbstractController extends FOSRestController
      * Creates a new instance of FormType
      * corresponding to the REST Controller
      *
-     * @param array  $formTypeOptions FormType options.
      * @param string $formTypeClass   FormType classname.
+     * @param array  $data            Form data.
+     * @param array  $formTypeOptions FormType options.
      *
      * @return mixed
      */
-    protected function createFormType(
-        $formTypeOptions = array(), $formTypeClass = null
+    protected function createFormFromType(
+        $formTypeClass = null, $data = null, $formTypeOptions = array()
     ) {
         $formTypeClass = $this->getFormType($formTypeClass);
         if (!is_array($formTypeOptions)) {
@@ -355,9 +343,8 @@ abstract class AbstractController extends FOSRestController
         $dbAdapter = $this->container->getParameter(
             'nami_core.database_adapter'
         );
-        $formTypeOptions['isORM'] = $dbAdapter !== 'odm';
-        //$formType = new $formTypeClass($formTypeOptions);
-        return $formTypeClass;
+        $formTypeOptions['isORM'] = ($dbAdapter === 'orm');
+        return $this->createForm($formTypeClass, $data, $formTypeOptions);
     }
 
     /**

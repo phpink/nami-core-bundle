@@ -60,15 +60,14 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
         // ie: WHERE id = 4 OR path LIKE 4,% OR path LIKE %,4,%
         $query
             ->where('this.id = :id')->setParameter('id', intval($id))
-            ->orWhere($query->expr()->like('this.path', '/'. intval($id). ',/'))
-            ->orWhere($query->expr()->like('this.path', '/,'. intval($id). ',/'))
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%'. intval($id). ',%')))
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%,'. intval($id). ',%')))
             ->orderBy('this.position')
             ->orderBy('this.path');
 
+
         $category = $this->buildCategoryTree(
-            $query->getQuery()->getResult()->getResult(
-                AbstractQuery::HYDRATE_ARRAY
-            ), $id
+            $query->getQuery()->getResult(), $id
         );
         return $category;
     }

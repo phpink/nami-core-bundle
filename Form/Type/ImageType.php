@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -36,15 +37,17 @@ class ImageType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->isORM ?
-                    'PhpInk\Nami\CoreBundle\Model\Orm\Image' :
-                    'PhpInk\Nami\CoreBundle\Model\Odm\Image',
-                'csrf_protection' => false,
-                'intention' => 'image',
-                'translation_domain' => 'NamiCoreBundle'
-            )
-        );
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'intention' => 'image',
+            'translation_domain' => 'NamiCoreBundle'
+        ]);
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isORM']) ?
+                'PhpInk\Nami\CoreBundle\Model\Orm\Image' :
+                'PhpInk\Nami\CoreBundle\Model\Odm\Image';
+
+        });
     }
 }

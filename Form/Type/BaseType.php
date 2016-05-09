@@ -4,9 +4,11 @@ namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -43,31 +45,6 @@ class BaseType extends AbstractType
      * @var User
      */
     protected $user;
-
-    /**
-     * FormType Constructor
-     *
-     * @param array $options Form type options.
-     */
-    public function __construct($options = array())
-    {
-        if (is_array($options)) {
-            if (array_key_exists('isEdit', $options)) {
-                $this->isEdit = ($options['isEdit'] === true);
-            }
-            if (array_key_exists('isFilter', $options)) {
-                $this->isFilter = ($options['isFilter'] === true);
-            }
-            if (array_key_exists('isORM', $options)) {
-                $this->isORM = ($options['isORM'] === true);
-            }
-            if (array_key_exists('user', $options)
-                && $options['user'] instanceof UserInterface
-            ) {
-                $this->user = $options['user'];
-            }
-        }
-    }
 
     /**
      * Form type building
@@ -118,6 +95,25 @@ class BaseType extends AbstractType
                 );
             }
         }
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['isORM', 'isEdit', 'isFilter', 'user']);
+        $resolver->addAllowedTypes('isORM', 'boolean');
+        $resolver->addAllowedTypes('isEdit', 'boolean');
+        $resolver->addAllowedTypes('isFilter', 'boolean');
+        $resolver->addAllowedTypes('user', [UserInterface::class, 'NULL']);
+    }
+
+    public function getBaseOptions($options)
+    {
+        return [
+          'isORM' => $options['isORM'],
+          'isEdit' => $options['isEdit'],
+          'isFilter' => $options['isFilter'],
+          'user' => $options['user'],
+        ];
     }
 
     /**
@@ -233,60 +229,5 @@ class BaseType extends AbstractType
     {
         // Empty string to map all fields at top level
         return '';
-    }
-
-    /**
-     * Is the form in edition mode (model update) ?
-     *
-     * @return bool
-     */
-    public function isEditMode()
-    {
-        return $this->isEdit;
-    }
-
-    /**
-     * Is the Db manager is ORM or ODM ?
-     *
-     * @return bool
-     */
-    public function isORM()
-    {
-        return $this->isORM;
-    }
-
-    /**
-     * Get the user making the request.
-     *
-     * @return UserInterface
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Is the user has the admin role ?
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->user ?
-            $this->user->isAdmin() : false;
-    }
-
-    /**
-     * Get the form type options
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            'isEdit' => $this->isEditMode(),
-            'isORM' => $this->isORM(),
-            'user' => $this->getUser()
-        );
     }
 }

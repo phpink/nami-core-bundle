@@ -1,13 +1,6 @@
 <article class="block contact-block clearfix">
-    <form id="contact-form" method="post">
-        <input name="sujet" placeholder="Sujet du message" class="text">
-        <input name="nom" placeholder="Votre nom" class="text">
-        <input name="email" placeholder="Votre adresse email" class="text" type="email">
-        <input name="societe" placeholder="Votre société" class="text">
-        <input name="capcha" placeholder="Combien font %d + %d ? (antispam)" class="text">
-
-        <textarea name="message" placeholder="Votre message" class="textarea"></textarea>
-
-        <input id="submit" name="submit" value="Envoyer le message" class="submit" type="submit">
-    </form>
+    <h1>{{ block.getTitle() }}</h1>
+    <div class="well">
+        {{ block.getContent() | raw }}
+    </div>
 </article>

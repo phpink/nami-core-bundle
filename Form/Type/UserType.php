@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -87,22 +88,28 @@ class UserType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $validationGroups = array('Default');
-        $validationGroups[] = $this->isEditMode() ?
-            'profile' : 'registration';
-
-        $defaultOptions = array(
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
             'csrf_protection' => false,
             'cascade_validation' => true,
             'translation_domain' => 'NamiCoreBundle',
-            'validation_groups' => $validationGroups
-        );
-        if (!$this->isFilter) {
-            $defaultOptions['data_class'] = $this->isORM ?
+        ]);
+        $resolver->setDefault('validation_groups', function (Options $options) {
+            $validationGroups = array('Default');
+            $validationGroups[] = ($options['isEditMode']) ?
+                'profile' : 'registration';
+            return $validationGroups;
+
+        });
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isFilter']) ?
+                null : ($options['isORM']) ?
                 'PhpInk\Nami\CoreBundle\Model\Orm\User' :
                 'PhpInk\Nami\CoreBundle\Model\Odm\User';
-            $defaultOptions['intention'] = 'user';
-        }
-        $resolver->setDefaults($defaultOptions);
+
+        });
+        $resolver->setDefault('intention', function (Options $options, $previousValue) {
+            return ($options['isFilter']) ? $previousValue : 'user';
+        });
     }
 }

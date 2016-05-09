@@ -26,24 +26,6 @@ class BulkType extends BaseType
     protected $modelType;
 
     /**
-     * FormType Constructor
-     *
-     * @param array $options Form type options.
-     */
-    public function __construct($options = array())
-    {
-        parent::__construct($options);
-        if (is_array($options)) {
-            if (array_key_exists('model', $options)) {
-                $this->model = $options['model'];
-            }
-            if (array_key_exists('modelType', $options)) {
-                $this->modelType = $options['modelType'];
-            }
-        }
-    }
-
-    /**
      * Form type building
      *
      * @param FormBuilderInterface $builder The form builder.
@@ -56,20 +38,18 @@ class BulkType extends BaseType
         $builder = $this->addModel(
             'id', $builder, array(
                 'multiple' => true,
-                'class' => 'NamiCoreBundle:'. $this->model,
+                'class' => 'NamiCoreBundle:'. $options['model'],
                 'choice_label' => 'id',
                 'required' => true
             )
         );
         if ($this->modelType !== false) {
             $builder->add(
-                'fields', new $this->modelType(
-                    array_merge(
-                        $this->getOptions(),
-                        array(
-                            'isFilter' => true
-                        )
-                    )
+                'fields', $options['modelType'],
+                array_merge(
+                    $options, [
+                        'isFilter' => true
+                    ]
                 )
             );
         }
@@ -84,6 +64,10 @@ class BulkType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+        $resolver->setRequired(['model', 'modelType']);
+        $resolver->addAllowedTypes('model', 'string');
+        $resolver->addAllowedTypes('modelType', 'string');
         $resolver->setDefaults(
             array(
                 'csrf_protection' => false,

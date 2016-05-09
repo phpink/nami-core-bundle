@@ -2,7 +2,11 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -13,26 +17,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CategoryType extends BaseType
 {
     /**
-     * FormType Constructor
-     *
-     * @param array $options Form type options.
-     */
-    public function __construct($options = array())
-    {
-        parent::__construct($options);
-        $this->depth = 0;
-        $this->mapId = false;
-        if (is_array($options)) {
-            if (array_key_exists('depth', $options)) {
-                $this->depth = $options['depth'];
-            }
-            if (array_key_exists('mapId', $options)) {
-                $this->mapId = boolval($options['mapId']);
-            }
-        }
-    }
-
-    /**
      * Form type building
      *
      * @param FormBuilderInterface $builder The form builder.
@@ -42,38 +26,20 @@ class CategoryType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'text', array('mapped' => $this->mapId));
-        $builder->add('active', 'checkbox');
-        $builder->add('name', 'text');
-        $builder->add('position', 'integer');
-        $builder = $this->addModel(
-            'parent', $builder, array(
-                'class' => 'NamiCoreBundle:Category',
-                'choice_label' => 'id',
-                'required' => false
-            )
-        );
-        $builder->add('header', 'text');
-        $builder->add('metaDescription', 'text');
-        $builder->add('metaKeywords', 'text');
-        $builder->add('content', 'text');
-        if ($this->depth < 2) { // Limit the tree to 2 levels
-            $builder->add(
-                'items', 'collection', array(
-                    'type' => new self(
-                        array(
-                            'depth' => $this->depth + 1,
-                            'mapId' => $this->mapId
-                        )
-                    ),
-                    'required' => false,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'cascade_validation' => true
-                )
-            );
-        }
+        $builder->add('id', TextType::class);
+        $builder->add('active', CheckboxType::class);
+        $builder->add('name', TextType::class);
+        $builder->add('title', TextType::class);
+        $builder->add('position', IntegerType::class);
+        $builder->add('parent', EntityType::class, [
+            'class' => 'NamiCoreBundle:Category',
+            'choice_label' => 'id',
+            'required' => false
+        ]);
+        $builder->add('header', TextType::class);
+        $builder->add('metaDescription', TextType::class);
+        $builder->add('metaKeywords', TextType::class);
+        $builder->add('content', TextType::class);
     }
 
     /**
@@ -85,15 +51,19 @@ class CategoryType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->isORM ?
-                    'PhpInk\Nami\CoreBundle\Model\Orm\Category' :
-                    'PhpInk\Nami\CoreBundle\Model\Odm\Category',
-                'csrf_protection' => false,
-                'intention' => 'category',
-                'translation_domain' => 'NamiCoreBundle'
-            )
-        );
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'translation_domain' => 'NamiCoreBundle'
+        ]);
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isORM']) ?
+                'PhpInk\Nami\CoreBundle\Model\Orm\Category' :
+                'PhpInk\Nami\CoreBundle\Model\Odm\Category';
+
+        });
+        $resolver->setDefault('intention', function (Options $options, $previousValue) {
+            return ($options['isFilter']) ? $previousValue : 'category';
+        });
     }
 }

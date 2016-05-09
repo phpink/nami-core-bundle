@@ -76,6 +76,7 @@ class Category extends Core\Document implements CategoryInterface
     /**
      * @var string
      * @ODM\String
+     * @JMS\Expose
      */
     private $name;
 

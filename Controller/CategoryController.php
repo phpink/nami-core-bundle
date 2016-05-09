@@ -76,7 +76,7 @@ class CategoryController extends AbstractController
     {
         /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
         $categoryRepo = $this->getRepository();
-        $menu = $categoryRepo->getMenu();
+        $menu = $categoryRepo->getCategoryTree();
         return $this->restView($menu);
     }
 
