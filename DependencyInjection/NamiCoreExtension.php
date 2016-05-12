@@ -147,16 +147,16 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 )
             ));
         }
-        $adapterKey = ($dbAdapter === 'orm') ? 'orm' : 'mongodb';
-        $this->container->prependExtensionConfig('stof_doctrine_extensions', array(
-            $adapterKey => array(
-                'default' => array(
-                    'blameable' => true,
-                    'sluggable' => true,
-                    'sortable' => true
-                )
-            )
-        ));
+//        $adapterKey = ($dbAdapter === 'orm') ? 'orm' : 'mongodb';
+//        $this->container->prependExtensionConfig('stof_doctrine_extensions', array(
+//            $adapterKey => array(
+//                'default' => array(
+//                    'blameable' => true,
+//                    'sluggable' => true,
+//                    'sortable' => true
+//                )
+//            )
+//        ));
 
         $this->container->prependExtensionConfig('jms_serializer', array(
             'handlers' => array(

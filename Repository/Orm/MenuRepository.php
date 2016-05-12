@@ -14,6 +14,8 @@ use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 class MenuRepository extends OrmRepository implements MenuRepositoryInterface
 {
+    //use MaterializedPathRepositoryTrait;
+    
     protected $orderByFields = array(
         'default' => array('this.path', 'this.position')
     );
