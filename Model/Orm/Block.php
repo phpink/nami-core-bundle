@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
+use PhpInk\Nami\CoreBundle\Model\Image\BlockImageInterface;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
@@ -82,11 +82,11 @@ class Block extends Core\Entity implements BlockInterface
     protected $type = 'default';
 
     /**
-     * @var Collection<Image>
-     * @ORM\ManyToMany(targetEntity="Image", cascade={"persist", "remove"})
-     * @ORM\JoinTable(name="block_images",
-     *   joinColumns={@ORM\JoinColumn(name="block_id", referencedColumnName="id")},
-     *   inverseJoinColumns={@ORM\JoinColumn(name="image_id", referencedColumnName="id")}
+     * @var Collection<PhpInk\Nami\CoreBundle\Model\Orm\Image\BlockImage>
+     * @ORM\OneToMany(
+     *     targetEntity="PhpInk\Nami\CoreBundle\Model\Orm\Image\BlockImage",
+     *     mappedBy="block",
+     *     cascade={"persist", "remove"}
      * )
      * @JMS\Expose
      * @JMS\Type("array<integer>")
@@ -106,6 +106,14 @@ class Block extends Core\Entity implements BlockInterface
      * @var mixed
      */
     protected $plugin = null;
+
+    /**
+     * @var integer
+     * @Gedmo\Sortable(groups={"page"})
+     * @ORM\Column(name="position", type="integer")
+     * @JMS\Expose
+     */
+    private $position = 0;
 
     /**
      * @var array
@@ -258,10 +266,10 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Remove a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return $this
      */
-    public function removeImage(ImageInterface $image)
+    public function removeImage(BlockImageInterface $image)
     {
         $this->images->remove($image);
 
@@ -271,11 +279,12 @@ class Block extends Core\Entity implements BlockInterface
     /**
      * Add a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return $this
      */
-    public function addImage(ImageInterface $image)
+    public function addImage(BlockImageInterface $image)
     {
+        $image->setBlock($this);
         $this->images->add($image);
 
         return $this;
@@ -302,9 +311,9 @@ class Block extends Core\Entity implements BlockInterface
     }
 
     /**
-     * Returns first image url
+     * Returns first image
      *
-     * @return string
+     * @return BlockImageInterface
      */
     public function getFirstImage()
     {

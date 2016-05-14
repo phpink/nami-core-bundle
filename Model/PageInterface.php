@@ -3,8 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
-use PhpInk\Nami\CoreBundle\Model\UserInterface;
+use PhpInk\Nami\CoreBundle\Model\Image\BackgroundInterface;
 
 /**
  * Page interface
@@ -179,15 +178,15 @@ interface PageInterface
     /**
      * Set background Page (one to one).
      *
-     * @param ImageInterface $background
+     * @param BackgroundInterface $background
      * @return PageInterface
      */
-    public function setBackground(ImageInterface $background = null);
+    public function setBackground(BackgroundInterface $background = null);
 
     /**
      * Get background Page (one to one).
      *
-     * @return ImageInterface
+     * @return BackgroundInterface
      */
     public function getBackground();
 

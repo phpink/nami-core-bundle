@@ -32,15 +32,14 @@ class PageRepository extends OrmRepository implements PageRepositoryInterface
      */
     public function buildItemsQuery($query, UserInterface $user = null)
     {
-        $alias = 'this';
         $query->addSelect(
             'category', 'background',
             'blocks', 'blockImages'
         );
         $query
-            ->leftJoin($alias . '.category', 'category')
-            ->leftJoin($alias . '.background', 'background')
-            ->leftJoin($alias . '.blocks', 'blocks')
+            ->leftJoin('this.category', 'category')
+            ->leftJoin('this.background', 'background')
+            ->leftJoin('this.blocks', 'blocks')
             ->leftJoin('blocks.images', 'blockImages');
 
         return $query;
@@ -72,7 +71,8 @@ class PageRepository extends OrmRepository implements PageRepositoryInterface
                     'slug' => $slug
                 )
             )
-            ->orderBy('blocks.position', 'asc');
+            ->orderBy('blocks.position', 'asc')
+            ;//->orderBy('blockImages.position', 'asc');
         $entity = $this->fetchSingleResult($query);
         return $entity;
 

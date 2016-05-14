@@ -18,7 +18,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
      * @var array
      */
     private $requiredBundles = array(
-        'DoctrineBundle', 'StofDoctrineExtensionsBundle', // CORE //
+        'DoctrineBundle', //'StofDoctrineExtensionsBundle', // CORE //
         'JMSSerializerBundle', 'BazingaHateoasBundle',
         'LiipImagineBundle',
 

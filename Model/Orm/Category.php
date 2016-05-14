@@ -89,7 +89,7 @@ class Category extends Core\Entity implements CategoryInterface
 
     /**
      * @var string
-     * @Gedmo\TreeParent
+     * @Gedmo\TreePathSource
      * @ORM\Column(name="name", type="string", length=255)
      * @JMS\Expose
      */

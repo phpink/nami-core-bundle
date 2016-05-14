@@ -54,6 +54,28 @@ services:
       tags:
         - { name: twig.extension  }
 
+    # Gedmo doctrine extensions listeners
+    nami_core.listener.tree:
+      class: Gedmo\Tree\TreeListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
+
+    nami_core.listener.sluggable:
+      class: Gedmo\Sluggable\SluggableListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
+
+    nami_core.listener.sortable:
+      class: Gedmo\Sortable\SortableListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
+
     # JWT listeners -> set user last_login,ip / return data on login
     nami_core.authentication_success_listener:
         class: PhpInk\Nami\CoreBundle\EventListener\AuthenticationSuccessListener

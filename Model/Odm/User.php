@@ -11,8 +11,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
+use PhpInk\Nami\CoreBundle\Model\Image\UserImageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
 
 /**
  * User
@@ -183,7 +183,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
 
     /**
      * @var Image
-     * @ODM\EmbedOne(targetDocument="Image")
+     * @ODM\EmbedOne(targetDocument="PhpInk\Nami\CoreBundle\Model\Odm\Image\UserImage")
      * @JMS\Expose
      * @JMS\Type("string")
      * @JMS\Accessor("getAvatarId")
@@ -943,11 +943,12 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
     /**
      * Set the value of avatar.
      *
-     * @param ImageInterface $avatar
+     * @param UserImageInterface $avatar
      * @return $this
      */
-    public function setAvatar(ImageInterface $avatar)
+    public function setAvatar(UserImageInterface $avatar)
     {
+        $avatar->setUser($this);
         $avatar->setMaster(true);
         $this->avatar = $avatar;
 
@@ -957,7 +958,7 @@ class User extends Core\Document implements AdvancedUserInterface,UserInterface
     /**
      * Get the value of avatar.
      *
-     * @return Image
+     * @return UserImageInterface
      */
     public function getAvatar()
     {

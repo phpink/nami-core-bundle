@@ -11,15 +11,6 @@ use JMS\Serializer\Annotation as JMS;
  */
 trait SortableItemTrait
 {
-
-    /**
-     * @var integer
-     * @ODM\Int
-     * @ODM\Index
-     * @JMS\Expose
-     */
-    private $position = 0;
-
     /**
      * Get position
      *

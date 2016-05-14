@@ -43,7 +43,6 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
     /**
      * Primary Key
      * @var int
-     * @Gedmo\TreePathSource
      * @ORM\Id
      * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -86,7 +85,7 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
 
     /**
      * @var string
-     * @Gedmo\TreeParent
+     * @Gedmo\TreePathSource
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;

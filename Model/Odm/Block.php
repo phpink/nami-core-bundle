@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
+use PhpInk\Nami\CoreBundle\Model\Image\BlockImageInterface;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
@@ -81,8 +81,10 @@ class Block extends Core\Document implements BlockInterface
     protected $type = 'default';
 
     /**
-     * @var ArrayCollection<Image>
-     * @ODM\ReferenceMany(targetDocument="Image", cascade={"persist", "remove"})
+     * @var ArrayCollection<PhpInk\Nami\CoreBundle\Model\Odm\Image\BlockImage>
+     * @ODM\ReferenceMany(targetDocument="PhpInk\Nami\CoreBundle\Model\Odm\Image\BlockImage",
+     * mappedBy="block", orphanRemoval=true,
+     * cascade={"persist", "remove"})
      * @ODM\EmbedMany(targetDocument="Image")
      * @JMS\Expose
      * @JMS\Type("array<string>")
@@ -254,10 +256,10 @@ class Block extends Core\Document implements BlockInterface
     /**
      * Remove a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return BlockInterface
      */
-    public function removeImage(ImageInterface $image)
+    public function removeImage(BlockImageInterface $image)
     {
         $this->images->remove($image);
 
@@ -267,11 +269,12 @@ class Block extends Core\Document implements BlockInterface
     /**
      * Add a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return BlockInterface
      */
-    public function addImage(ImageInterface $image)
+    public function addImage(BlockImageInterface $image)
     {
+        $image->setBlock($this);
         $this->images->add($image);
 
         return $this;

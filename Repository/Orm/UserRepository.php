@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Repository\Orm;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
 use PhpInk\Nami\CoreBundle\Repository\Core\UserRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
@@ -26,6 +27,21 @@ class UserRepository extends OrmRepository implements UserRepositoryInterface
         'createdAt' => 'this.createdAt',
         'updatedAt' => 'this.updatedAt'
     );
+
+    /**
+     * Build the items query (join, filters)
+     *
+     * @param mixed         $query The doctrine query builder.
+     * @param UserInterface $user  The user who made the request.
+     *
+     * @return QueryBuilder
+     */
+    public function buildItemsQuery($query, UserInterface $user = null)
+    {
+        //$query->addSelect('userImage');
+        //$query->leftJoin('this.avatar', 'userImage');
+        return $query;
+    }
 
     /**
      * Finds a user either by email, or username

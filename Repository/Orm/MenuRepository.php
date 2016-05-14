@@ -6,6 +6,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Tree\Traits\Repository\ORM\MaterializedPathRepositoryTrait;
 use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
 use PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Util\Collection;
@@ -14,7 +15,7 @@ use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 class MenuRepository extends OrmRepository implements MenuRepositoryInterface
 {
-    //use MaterializedPathRepositoryTrait;
+    use MaterializedPathRepositoryTrait;
     
     protected $orderByFields = array(
         'default' => array('this.path', 'this.position')
