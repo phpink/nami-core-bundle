@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -25,9 +26,12 @@ class ImageType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', TextType::class, array('mapped' => false));
-        $builder->add('name', TextType::class, array('required' => true));
-        $builder->add('file', FileType::class, array('required' => true));
+        $builder->add('id', TextType::class, ['mapped' => false]);
+        $builder->add('name', TextType::class, ['required' => true]);
+        $builder->add('file', FileType::class, ['required' => true]);
+        if ($options['imageType'] === 'BlockImage') {
+            $builder->add('position', IntegerType::class, ['required' => true]);
+        }
     }
 
     /**

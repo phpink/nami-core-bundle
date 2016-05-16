@@ -25,7 +25,7 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  *
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
- *     "id", "active", "parent", "position",
+ *     "id", "active", "parent",
  *     "locales", "items",
  *     "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
@@ -39,8 +39,7 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  */
 class Category extends Core\Entity implements CategoryInterface
 {
-    use Core\SortableItemTrait,
-        Core\CreatedUpdatedAtTrait,
+    use Core\CreatedUpdatedAtTrait,
         Core\CreatedUpdatedByTrait;
 
     /**

@@ -113,6 +113,14 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
     protected $items;
 
     /**
+     * @var integer
+     * @Gedmo\Sortable(groups={"parent"})
+     * @ORM\Column(name="position", type="integer")
+     * @JMS\Expose
+     */
+    private $position = 0;
+
+    /**
      * Menu constructor
      */
     public function __construct()

@@ -20,8 +20,7 @@ use PhpInk\Nami\CoreBundle\Model\PageInterface;
  */
 class Background extends Image implements BackgroundInterface
 {
-    use Core\SortableItemTrait,
-        Core\CreatedUpdatedAtTrait,
+    use Core\CreatedUpdatedAtTrait,
         Core\CreatedUpdatedByTrait;
 
     const DEFAULT_SUBFOLDER = 'background';

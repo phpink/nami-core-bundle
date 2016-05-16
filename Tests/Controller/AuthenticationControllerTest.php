@@ -33,6 +33,7 @@ class AuthenticationControllerTest extends ApiTestCase
      * test login
      *
      * @covers UserController::postUserTokenAction
+     * @group authentication
      */
     public function testLoginFailure()
     {
@@ -52,6 +53,7 @@ class AuthenticationControllerTest extends ApiTestCase
      * test login
      *
      * @covers UserController::postUserTokenAction
+     * @group authentication
      */
     public function testLoginSuccess()
     {

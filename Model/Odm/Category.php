@@ -23,14 +23,15 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  *
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
- *     "id", "active", "parent", "position",
+ *     "id", "active", "parent",
  *     "locales", "items",
  *     "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  */
 class Category extends Core\Document implements CategoryInterface
 {
-    use Core\SortableItemTrait;
+    use Core\CreatedUpdatedAtTrait,
+        Core\CreatedUpdatedByTrait;
 
     /**
      * Primary Key
@@ -143,6 +144,7 @@ class Category extends Core\Document implements CategoryInterface
      * cascade={"persist", "remove"})
      */
     protected $pages;
+
 
     /**
      * Category constructor

@@ -20,6 +20,7 @@ class PageControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testGetPages($user, $role)
     {
@@ -51,6 +52,7 @@ class PageControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testGetPage($user, $role)
     {
@@ -90,7 +92,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group fail
+     * @group page
      */
     public function testPostPage($user, $role)
     {
@@ -135,7 +137,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group fail
+     * @group page
      */
     public function testPutPage($user, $role)
     {
@@ -177,6 +179,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testDeletePage($user, $role)
     {

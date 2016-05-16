@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,7 +31,7 @@ class CategoryType extends BaseType
         $builder->add('active', CheckboxType::class);
         $builder->add('name', TextType::class);
         $builder->add('title', TextType::class);
-        $builder->add('position', IntegerType::class);
+        $builder->add('slug', TextType::class);
         $builder->add('parent', EntityType::class, [
             'class' => 'NamiCoreBundle:Category',
             'choice_label' => 'id',
@@ -40,6 +41,9 @@ class CategoryType extends BaseType
         $builder->add('metaDescription', TextType::class);
         $builder->add('metaKeywords', TextType::class);
         $builder->add('content', TextType::class);
+
+        $this->addCreatedUpdatedAt($builder);
+        $this->addCreatedUpdatedBy($builder);
     }
 
     /**

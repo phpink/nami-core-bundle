@@ -101,6 +101,15 @@ class MenuLink extends Core\Document implements MenuLinkInterface
     protected $items;
 
     /**
+     * @var integer
+     * @Gedmo\Sortable(groups={"parent"})
+     * @ODM\Int
+     * @ODM\Index
+     * @JMS\Expose
+     */
+    private $position = 0;
+
+    /**
      * Menu constructor
      */
     public function __construct()

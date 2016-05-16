@@ -58,29 +58,6 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * List all categories with the associated pages.
-     *
-     * @ApiDoc(
-     *   description = "Get the collection of categories with the associated pages.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     * @Annotations\Get("/categories/menu")
-     *
-     * @return array
-     */
-    public function getCategoryMenuAction()
-    {
-        /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
-        $categoryRepo = $this->getRepository();
-        $menu = $categoryRepo->getCategoryTree();
-        return $this->restView($menu);
-    }
-
-    /**
      * Get a single category.
      *
      * @ApiDoc(

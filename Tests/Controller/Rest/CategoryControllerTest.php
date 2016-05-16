@@ -20,6 +20,7 @@ class CategoryControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group category
      */
     public function testGetCategories($user, $role)
     {
@@ -28,8 +29,8 @@ class CategoryControllerTest extends ApiTestCase
 
         $response = $client->getResponse();
         if ($role === 'ROLE_ADMIN') {
-            $content = $this->assertJsonHasPaginationResponse($response, 200);
-            $this->assertCount(4, $content['elements']);
+            $content = $this->assertJsonResponse($response, 200);
+            $this->assertCount(2, $content['elements']);
 
             $firstEl = $content['elements'][0];
             $this->assertArrayHasKey('id', $firstEl);
@@ -52,6 +53,7 @@ class CategoryControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group category
      */
     public function testGetCategory($user, $role)
     {
@@ -98,7 +100,6 @@ class CategoryControllerTest extends ApiTestCase
     {
         $client = $this->createAuthenticatedClient($user['username'], $user['password']);
         $category = [
-            'position' =>  3,
             'parent' => null,
             'name' => 'Test 2',
             'title' => 'Test 2 category',
@@ -167,6 +168,7 @@ class CategoryControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
+     * @group category
      */
     public function testDeleteCategory($user, $role)
     {
