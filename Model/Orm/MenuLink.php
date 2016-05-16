@@ -107,7 +107,7 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
     /**
      * @var Collection<Menu>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Menu>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Orm\MenuLink>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;

@@ -38,8 +38,8 @@ class UserRepository extends OrmRepository implements UserRepositoryInterface
      */
     public function buildItemsQuery($query, UserInterface $user = null)
     {
-        //$query->addSelect('userImage');
-        //$query->leftJoin('this.avatar', 'userImage');
+        $query->addSelect('userImage');
+        $query->leftJoin('this.avatar', 'userImage');
         return $query;
     }
 

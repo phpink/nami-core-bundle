@@ -4,7 +4,6 @@ namespace PhpInk\Nami\CoreBundle\Model\Orm\Image;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Gedmo\Mapping\Annotation as Gedmo;
 use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Model\Image\BackgroundInterface;
 use PhpInk\Nami\CoreBundle\Model\Orm\Image;
@@ -33,14 +32,6 @@ class Background extends Image implements BackgroundInterface
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", nullable=false)
      */
     protected $page;
-
-    /**
-     * @var integer
-     * @Gedmo\Sortable(groups={"page"})
-     * @ORM\Column(name="position", type="integer")
-     * @JMS\Expose
-     */
-    private $position = 0;
 
     /**
      * Set page.

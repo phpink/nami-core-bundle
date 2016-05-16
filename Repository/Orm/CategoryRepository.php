@@ -99,9 +99,10 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
     {
         return new Collection(
             new ArrayCollection(
-                $this->getCategoryTree(
+                $this->childrenHierarchy()
+                /*$this->getCategoryTree(
                     $user, $orderBy, $filterBy
-                )
+                )*/
             ),
             'nami_api_get_categories'
         );

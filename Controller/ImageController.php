@@ -26,56 +26,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ImageController extends AbstractController
 {
     /**
-     * Image upload
-     *
-     * @param Request $request The request object.
-     *
-     * @return FormTypeInterface|View
-     *
-     * @Annotations\Post("/upload")
-     * @ApiDoc(
-     *   description = "Upload an image",
-     *   input = "PhpInk\Nami\CoreBundle\Form\Type\ImageType",
-     *   output = "ImageInterface",
-     *   resource = false,
-     *   statusCodes = {
-     *     200 = "Returned when upload successful",
-     *     401 = "Returned when upload failed"
-     *   },
-     *  parameters={
-     *      {
-     *        "name"="name", "dataType"="string",
-     *        "required"=true, "description"="The name of the file."
-     *      },
-     *      {
-     *         "name"="file", "dataType"="string",
-     *         "required"=true, "description"="The binary content."
-     *      },
-     *      {
-     *         "name"="folder", "dataType"="string",
-     *         "required"=false, "description"="The upload sub-folder."
-     *      }
-     *  }
-     * )
-     */
-    public function postUploadAction(Request $request)
-    {
-        /**
-         * Image model
-         * @var Image $image
-         */
-        $image = $this->getRepository()->createModel();
-        // Validate subfolder
-        $folder = $request->request->get('folder');
-        if (in_array($folder, array('avatar', 'block', 'background'))) {
-            $image->setFolder($folder);
-        }
-        return $this->processForm(
-            $request, $image
-        );
-    }
-
-    /**
      * Image upload for page (background)
      *
      * @param Request $request The request object.
@@ -118,16 +68,16 @@ class ImageController extends AbstractController
              * Image model
              * @var Image $image
              */
-            $image = $this->getRepository()->createModel();
+            $image = $this->getRepository('NamiCoreBundle:Image\\Background')->createModel();
             $image->setFolder('background');
+            $image->setPage($page);
             $imageView = $this->processForm(
-                $request, $image
+                $request, $image, [
+                    'imageType' => 'Background',
+                    'isEdit' => false,
+                    'isFilter' => false
+                 ]
             );
-            // If upload has been successfull
-            if ($imageView->getStatusCode() === Codes::HTTP_CREATED) {
-                $page->setBackground($image);
-                $this->saveModel($page, Codes::HTTP_OK);
-            }
         }
         return $imageView;
     }
@@ -175,16 +125,16 @@ class ImageController extends AbstractController
              * Image model
              * @var Image $image
              */
-            $image = $this->getRepository()->createModel();
+            $image = $this->getRepository('NamiCoreBundle:Image\\BlockImage')->createModel();
             $image->setFolder('block');
+            $image->setBlock($block);
             $imageView = $this->processForm(
-                $request, $image
+                $request, $image, [
+                    'imageType' => 'BlockImage',
+                    'isEdit' => false,
+                    'isFilter' => false
+                ]
             );
-            // If upload has been successfull
-            if ($imageView->getStatusCode() === Codes::HTTP_CREATED) {
-                $block->addImage($image);
-                $this->saveModel($block, Codes::HTTP_OK);
-            }
         }
         return $imageView;
     }
@@ -232,16 +182,16 @@ class ImageController extends AbstractController
              * Image model
              * @var Image $image
              */
-            $image = $this->getRepository()->createModel();
+            $image = $this->getRepository('NamiCoreBundle:Image\\UserImage')->createModel();
             $image->setFolder('avatar');
+            $image->setUser($user);
             $imageView = $this->processForm(
-                $request, $image
+                $request, $image, [
+                    'imageType' => 'UserImage',
+                    'isEdit' => false,
+                    'isFilter' => false
+                ]
             );
-            // If upload has been successfull
-            if ($imageView->getStatusCode() === Codes::HTTP_CREATED) {
-                $user->setAvatar($image);
-                $this->saveModel($user, Codes::HTTP_OK);
-            }
         }
         return $imageView;
     }

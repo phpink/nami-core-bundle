@@ -2,6 +2,8 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,9 +25,9 @@ class ImageType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'text', array('mapped' => false));
-        $builder->add('name', 'text', array('required' => true));
-        $builder->add('file', 'file', array('required' => true));
+        $builder->add('id', TextType::class, array('mapped' => false));
+        $builder->add('name', TextType::class, array('required' => true));
+        $builder->add('file', FileType::class, array('required' => true));
     }
 
     /**
@@ -38,6 +40,8 @@ class ImageType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
+        $resolver->setRequired(['imageType']);
+        $resolver->addAllowedTypes('imageType', 'string');
         $resolver->setDefaults([
             'csrf_protection' => false,
             'intention' => 'image',
@@ -45,8 +49,8 @@ class ImageType extends BaseType
         ]);
         $resolver->setDefault('data_class', function (Options $options) {
             return ($options['isORM']) ?
-                'PhpInk\Nami\CoreBundle\Model\Orm\Image' :
-                'PhpInk\Nami\CoreBundle\Model\Odm\Image';
+                'PhpInk\Nami\CoreBundle\Model\Orm\Image\\'. $options['imageType'] :
+                'PhpInk\Nami\CoreBundle\Model\Odm\Image\\'. $options['imageType'];
 
         });
     }

@@ -51,7 +51,7 @@ class UserType extends BaseType
             'avatar' => array(
                 'type' => 'model',
                 'options' => array(
-                    'class' => 'NamiCoreBundle:Image',
+                    'class' => 'NamiCoreBundle:Image\UserImage',
                     'choice_label' => 'id',
                     'required' => false
                 )

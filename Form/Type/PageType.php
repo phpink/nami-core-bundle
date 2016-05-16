@@ -51,7 +51,7 @@ class PageType extends BaseType
             'required' => false
         ]);
         $builder->add('background', EntityType::class, [
-            'class' => 'NamiCoreBundle:Image',
+            'class' => 'NamiCoreBundle:Image\Background',
             'choice_label' => 'id',
             'required' => false
         ]);

@@ -30,7 +30,7 @@ class CategoryController extends AbstractController
      *
      * @ApiDoc(
      *   description = "Get the collection of categories.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
      *   resource = true,
      *   statusCodes = {
      *     200 = "Returned when successful"
@@ -62,7 +62,7 @@ class CategoryController extends AbstractController
      *
      * @ApiDoc(
      *   description = "Get the collection of categories with the associated pages.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
      *   resource = true,
      *   statusCodes = {
      *     200 = "Returned when successful"
@@ -85,7 +85,7 @@ class CategoryController extends AbstractController
      *
      * @ApiDoc(
      *   description = "Get a single category.",
-     *   output = "PhpInk\Nami\CoreBundle\Model\Category",
+     *   output = "PhpInk\Nami\CoreBundle\Model\CategoryInterface",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the category is not found"
@@ -187,7 +187,7 @@ class CategoryController extends AbstractController
      * @Annotations\Post("/categories/sort")
      * @ApiDoc(
      *   description = "Sort Categories position",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
      *   resource = true,
      *   statusCodes={
      *     204="Returned when successful"

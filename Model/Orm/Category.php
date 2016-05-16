@@ -146,7 +146,7 @@ class Category extends Core\Entity implements CategoryInterface
     /**
      * @var Collection<Category>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Orm\Category>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;

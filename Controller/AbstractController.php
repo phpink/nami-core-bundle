@@ -153,6 +153,7 @@ abstract class AbstractController extends FOSRestController
             $request, $model, [
                 'isEdit' => true,
                 'isFilter' => false,
+                'method' => 'PUT'
             ]
         );
     }
@@ -289,20 +290,21 @@ abstract class AbstractController extends FOSRestController
      * @param ModelInterface $model           The form entity.
      * @param array          $formTypeOptions The form type options.
      * @param boolean        $triggerHooks    Trigger or not model hooks.
+     * @param string         $formType        Optional form type name
      *
      * @return View
      */
     protected function processForm(
         Request $request, ModelInterface $model,
         $formTypeOptions = array(),
-        $triggerHooks = true
+        $triggerHooks = true, $formType = null
     ) {
         $view = null;
         $statusCode = $model->getId() ?
             Response::HTTP_OK : Response::HTTP_CREATED;
 
         // Create the FormType
-        $form = $this->createFormFromType(null, $model, $formTypeOptions);
+        $form = $this->createFormFromType($formType, $model, $formTypeOptions);
 
         // Submit the form data
         $form->handleRequest($request);

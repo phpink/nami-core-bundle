@@ -1,36 +1,35 @@
 PhpInk\Nami\CoreBundle\Model\User:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
-    properties:
-        username:
-            - NotBlank: ~
-            - Length:
-                min: 6
-                max: 255
-            - Regex: "/^[a-zA-Z0-9-_\.]+/"
-        password:
-            - NotBlank: { groups: [registration] }
-            - Length: { min: 6, groups: [registration] }
-        firstName:
-            - NotBlank: ~
-            - Length:
-                min: 2
-                max: 255
-        lastName:
-            - NotBlank: ~
-            - Length:
-                min: 2
-                max: 255
-        email:
-            - Email: ~
-                #checkMX: true
-        phone:
-            - NotBlank: ~
-            - Length:
-                min: 6
-        country:
-            - NotBlank: ~
-        locale:
-            - NotBlank: ~
-
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: "email"
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: "username"
+  properties:
+    username:
+      - NotBlank: ~
+      - Length:
+          min: 6
+          max: 255
+      - Regex: "/^[a-zA-Z0-9-_\\.]+/"
+    password:
+      - NotBlank: { groups: ["registration"] }
+      - Length: { min: 6, groups: ["registration"] }
+    firstName:
+      - NotBlank: ~
+      - Length:
+          min: 2
+          max: 255
+    lastName:
+      - NotBlank: ~
+      - Length:
+          min: 2
+          max: 255
+    email:
+      - Email: ~
+          #checkMX: true
+    phone:
+      - NotBlank: ~
+      - Length:
+          min: 6
+    country:
+      - NotBlank: ~
+    locale:
+      - NotBlank: ~

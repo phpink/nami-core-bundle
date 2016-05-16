@@ -111,6 +111,7 @@ class Page extends Core\Document implements PageInterface
     /**
      * @var ArrayCollection<Block>
      * @ODM\ReferenceMany(targetDocument="Block", mappedBy="page", cascade={"persist", "remove"}, sort={"position": "asc"})
+     * ODM\EmbedMany(targetDocument="Block")
      * @JMS\Expose
      */
     protected $blocks;

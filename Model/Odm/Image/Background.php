@@ -35,15 +35,6 @@ class Background extends Image implements BackgroundInterface
     protected $page;
 
     /**
-     * @var integer
-     * @Gedmo\Sortable(groups={"page"})
-     * @ODM\Int
-     * @ODM\Index
-     * @JMS\Expose
-     */
-    private $position = 0;
-
-    /**
      * Set page.
      *
      * @param PageInterface $page

@@ -27,7 +27,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  *     "items", "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  */
-class MenuLink extends Core\Document implements MenuInterface
+class MenuLink extends Core\Document implements MenuLinkInterface
 {
     use Core\SortableItemTrait;
 
@@ -95,7 +95,7 @@ class MenuLink extends Core\Document implements MenuInterface
     /**
      * @var Collection<MenuLink>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\MenuLinkInterface>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Odm\MenuLink>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;

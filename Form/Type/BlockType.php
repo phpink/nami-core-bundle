@@ -41,7 +41,7 @@ class BlockType extends BaseType
         $builder->add('template', TextType::class, array('empty_data' => 'default'));
         $builder->add('type', TextType::class);
         $builder->add('images', EntityType::class, [
-            'class' => 'NamiCoreBundle:Image',
+            'class' => 'NamiCoreBundle:Image\BlockImage',
             'multiple' => true,
             'choice_label' => 'id',
             'choices_as_values' => true,

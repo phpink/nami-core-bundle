@@ -4,6 +4,7 @@ namespace PhpInk\Nami\CoreBundle\Model\Odm\Image;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use JMS\Serializer\Annotation as JMS;
+use Gedmo\Mapping\Annotation as Gedmo;
 use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Model\Image\BlockImageInterface;
 use PhpInk\Nami\CoreBundle\Model\Odm\Image;
@@ -30,7 +31,7 @@ class BlockImage extends Image implements BlockImageInterface
     
     /**
      * @var Block
-     * @ODM\ReferenceOne(targetDocument="PhpInk\Nami\CoreBundle\Model\Orm\Block", inversedBy="images")
+     * @ODM\ReferenceOne(targetDocument="PhpInk\Nami\CoreBundle\Model\Odm\Block", inversedBy="images")
      */
     protected $block;
 

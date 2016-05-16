@@ -22,6 +22,10 @@ _image:
     resource: "@NamiCoreBundle/Controller/ImageController.php"
     type:     rest
 
+_menu:
+    resource: "@NamiCoreBundle/Controller/MenuController.php"
+    type:     rest
+
 _page:
     resource: "@NamiCoreBundle/Controller/PageController.php"
     type:     rest

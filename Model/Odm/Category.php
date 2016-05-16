@@ -131,7 +131,7 @@ class Category extends Core\Document implements CategoryInterface
     /**
      * @var Collection<Category>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Odm\Category>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;
