@@ -113,7 +113,7 @@ class UserProvider implements UserProviderInterface
      */
     public function updateUser($user)
     {
-        return $this->userRepo->saveEntity($user);
+        return $this->userRepo->saveModel($user);
     }
 
     /**

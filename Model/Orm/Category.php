@@ -5,6 +5,8 @@ namespace PhpInk\Nami\CoreBundle\Model\Orm;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
@@ -20,12 +22,13 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  *     name="category"
  * )
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  *
  * @Gedmo\Tree(type="materializedPath")
  *
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
- *     "id", "active", "parent", "position",
+ *     "id", "active", "parent",
  *     "locales", "items",
  *     "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
@@ -39,8 +42,7 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  */
 class Category extends Core\Entity implements CategoryInterface
 {
-    use Core\SortableItemTrait,
-        Core\CreatedUpdatedAtTrait,
+    use Core\CreatedUpdatedAtTrait,
         Core\CreatedUpdatedByTrait;
 
     /**
@@ -89,8 +91,10 @@ class Category extends Core\Entity implements CategoryInterface
 
     /**
      * @var string
-     * @Gedmo\TreeParent
+     * @Gedmo\TreePathSource
      * @ORM\Column(name="name", type="string", length=255)
+     * @JMS\Expose
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -145,7 +149,7 @@ class Category extends Core\Entity implements CategoryInterface
     /**
      * @var Collection<Category>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Orm\Category>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;

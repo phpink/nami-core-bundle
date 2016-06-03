@@ -23,8 +23,47 @@ use PhpInk\Nami\CoreBundle\Util\PaginatedCollection;
  * @Annotations\NamePrefix("nami_api_")
  * @author Geoffroy Pierret <geofrwa@yandex.com>
  */
-class MenuLinkController extends AbstractController
+class MenuController extends AbstractController
 {
+    /**
+     * The name of the entity
+     * mapped by this controller
+     * @var string
+     */
+    protected $modelName = 'MenuLink';
+
+    /**
+     * List all users.
+     *
+     * @ApiDoc(
+     *   description = "Get the collection of users.",
+     *   output = "PhpInk\Nami\CoreBundle\Util\PaginatedCollection<PhpInk\Nami\CoreBundle\Model\User>",
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
+     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many items to return.")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     *
+     * ie: ?offset=2&limit=10&orderBy[createdAt]=0&filterBy[active]=true
+     *
+     *
+     * @param Request               $request      the request object
+     * @param ParamFetcherInterface $paramFetcher param fetcher service
+     *
+     * @return array
+     *
+     * @throws AccessDeniedException
+     */
+    public function getMenusAction(Request $request, ParamFetcherInterface $paramFetcher)
+    {
+        return $this->getAllItems($request, $paramFetcher);
+    }
+
     /**
      * List all menus.
      *
@@ -36,69 +75,43 @@ class MenuLinkController extends AbstractController
      *     200 = "Returned when successful"
      *   }
      * )
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * ie: ?offset=2&limit=10&orderBy[name]=0&orderBy[locale]=en&filterBy[parent]=1
      *
+     * @param Request               $request      The request object.
      * @param ParamFetcherInterface $paramFetcher Param fetcher service
      *
      * @return array
      */
-    public function getCategoriesAction(ParamFetcherInterface $paramFetcher)
+    public function getMenusTreeAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
         /** @var \PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface $menuRepo */
-        $menuRepo = $this->getRepository();
-        $menus = $menuRepo->getMenuTreePaginated(
-            $this->getLoggedUser(),
-            $paramFetcher->get('orderBy'),
-            $paramFetcher->get('filterBy')
-        );
-        return $this->restView($menus);
+        $menuRepo = $this->getRepository('MenuLink');
+        $menus = $menuRepo->getMenuTree();
+        return $this->restView($menus, null, 'menu', 'menu');
     }
 
     /**
-     * List all menus with the associated pages.
+     * Get a single category.
      *
      * @ApiDoc(
-     *   description = "Get the collection of menus with the associated pages.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Menu>",
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     * @Annotations\Get("/menus/menu")
-     *
-     * @return array
-     */
-    public function getMenuMenuAction()
-    {
-        /** @var \PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface $menuRepo */
-        $menuRepo = $this->getRepository();
-        $menu = $menuRepo->getMenu();
-        return $this->restView($menu);
-    }
-
-    /**
-     * Get a single menu.
-     *
-     * @ApiDoc(
-     *   description = "Get a single menu.",
-     *   output = "PhpInk\Nami\CoreBundle\Model\Menu",
+     *   description = "Get a single menu link.",
+     *   output = "PhpInk\Nami\CoreBundle\Model\MenuInterface",
      *   statusCodes = {
      *     200 = "Returned when successful",
-     *     404 = "Returned when the menu is not found"
+     *     404 = "Returned when the menu link is not found"
      *   }
      * )
      *
      *
      * @param Request $request The request object
-     * @param int     $id      The menu id
+     * @param int     $id      The menu link id
      *
      * @return array
      *
-     * @throws NotFoundHttpException when menu not exist
+     * @throws NotFoundHttpException when menu link not exist
      */
     public function getMenuAction(Request $request, $id)
     {
@@ -125,7 +138,7 @@ class MenuLinkController extends AbstractController
      *
      * @throws AccessDeniedException
      */
-    public function postCategoriesAction(Request $request)
+    public function postMenuAction(Request $request)
     {
         return $this->postItem($request);
     }
@@ -171,7 +184,7 @@ class MenuLinkController extends AbstractController
      * @param Request $request The request object
      * @param int     $id      The menu id
      *
-     * @return RouteRedirectView
+     * @return mixed
      *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException when menu not exist
@@ -179,63 +192,5 @@ class MenuLinkController extends AbstractController
     public function deleteMenuAction(Request $request, $id)
     {
         return $this->deleteItem($request, $id);
-    }
-
-    /**
-     * Sort the menus
-     *
-     * @Annotations\Post("/menus/sort")
-     * @ApiDoc(
-     *   description = "Sort Categories position",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Menu>",
-     *   resource = true,
-     *   statusCodes={
-     *     204="Returned when successful"
-     *   }
-     * )
-     * @param Request $request The request object
-     * @return View
-     */
-    public function sortCategoriesAction(Request $request)
-    {
-        $view = null;
-        $this->formType = 'PhpInk\Nami\CoreBundle\Form\Type\Menu\SortType';
-        $this->checkIsAdmin();
-
-        // Create the FormType
-        $formType = $this->createFormType(
-            array(
-                'isEdit' => true,
-                'mapId' => true,
-                'user' => $this->getLoggedUser()
-            )
-        );
-        $menus = new Collection(
-            new ArrayCollection(),
-            'nami_api_get_menus'
-        );
-        $form = $this->createForm($formType, $menus);
-
-        // Submit the form data
-        $form->submit($request);
-
-        // If the submitted data is valid
-        if ($form->isValid()) {
-            /** @var \PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface $menuRepo */
-            $menuRepo = $this->getRepository();
-            // Form data is saved
-            $menuRepo->sortCategories($menus);
-
-            // The user is redirected to the menu list
-            $view = $this->routeRedirectView(
-                'nami_api_get_menus',
-                array(), Codes::HTTP_NO_CONTENT
-            );
-
-        } else {
-            // Form errors are displayed
-            $view = View::create($form, 400);
-        }
-        return $view;
     }
 }

@@ -25,8 +25,8 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'code' => new \Twig_SimpleFunction($this, [$this, 'getCode'], array('is_safe' => array('html'))),
-            'include_template' => new \Twig_SimpleFunction($this, [$this, 'includeTemplate'], array('is_safe'=> array('all'))),
+            'code' => new \Twig_Function_Method($this, 'getCode', array('is_safe' => array('html'))),
+            'include_template' => new \Twig_Function_Method($this, 'includeTemplate', array('is_safe'=> array('all'))),
         );
     }
 

@@ -6,6 +6,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Tree\Traits\Repository\ORM\MaterializedPathRepositoryTrait;
 use PhpInk\Nami\CoreBundle\Repository\Orm\AbstractRepository as OrmRepository;
 use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Util\Collection;
@@ -14,6 +15,8 @@ use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 class CategoryRepository extends OrmRepository implements CategoryRepositoryInterface
 {
+    use MaterializedPathRepositoryTrait;
+
     protected $orderByFields = array(
         'default' => array('this.path', 'this.position')
     );
@@ -41,6 +44,7 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
             $this->orderByFields,
             $this->filterByFields
         );
+        $this->initializeTreeRepository($em, $class);
     }
 
     /**
@@ -60,15 +64,14 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
         // ie: WHERE id = 4 OR path LIKE 4,% OR path LIKE %,4,%
         $query
             ->where('this.id = :id')->setParameter('id', intval($id))
-            ->orWhere($query->expr()->like('this.path', '/'. intval($id). ',/'))
-            ->orWhere($query->expr()->like('this.path', '/,'. intval($id). ',/'))
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%'. intval($id). ',%')))
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%,'. intval($id). ',%')))
             ->orderBy('this.position')
             ->orderBy('this.path');
 
+
         $category = $this->buildCategoryTree(
-            $query->getQuery()->getResult()->getResult(
-                AbstractQuery::HYDRATE_ARRAY
-            ), $id
+            $query->getQuery()->getResult(), $id
         );
         return $category;
     }
@@ -96,6 +99,7 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
     {
         return new Collection(
             new ArrayCollection(
+                //$this->childrenHierarchy()
                 $this->getCategoryTree(
                     $user, $orderBy, $filterBy
                 )
@@ -236,12 +240,12 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
     public function getCategoryFromSlug($slug)
     {
         $query = $this->createQueryBuilder('this')
-            ->where('this.level = :level')
+            //->where('this.level = :level')
             ->andWhere('this.slug = :slug')
             ->setParameters(
                 array(
                     'slug' => $slug,
-                    'level' => 0
+                    //'level' => 0
                 )
             );
 

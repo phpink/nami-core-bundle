@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -50,7 +49,7 @@ class ResetController extends AbstractController
     public function getUserResetAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
         $data = null;
-        $statusCode = Codes::HTTP_OK;
+        $statusCode = Response::HTTP_OK;
 
         /**
          * Retrieves the user / checks its activation
@@ -61,7 +60,7 @@ class ResetController extends AbstractController
         $user = $userProvider->findUserByUsernameOrEmail($usernameOrEmail);
 
         if (!$user) {
-            $statusCode = Codes::HTTP_BAD_REQUEST;
+            $statusCode = Response::HTTP_BAD_REQUEST;
             $data = array(
                 'error' => array(
                     'type' => 'invalid_username',
@@ -70,21 +69,24 @@ class ResetController extends AbstractController
             );
 
         } elseif (!$user->isActive()) {
-            throw new LogicException(
-                'Request password reset denied for inactive users.'
+            $data = array(
+                'error' => array(
+                    'type' => 'inactive_user',
+                    'data' => $usernameOrEmail
+                )
             );
 
         } else {
             if ($user->isPasswordRequestNonExpired(
-                $this->container->getParameter('nami_api.reset_token_ttl')
+                $this->container->getParameter('nami_core.reset_token_ttl')
             )) {
-                $statusCode = Codes::HTTP_BAD_REQUEST;
-                $data = array(
-                    'error' => array(
+                $statusCode = Response::HTTP_BAD_REQUEST;
+                $data = [
+                    'error' => [
                         'type' => 'password_already_resetted',
                         'data' => $usernameOrEmail
-                    )
-                );
+                    ]
+                ];
 
             } else {
 
@@ -95,20 +97,21 @@ class ResetController extends AbstractController
                      * \PhpInk\Nami\CoreBundle\Util\TokenGeneratorInterface
                      */
                     $tokenGenerator = $this->get(
-                        'nami_api.util.token_generator'
+                        'nami_core.util.token_generator'
                     );
                     $user->setConfirmationToken($tokenGenerator->generateToken());
 
                 }
+
+                $user->setPasswordRequestedAt(new \DateTime());
+                $this->get('nami_core.user_provider')->updateUser($user);
                 /**
                  * Sends the reset email
                  * @var $mailer \PhpInk\Nami\CoreBundle\Mailer\MailerInterface
                  */
-                $mailer = $this->get('nami_api.mailer');
+                $mailer = $this->get('nami_core.mailer');
                 $mailer->sendResettingEmailMessage($user);
-
-                $user->setPasswordRequestedAt(new \DateTime());
-                $this->get('nami_core.user_provider')->updateUser($user);
+                
                 $data = array(
                     'username' => $user->getUsername(),
                     'status' => 'reset_mail_sent'
@@ -155,36 +158,51 @@ class ResetController extends AbstractController
         $userProvider = $this->get('nami_core.user_provider');
         $user = $userProvider->findUserByConfirmationToken($token);
 
+        $data = null;
+        $code = Response::HTTP_BAD_REQUEST;
         if (!$user) {
-            throw new NotFoundHttpException("The token could not be found");
+            $data = [
+                'error' => [
+                    'type' => 'token_not_found',
+                    'data' => $token
+                ]
+            ];
+            $code = Response::HTTP_NOT_FOUND;
 
         } elseif (!$user->isActive()) {
-            throw new LogicException('Password reset denied for inactive users.');
-        }
+            $data = [
+                'error' => [
+                    'type' => 'inactive_user',
+                    'data' => $token
+                ]
+            ];
+        } else {
 
-        // Create the form
-        $form = $this->createForm(new UserResetType(), $user);
-        // Submit the form data
-        $form->handleRequest($request);
 
-        // If the submitted data is valid
-        if ($form->isValid()) {
+            // Create the form
+            $form = $this->createForm(new UserResetType(), $user);
+            // Submit the form data
+            $form->handleRequest($request);
 
-            $user->setConfirmationToken(null);
-            $user->setPasswordRequestedAt(null);
+            // If the submitted data is valid
+            if ($form->isValid()) {
 
-            $userProvider->updateUser($user);
+                $user->setConfirmationToken(null);
+                $user->setPasswordRequestedAt(null);
 
-            // The result is displayed
-            return View::create(
-                array(
+                $userProvider->updateUser($user);
+
+                // The result is displayed
+                $code = Response::HTTP_OK;
+                $data = [
                     'username' => $user->getUsername(),
                     'status' => 'resetted'
-                ),
-                Codes::HTTP_OK
-            );
+                ];
+            } else {
+                // Form errors are displayed
+                $data = $form;
+            }
         }
-        // Form errors are displayed
-        return View::create($form, 400);
+        return View::create($data, $code);
     }
 }

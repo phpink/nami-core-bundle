@@ -31,8 +31,8 @@ class AnalyticsController extends AbstractController
      *
      * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="10", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * @param ParamFetcherInterface $paramFetcher Param fetcher service
      *
@@ -76,8 +76,8 @@ class AnalyticsController extends AbstractController
      *
      * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="10", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * @param ParamFetcherInterface $paramFetcher Param fetcher service
      *
@@ -122,8 +122,8 @@ class AnalyticsController extends AbstractController
      *
      * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="10", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * @param ParamFetcherInterface $paramFetcher Param fetcher service
      *
@@ -167,8 +167,8 @@ class AnalyticsController extends AbstractController
      *
      * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="10", description="How many items to return.")
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * @param ParamFetcherInterface $paramFetcher Param fetcher service
      *
@@ -239,7 +239,7 @@ class AnalyticsController extends AbstractController
             $ch = curl_init();
             curl_setopt(
                 $ch, CURLOPT_URL,
-                'http://api.openweathermap.org/data/2.5/forecast/daily?q=bordeaux,fr&cnt=5&lang=fr_FR&mode=json'
+                'http://api.openweathermap.org/data/2.5/forecast/daily?q=bordeaux,fr&cnt=5&lang=fr_FR&mode=json&APPID=57a282fbc5ecb6a287dfafca1e7ec3f9'
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $data = curl_exec($ch);

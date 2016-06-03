@@ -10,9 +10,9 @@ services:
             host: "%host%"
             appDir: "%kernel.root_dir%"
             env: "%kernel.environment%"
-            uploadDir: %nami_core.upload_dir%
-            pluginPath: %nami_core.plugin_path%
-            extension: @nami_core.twig_extensions
+            uploadDir: "%nami_core.upload_dir%"
+            pluginPath: "%nami_core.plugin_path%"
+            extension: "@nami_core.twig_extensions"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
@@ -50,9 +50,37 @@ services:
     # Twig extension
     nami_core.twig_extensions:
       class: PhpInk\Nami\CoreBundle\Twig\TwigExtension
-      arguments: [@twig.loader]
+      arguments: ["@twig.loader"]
       tags:
         - { name: twig.extension  }
+
+    nami_core.menu_voter_request:
+        class: PhpInk\Nami\CoreBundle\Menu\RequestVoter
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.voter }
+
+    # Gedmo doctrine extensions listeners
+    nami_core.listener.tree:
+      class: Gedmo\Tree\TreeListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
+
+    nami_core.listener.sluggable:
+      class: Gedmo\Sluggable\SluggableListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
+
+    nami_core.listener.sortable:
+      class: Gedmo\Sortable\SortableListener
+      calls:
+          - [setAnnotationReader, ["@annotation_reader"]]
+      tags:
+          - { name: doctrine.event_subscriber }
 
     # JWT listeners -> set user last_login,ip / return data on login
     nami_core.authentication_success_listener:
@@ -74,7 +102,7 @@ services:
     # Token generator for user password reset
     nami_core.util.token_generator:
         class: PhpInk\Nami\CoreBundle\Util\TokenGenerator
-        arguments: [@logger]
+        arguments: ["@logger"]
 
     # Mailer
     nami_core.mailer:
@@ -84,11 +112,11 @@ services:
             templating: "@twig"
             parameters:
                 url:
-                    confirmation: %nami_core.front_url_confirmation%
-                    resetting: %nami_core.front_url_resetting%
+                    confirmation: "%nami_core.front_url_confirmation%"
+                    resetting: "%nami_core.front_url_resetting%"
                 template:
-                    confirmation: %nami_core.registration.confirmation.template%
-                    resetting: %nami_core.resetting.email.template%
+                    confirmation: "%nami_core.registration.confirmation.template%"
+                    resetting: "%nami_core.resetting.email.template%"
                 from_email:
-                    confirmation: %nami_core.mailer_from%
-                    resetting: %nami_core.mailer_from%
+                    confirmation: "%nami_core.mailer_from%"
+                    resetting: "%nami_core.mailer_from%"

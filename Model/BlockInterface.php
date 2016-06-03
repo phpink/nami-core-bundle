@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PhpInk\Nami\CoreBundle\Model\Image\BlockImageInterface;
 
 /**
  * Block interface
@@ -78,18 +79,18 @@ interface BlockInterface
     /**
      * Remove a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return BlockInterface
      */
-    public function removeImage(ImageInterface $image);
+    public function removeImage(BlockImageInterface $image);
 
     /**
      * Add a block image
      *
-     * @param ImageInterface $image
+     * @param BlockImageInterface $image
      * @return BlockInterface
      */
-    public function addImage(ImageInterface $image);
+    public function addImage(BlockImageInterface $image);
 
     /**
      * Returns the block images
@@ -106,9 +107,9 @@ interface BlockInterface
     public function hasImages();
 
     /**
-     * Returns first image url
+     * Returns first image
      *
-     * @return string
+     * @return BlockImageInterface
      */
     public function getFirstImage();
 

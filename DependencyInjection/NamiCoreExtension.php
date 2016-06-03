@@ -18,7 +18,7 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
      * @var array
      */
     private $requiredBundles = array(
-        'DoctrineBundle', 'StofDoctrineExtensionsBundle', // CORE //
+        'DoctrineBundle', //'StofDoctrineExtensionsBundle', // CORE //
         'JMSSerializerBundle', 'BazingaHateoasBundle',
         'LiipImagineBundle',
 
@@ -80,11 +80,14 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
          */
         $dbAdapter = $this->container->getParameter('nami_core.database_adapter');
         $mappingsInfo = array(
-            'gedmo_tree' => array(
+
+            'tree' => array(
                 'type' => 'annotation',
-                'prefix' => 'Gedmo\Tree\Document',
-                'dir' => "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document",
-                'alias' => 'GedmoTree',
+                'prefix' => $dbAdapter === 'orm' ? 'Gedmo\Tree\Entity' : 'Gedmo\Tree\Document',
+                'dir' => $dbAdapter === 'orm' ?
+                    "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity" :
+                    "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document",
+                'alias' => 'Gedmo',
                 'is_bundle' => false,
             ),
             'NamiCoreBundle' => array(
@@ -144,16 +147,16 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 )
             ));
         }
-        $adapterKey = ($dbAdapter === 'orm') ? 'orm' : 'mongodb';
-        $this->container->prependExtensionConfig('stof_doctrine_extensions', array(
-            $adapterKey => array(
-                'default' => array(
-                    'blameable' => true,
-                    'sluggable' => true,
-                    'sortable' => true
-                )
-            )
-        ));
+//        $adapterKey = ($dbAdapter === 'orm') ? 'orm' : 'mongodb';
+//        $this->container->prependExtensionConfig('stof_doctrine_extensions', array(
+//            $adapterKey => array(
+//                'default' => array(
+//                    'blameable' => true,
+//                    'sluggable' => true,
+//                    'sortable' => true
+//                )
+//            )
+//        ));
 
         $this->container->prependExtensionConfig('jms_serializer', array(
             'handlers' => array(
@@ -162,22 +165,6 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
                 )
             )
         ));
-
-        /*
-         * Lexik JWT Configuration
-         */
-        $this->container->prependExtensionConfig('swiftmailer', [
-            'transport' =>  '%nami_core.mailer_transport%',
-            'host' =>       '%nami_core.mailer_host%',
-            'port' =>       '%nami_core.mailer_port%',
-            'encryption' => '%nami_core.mailer_encryption%',
-            'username' =>   '%nami_core.mailer_username%',
-            'password' =>   '%nami_core.mailer_password%',
-            'spool' => [
-                'type' => 'file',
-                'path' => '%kernel.root_dir%/spool',
-            ],
-        ]);
     }
 
     /**
@@ -209,16 +196,14 @@ class NamiCoreExtension extends Extension implements PrependExtensionInterface
         ));
         $this->container->prependExtensionConfig('sensio_framework_extra', array(
             'view' => array(
-                'annotations' => false,
+                'annotations' => true,
             )
         ));
         $this->container->prependExtensionConfig('twig', array(
             'debug' => '%kernel.debug%',
             'strict_variables' => '%kernel.debug%',
             'exception_controller' => 'FOS\RestBundle\Controller\ExceptionController::showAction',
-            'paths' => [
-                '%kernel.root_dir%/../plugins' => 'NamiPlugin',
-            ]
+            'form_themes' => ['bootstrap_3_layout.html.twig'],
         ));
 
         /*

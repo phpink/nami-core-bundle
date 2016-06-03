@@ -11,7 +11,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\User;
  * Document\Analytics\Search
  *
  * @ODM\Document(
- *     collection="countries",
+ *     collection="analytics_search",
  *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\AnalyticsRepository"
  * )
  * @JMS\ExclusionPolicy("all")

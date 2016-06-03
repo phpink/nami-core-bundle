@@ -30,14 +30,45 @@ class CategoryController extends AbstractController
      *
      * @ApiDoc(
      *   description = "Get the collection of categories.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   output = "PhpInk\Nami\CoreBundle\Util\PaginatedCollection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
      *   resource = true,
      *   statusCodes = {
      *     200 = "Returned when successful"
      *   }
      * )
-     * @Annotations\QueryParam(name="orderBy", array=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
-     * @Annotations\QueryParam(name="filterBy", array=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     *
+     * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
+     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many items to return.")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     *
+     * ie: ?offset=2&limit=10&orderBy[createdAt]=0&filterBy[active]=true
+     *
+     *
+     * @param Request               $request      the request object
+     * @param ParamFetcherInterface $paramFetcher param fetcher service
+     *
+     * @return array
+     *
+     * @throws AccessDeniedException
+     */
+    public function getCategoriesAction(Request $request, ParamFetcherInterface $paramFetcher)
+    {
+        return $this->getAllItems($request, $paramFetcher);
+    }
+    /**
+     * List all categories.
+     *
+     * @ApiDoc(
+     *   description = "Get the collection of categories.",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
      *
      * ie: ?offset=2&limit=10&orderBy[name]=0&orderBy[locale]=en&filterBy[parent]=1
      *
@@ -45,7 +76,7 @@ class CategoryController extends AbstractController
      *
      * @return array
      */
-    public function getCategoriesAction(ParamFetcherInterface $paramFetcher)
+    public function getCategoriesTreeAction(ParamFetcherInterface $paramFetcher)
     {
         /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
         $categoryRepo = $this->getRepository();
@@ -58,34 +89,11 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * List all categories with the associated pages.
-     *
-     * @ApiDoc(
-     *   description = "Get the collection of categories with the associated pages.",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     * @Annotations\Get("/categories/menu")
-     *
-     * @return array
-     */
-    public function getCategoryMenuAction()
-    {
-        /** @var \PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface $categoryRepo */
-        $categoryRepo = $this->getRepository();
-        $menu = $categoryRepo->getMenu();
-        return $this->restView($menu);
-    }
-
-    /**
      * Get a single category.
      *
      * @ApiDoc(
      *   description = "Get a single category.",
-     *   output = "PhpInk\Nami\CoreBundle\Model\Category",
+     *   output = "PhpInk\Nami\CoreBundle\Model\CategoryInterface",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the category is not found"
@@ -187,7 +195,7 @@ class CategoryController extends AbstractController
      * @Annotations\Post("/categories/sort")
      * @ApiDoc(
      *   description = "Sort Categories position",
-     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\Category>",
+     *   output = "PhpInk\Nami\CoreBundle\Util\Collection<PhpInk\Nami\CoreBundle\Model\CategoryInterface>",
      *   resource = true,
      *   statusCodes={
      *     204="Returned when successful"

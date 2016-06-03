@@ -3,6 +3,7 @@
 namespace PhpInk\Nami\CoreBundle\Tests\Controller\Rest;
 
 use PhpInk\Nami\CoreBundle\Tests\ApiTestCase;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Tests for PageController
@@ -19,6 +20,7 @@ class PageControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testGetPages($user, $role)
     {
@@ -50,6 +52,7 @@ class PageControllerTest extends ApiTestCase
      * @param string $role user role
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testGetPage($user, $role)
     {
@@ -89,6 +92,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testPostPage($user, $role)
     {
@@ -133,7 +137,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
-     * @group test
+     * @group page
      */
     public function testPutPage($user, $role)
     {
@@ -162,7 +166,6 @@ class PageControllerTest extends ApiTestCase
             $response = $client->getResponse();
             $output = $this->assertJsonResponse($response, 200);
             $this->assertEquals('The test Page', $output['title']);
-            $this->assertEquals('the-test-Page', $output['slug']);
             $this->assertEquals('Nami CMS DEMO', $output['header']);
 
         } else {
@@ -176,6 +179,7 @@ class PageControllerTest extends ApiTestCase
      * @param array $user
      *
      * @dataProvider getUsers
+     * @group page
      */
     public function testDeletePage($user, $role)
     {
@@ -184,10 +188,15 @@ class PageControllerTest extends ApiTestCase
         $client->request('GET', $this->getUrl('nami_api_get_pages'));
 
         if ($role === 'ROLE_ADMIN') {
+            // test response & redirection
             $content = json_decode($client->getResponse()->getContent(), true);
             $page = $content['elements'][0];
             $client->request('DELETE', $this->getUrl('nami_api_delete_page', array('id' => $page['id'])));
-            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', array(), true)); // Page delete OK
+            $this->assertJsonResponse($client->getResponse(), 204, false, $this->getUrl('nami_api_get_pages', [], UrlGenerator::ABSOLUTE_URL)); // Page delete OK
+            
+            // test that the page has been deleted
+            $client->request('GET', $this->getUrl('nami_api_get_page', array('id' => $page['id'])));
+            $this->assertJsonResponse($client->getResponse(), 404); // Not found
 
         } else {
             $this->assertJsonResponse($client->getResponse(), 401); // Access denied

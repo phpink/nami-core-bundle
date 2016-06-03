@@ -4,6 +4,7 @@ namespace PhpInk\Nami\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -44,24 +45,13 @@ class UserResetType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->isORM ?
-                    'PhpInk\Nami\CoreBundle\Model\Orm\User' :
-                    'PhpInk\Nami\CoreBundle\Model\Odm\User',
-                'intention' => 'resetting',
-            )
-        );
-    }
-
-    /**
-     * Get the name of the form type.
-     *
-     * @return string The form type name.
-     */
-    public function getName()
-    {
-        // Empty string to map all fields at top level
-        return '';
+        parent::configureOptions($resolver); 
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isORM']) ?
+                'PhpInk\Nami\CoreBundle\Model\Orm\User' :
+                'PhpInk\Nami\CoreBundle\Model\Odm\User';
+       
+         });
+        $resolver->setDefaults('intention', 'resetting');
     }
 }

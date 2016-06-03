@@ -14,8 +14,6 @@ interface MenuLinkInterface
 
     /**
      * Fill null collection properties
-     *
-     * @ODM\PostLoad
      */
     public function initialize();
 

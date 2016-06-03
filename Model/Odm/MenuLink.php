@@ -27,7 +27,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  *     "items", "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  */
-class MenuLink extends Core\Document implements MenuInterface
+class MenuLink extends Core\Document implements MenuLinkInterface
 {
     use Core\SortableItemTrait;
 
@@ -39,14 +39,6 @@ class MenuLink extends Core\Document implements MenuInterface
      * @JMS\Expose
      */
     protected $id;
-
-    /**
-     * @var bool
-     * @ODM\Boolean
-     * @JMS\Expose
-     * @JMS\Groups({"full"})
-     */
-    protected $active;
 
     /**
      * @var int
@@ -75,6 +67,7 @@ class MenuLink extends Core\Document implements MenuInterface
     /**
      * @var string
      * @ODM\String
+     * @JMS\Expose
      */
     private $name;
 
@@ -95,17 +88,25 @@ class MenuLink extends Core\Document implements MenuInterface
     /**
      * @var Collection<MenuLink>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\MenuLinkInterface>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Odm\MenuLink>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;
+
+    /**
+     * @var integer
+     * @Gedmo\Sortable(groups={"parent"})
+     * @ODM\Int
+     * @ODM\Index
+     * @JMS\Expose
+     */
+    private $position = 0;
 
     /**
      * Menu constructor
      */
     public function __construct()
     {
-        $this->active = false;
         $this->items = new ArrayCollection();
     }
 

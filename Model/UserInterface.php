@@ -2,6 +2,7 @@
 
 namespace PhpInk\Nami\CoreBundle\Model;
 
+use PhpInk\Nami\CoreBundle\Model\Image\UserImageInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -414,15 +415,15 @@ interface UserInterface extends AdvancedUserInterface
     /**
      * Set the value of avatar.
      *
-     * @param ImageInterface $avatar
+     * @param UserImageInterface $avatar
      * @return User
      */
-    public function setAvatar(ImageInterface $avatar);
+    public function setAvatar(UserImageInterface $avatar);
 
     /**
      * Get the value of avatar.
      *
-     * @return Image
+     * @return UserImageInterface
      */
     public function getAvatar();
 

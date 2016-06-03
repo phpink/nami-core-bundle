@@ -6,6 +6,8 @@ use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
@@ -18,19 +20,21 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\CategoryRepository"
  * )
  * @ODM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  *
  * @Gedmo\Tree(type="materializedPath")
  *
  * @JMS\ExclusionPolicy("all")
  * @JMS\AccessorOrder("custom", custom = {
- *     "id", "active", "parent", "position",
+ *     "id", "active", "parent",
  *     "locales", "items",
  *     "createdAt", "updatedAt", "createdBy", "updatedBy"
  * })
  */
 class Category extends Core\Document implements CategoryInterface
 {
-    use Core\SortableItemTrait;
+    use Core\CreatedUpdatedAtTrait,
+        Core\CreatedUpdatedByTrait;
 
     /**
      * Primary Key
@@ -76,6 +80,8 @@ class Category extends Core\Document implements CategoryInterface
     /**
      * @var string
      * @ODM\String
+     * @JMS\Expose
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -130,7 +136,7 @@ class Category extends Core\Document implements CategoryInterface
     /**
      * @var Collection<Category>
      * @JMS\Expose
-     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Category>")
+     * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Odm\Category>")
      * @JMS\Groups({"standard", "full"})
      */
     protected $items;
@@ -142,6 +148,7 @@ class Category extends Core\Document implements CategoryInterface
      * cascade={"persist", "remove"})
      */
     protected $pages;
+
 
     /**
      * Category constructor

@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use JMS\Serializer\Annotation as JMS;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use PhpInk\Nami\CoreBundle\Model\ImageInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
-use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Util\Globals;
 use PhpInk\Nami\CoreBundle\Exception\EmptyFileException;
 use PhpInk\Nami\CoreBundle\Exception\UploadDirException;
@@ -17,17 +17,12 @@ use PhpInk\Nami\CoreBundle\Exception\UploadDirException;
 /**
  * Entity\Image
  *
- * @ORM\Entity(repositoryClass="PhpInk\Nami\CoreBundle\Repository\Orm\ImageRepository")
- * @ORM\Table(name="image")
+ * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks()
  * @JMS\ExclusionPolicy("all")
  */
 class Image extends Core\Entity implements ImageInterface
 {
-    use Core\SortableItemTrait,
-        Core\CreatedUpdatedAtTrait,
-        Core\CreatedUpdatedByTrait;
-
     const DEFAULT_SUBFOLDER = 'other';
 
     /**

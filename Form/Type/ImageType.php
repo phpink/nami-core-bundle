@@ -2,7 +2,11 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -22,9 +26,12 @@ class ImageType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'text', array('mapped' => false));
-        $builder->add('name', 'text', array('required' => true));
-        $builder->add('file', 'file', array('required' => true));
+        $builder->add('id', TextType::class, ['mapped' => false]);
+        $builder->add('name', TextType::class, ['required' => true]);
+        $builder->add('file', FileType::class, ['required' => true]);
+        if ($options['imageType'] === 'BlockImage') {
+            $builder->add('position', IntegerType::class, ['required' => true]);
+        }
     }
 
     /**
@@ -36,15 +43,19 @@ class ImageType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->isORM ?
-                    'PhpInk\Nami\CoreBundle\Model\Orm\Image' :
-                    'PhpInk\Nami\CoreBundle\Model\Odm\Image',
-                'csrf_protection' => false,
-                'intention' => 'image',
-                'translation_domain' => 'NamiCoreBundle'
-            )
-        );
+        parent::configureOptions($resolver);
+        $resolver->setRequired(['imageType']);
+        $resolver->addAllowedTypes('imageType', 'string');
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'intention' => 'image',
+            'translation_domain' => 'NamiCoreBundle'
+        ]);
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isORM']) ?
+                'PhpInk\Nami\CoreBundle\Model\Orm\Image\\'. $options['imageType'] :
+                'PhpInk\Nami\CoreBundle\Model\Odm\Image\\'. $options['imageType'];
+
+        });
     }
 }

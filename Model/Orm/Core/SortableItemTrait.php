@@ -3,7 +3,6 @@
 namespace PhpInk\Nami\CoreBundle\Model\Orm\Core;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -12,15 +11,6 @@ use JMS\Serializer\Annotation as JMS;
  */
 trait SortableItemTrait
 {
-
-    /**
-     * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer")
-     * @JMS\Expose
-     */
-    private $position = 0;
-
     /**
      * Get position
      *

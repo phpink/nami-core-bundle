@@ -11,8 +11,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use PhpInk\Nami\CoreBundle\Model\Orm\Core;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
 use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
+use PhpInk\Nami\CoreBundle\Model\Image\BackgroundInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
@@ -126,8 +126,7 @@ class Page extends Core\Entity implements PageInterface
 
     /**
      * @var Image
-     * @ORM\ManyToOne(targetEntity="Image", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="background", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="PhpInk\Nami\CoreBundle\Model\Orm\Image\Background", mappedBy="page")
      * @JMS\Expose
      * @JMS\Type("integer")
      * @JMS\Accessor("getBackgroundId")
@@ -487,11 +486,14 @@ class Page extends Core\Entity implements PageInterface
     /**
      * Set background Page (one to one).
      *
-     * @param ImageInterface $background
+     * @param BackgroundInterface $background
      * @return $this
      */
-    public function setBackground(ImageInterface $background = null)
+    public function setBackground(BackgroundInterface $background = null)
     {
+        if ($background) {
+            $background->setPage($this);
+        }
         $this->background = $background;
 
         return $this;
@@ -500,7 +502,7 @@ class Page extends Core\Entity implements PageInterface
     /**
      * Get background Page (one to one).
      *
-     * @return $this
+     * @return BackgroundInterface
      */
     public function getBackground()
     {

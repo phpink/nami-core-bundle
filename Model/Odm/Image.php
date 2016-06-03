@@ -17,19 +17,12 @@ use PhpInk\Nami\CoreBundle\Model\UserInterface;
 /**
  * Document\Image
  *
- * @ODM\Document(
- *     collection="images",
- *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\ImageRepository"
- * )
+ * @ODM\MappedSuperClass
  * @ODM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  */
 class Image extends Core\Document implements ImageInterface
 {
-    use Core\SortableItemTrait,
-        Core\CreatedUpdatedAtTrait,
-        Core\CreatedUpdatedByTrait;
-
     const DEFAULT_SUBFOLDER = 'other';
 
     /**

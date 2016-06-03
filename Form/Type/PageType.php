@@ -2,7 +2,12 @@
 
 namespace PhpInk\Nami\CoreBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -13,65 +18,53 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PageType extends BaseType
 {
     /**
-     * FormType Constructor
+     * Form type building
      *
-     * @param array $options Form type options.
+     * @param FormBuilderInterface $builder The form builder.
+     * @param array                $options The form options
+     *
+     * @return void
      */
-    public function __construct($options = array())
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::__construct($options);
-        $this->fields = array(
-            'id' => array('type' => 'unmappedText'),
-            'active' => array('type' => 'checkbox'),
-            'title' => array('type' => 'text'),
-            'header' => array('type' => 'text'),
-            'slug' => array('type' => 'text'),
-            'content' => array('type' => 'text'),
-            'metaDescription' => array('type' => 'text'),
-            'metaKeywords' => array('type' => 'text'),
-            'blocks' => array(
-                'type' => 'collection',
-                'options' => array(
-                    'type' => new BlockType($this->getOptions()),
-                    'required' => false,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'cascade_validation' => true,
-                    'mapped' => true
-                )
-            ),
-            'background' => array(
-                'type' => 'model',
-                'options' => array(
-                    'class' => 'NamiCoreBundle:Image',
-                    'choice_label' => 'id',
-                    'required' => false
-                )
-            ),
-            'category' => array(
-                'type' => 'model',
-                'options' => array(
-                    'class' => 'NamiCoreBundle:Category',
-                    'choice_label' => 'id',
-                    'required' => false
-                )
-            ),
-            'template' => array(
-                'type' => 'text',
-                'options' => array(
-                    'empty_data' => 'default'
-                )
-            ),
-            'backgroundColor' => array('type' => 'text'),
-            'footerColor' => array('type' => 'text'),
-            'borderColor' => array('type' => 'text'),
-            'negativeText' => array('type' => 'checkbox'),
-            'createdAt' => array('type' => 'unmappedText'),
-            'updatedAt' => array('type' => 'unmappedText'),
-            'createdBy' => array('type' => 'unmappedText'),
-            'updatedBy' => array('type' => 'unmappedText')
-        );
+        $builder->add('id', TextType::class, ['mapped' => false]);
+        $builder->add('active', CheckboxType::class);
+        $builder->add('title', TextType::class);
+        $builder->add('slug', TextType::class);
+        $builder->add('header', TextType::class);
+        $builder->add('metaDescription', TextType::class);
+        $builder->add('metaKeywords', TextType::class);
+        $builder->add('content', TextType::class);
+        $builder->add('blocks',  CollectionType::class, [
+            'entry_type' => BlockType::class,
+            'entry_options' => $this->getBaseOptions($options),
+            'required' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            //'cascade_validation' => true,
+            'mapped' => true
+        ]);
+        $builder->add('category', EntityType::class, [
+            'class' => 'NamiCoreBundle:Category',
+            'choice_label' => 'id',
+            'required' => false
+        ]);
+        $builder->add('background', EntityType::class, [
+            'class' => 'NamiCoreBundle:Image\Background',
+            'choice_label' => 'id',
+            'required' => false
+        ]);
+        $builder->add('template', TextType::class, [
+            'empty_data' => 'default'
+        ]);
+        $builder->add('backgroundColor', TextType::class);
+        $builder->add('footerColor', TextType::class);
+        $builder->add('borderColor', TextType::class);
+        $builder->add('negativeText', CheckboxType::class);
+        
+        $this->addCreatedUpdatedAt($builder);
+        $this->addCreatedUpdatedBy($builder);
     }
 
     /**
@@ -83,16 +76,20 @@ class PageType extends BaseType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $defaultOptions = array(
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
             'csrf_protection' => false,
             'translation_domain' => 'NamiCoreBundle'
-        );
-        if (!$this->isFilter) {
-            $defaultOptions['data_class'] = $this->isORM ?
-                'PhpInk\Nami\CoreBundle\Model\Orm\Page' :
-                'PhpInk\Nami\CoreBundle\Model\Odm\Page';
-            $defaultOptions['intention'] = 'page';
-        }
-        $resolver->setDefaults($defaultOptions);
+        ]);
+        $resolver->setDefault('data_class', function (Options $options) {
+            return ($options['isFilter']) ?
+                null : ($options['isORM']) ?
+                    'PhpInk\Nami\CoreBundle\Model\Orm\Page' :
+                    'PhpInk\Nami\CoreBundle\Model\Odm\Page';
+
+        });
+        $resolver->setDefault('intention', function (Options $options, $previousValue) {
+            return ($options['isFilter']) ? $previousValue : 'page';
+        });
     }
 }

@@ -11,7 +11,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Page;
  * Model\Odm\Analytics\PageAnalytics
  *
  * @ODM\Document(
- *     collection="countries",
+ *     collection="analytics_page",
  *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\AnalyticsRepository"
  * )
  * @JMS\ExclusionPolicy("all")

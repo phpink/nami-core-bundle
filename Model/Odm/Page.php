@@ -12,7 +12,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
-use PhpInk\Nami\CoreBundle\Model\ImageInterface;
+use PhpInk\Nami\CoreBundle\Model\Image\BackgroundInterface;
 use PhpInk\Nami\CoreBundle\Model\UserInterface;
 
 /**
@@ -111,13 +111,14 @@ class Page extends Core\Document implements PageInterface
     /**
      * @var ArrayCollection<Block>
      * @ODM\ReferenceMany(targetDocument="Block", mappedBy="page", cascade={"persist", "remove"}, sort={"position": "asc"})
+     * ODM\EmbedMany(targetDocument="Block")
      * @JMS\Expose
      */
     protected $blocks;
 
     /**
      * @var Image
-     * @ODM\ReferenceOne(targetDocument="Image", cascade={"persist", "remove"})
+     * @ODM\ReferenceOne(targetDocument="PhpInk\Nami\CoreBundle\Model\Odm\Image\Background", cascade={"persist", "remove"})
      * @JMS\Expose
      * @JMS\Type("string")
      * @JMS\Accessor("getBackgroundId")
@@ -465,20 +466,23 @@ class Page extends Core\Document implements PageInterface
     /**
      * Set background Page (one to one).
      *
-     * @param ImageInterface $background
+     * @param BackgroundInterface $background
      * @return $this
      */
-    public function setBackground(ImageInterface $background = null)
+    public function setBackground(BackgroundInterface $background = null)
     {
+        if ($background) {
+            $background->setPage($this);
+        }
         $this->background = $background;
 
         return $this;
     }
 
     /**
-     * Get background Page (one to one).
+     * Get background (one to one).
      *
-     * @return string
+     * @return BackgroundInterface
      */
     public function getBackground()
     {
