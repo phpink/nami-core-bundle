@@ -63,15 +63,13 @@ class MenuRepository extends OrmRepository implements MenuRepositoryInterface
         // ie: WHERE id = 4 OR path LIKE 4,% OR path LIKE %,4,%
         $query
             ->where('this.id = :id')->setParameter('id', intval($id))
-            ->addOr($query->expr()->field('id')->equals('/'. intval($id). ',/'))
-            ->addOr($query->expr()->field('id')->equals('/,'. intval($id). ',/'))
-            ->sort('this.position')
-            ->sort('this.path');
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%'. intval($id). ',%')))
+            ->orWhere($query->expr()->like('this.path', $query->expr()->literal('%,'. intval($id). ',%')))
+            ->orderBy('this.position')
+            ->orderBy('this.path');
 
-        $menuLink = $this->buildMenuLinkTree(
-            $query->getQuery()->getResult()->getResult(
-                AbstractQuery::HYDRATE_ARRAY
-            ), $id
+        $menuLink = $this->buildMenuTree(
+            $query->getQuery()->getResult(), $id
         );
         return $menuLink;
     }
@@ -88,7 +86,6 @@ class MenuRepository extends OrmRepository implements MenuRepositoryInterface
     public function getMenu()
     {
         $query = $this->getItemsQuery();
-        $this->addWhereClause($query, 'this.active', true);
         $menu = $query->getQuery()->getResult();
         return $menu;
     }
@@ -101,7 +98,7 @@ class MenuRepository extends OrmRepository implements MenuRepositoryInterface
                     $user, $orderBy, $filterBy
                 )
             ),
-            'nami_api_get_menuLinks'
+            'nami_api_get_menu'
         );
     }
 
@@ -155,11 +152,11 @@ class MenuRepository extends OrmRepository implements MenuRepositoryInterface
      */
     public function applyRoleFiltering($query, UserInterface $user = NULL)
     {
-        if (!$user || !$user->isAdmin()) {
-            $query = $this->addWhereClause(
-                $query, 'this.active', true
-            );
-        }
+//        if (!$user || !$user->isAdmin()) {
+//            $query = $this->addWhereClause(
+//                $query, 'this.active', true
+//            );
+//        }
         return $query;
     }
 

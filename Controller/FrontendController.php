@@ -2,6 +2,10 @@
 
 namespace PhpInk\Nami\CoreBundle\Controller;
 
+use Knp\Menu\MenuFactory;
+use Knp\Menu\Renderer\ListRenderer;
+use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
+use PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use PhpInk\Nami\CoreBundle\Util\Analytics;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
 use PhpInk\Nami\CoreBundle\Model\PageInterface;
-use PhpInk\Nami\CoreBundle\Repository\Core\CategoryRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Repository\Core\PageRepositoryInterface;
 use PhpInk\Nami\CoreBundle\Event\BlockRenderEvent;
 use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
@@ -20,6 +23,11 @@ class FrontendController extends Controller
      * @var PageRepositoryInterface
      */
     protected $pageRepo;
+
+    /**
+     * @var MenuRepositoryInterface
+     */
+    protected $menuRepo;
 
     /**
      * @var CategoryRepositoryInterface
@@ -33,6 +41,7 @@ class FrontendController extends Controller
     {
         $em = $this->getManager();
         $this->pageRepo = $em->getRepository('NamiCoreBundle:Page');
+        $this->menuRepo = $em->getRepository('NamiCoreBundle:MenuLink');
         $this->categoryRepo = $em->getRepository('NamiCoreBundle:Category');
     }
 
@@ -56,73 +65,9 @@ class FrontendController extends Controller
     {
         $this->initRepositories();
         $slug = str_replace('.html', '', $slug);
-        // Retrieve page or category from slug
-        $page = $this->searchPage($request, $slug);
-        $response = null;
-        if (!$page) {
-            $response = new Response();
-            $response->setStatusCode(404);
-            $page = $this->get404Page();
-        }
-        // Plugins processing
-        if ($page) {
-            foreach ($page->getBlocks() as $block) {
-                $event = new BlockRenderEvent($block, $request);
-                /** @var EventDispatcher $dispatcher */
-                $dispatcher = $this->get('event_dispatcher');
-                $dispatcher->dispatch(BlockRenderEvent::NAME, $event);
-            }
-        }
-        return $this->render(
-            'NamiCoreBundle:default:layout.html.twig',
-            array(
-                'menu' => $this->categoryRepo->getMenu(),
-                'page' => $page
-            ),
-            $response
-        );
-    }
-
-    /**
-     * @param Request        $request
-     * @param BlockInterface $block
-     */
-    protected function processPlugin(Request $request, $block)
-    {
-        $pluginRegistry = PluginRegistry::getInstance(
-            $this->getParameter('nami_core.plugin_path')
-        );
-        if (!$pluginRegistry->getPlugins()) {
-            $pluginRegistry->scanPlugins();
-        }
-        $pluginDetails = $pluginRegistry->getPlugin(
-            $block->getType()
-        );
-        if (is_array($pluginDetails)
-            &&  array_key_exists('block', $pluginDetails)
-            &&  class_exists($pluginDetails['block'])) {
-            $plugin = new $pluginDetails['block'](
-                $this, $request, $block
-            );
-            $plugin->process(
-                $this->container
-            );
-        }
-    }
-
-    /**
-     * @param $slug string Page slug
-     * @return PageInterface
-     */
-    protected function searchPage(Request $request, $slug)
-    {
-        $page = $this->pageRepo->getPageFromSlug($slug);
-        if (!$page) {
-            $category = $this->categoryRepo->getCategoryFromSlug($slug);
-            if ($category) {
-                $page = $category->generatePage();
-            }
-        } else {
+        // Retrieve page and process it
+        if ($page = $this->pageRepo->getPageFromSlug($slug)) {
+            $this->processPageBlocks($request, $page);
             // Register analytics
             Analytics::registerPageHit(
                 $this->getManager(),
@@ -131,7 +76,18 @@ class FrontendController extends Controller
                 $page
             );
         }
-        return $page;
+        list($response, $page) = $this->processPageResponse($request, $page);
+        return $this->renderPage($page, $response);
+    }
+
+    public function categoryAction(Request $request, $slug)
+    {
+        $this->initRepositories();
+        $slug = str_replace('.html', '', $slug);
+        $category = $this->categoryRepo->getCategoryFromSlug($slug);
+        $page = $category ? $category->generatePage() : null;
+        list($response, $page) = $this->processPageResponse($request, $page);
+        return $this->renderPage($page, $response);
     }
 
 
@@ -152,5 +108,83 @@ class FrontendController extends Controller
         );
         $page->addBlock($block);
         return $page;
+    }
+
+    /**
+     * @param Request $request
+     * @param $page
+     */
+    protected function processPageBlocks(Request $request, $page)
+    {
+        foreach ($page->getBlocks() as $block) {
+            $event = new BlockRenderEvent($block, $request);
+            /** @var EventDispatcher $dispatcher */
+            $dispatcher = $this->get('event_dispatcher');
+            $dispatcher->dispatch(BlockRenderEvent::NAME, $event);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param $page
+     * @return array
+     */
+    protected function processPageResponse(Request $request, $page)
+    {
+        $response = null;
+        if (!$page) {
+            $response = new Response();
+            $response->setStatusCode(404);
+            $page = $this->get404Page();
+            return array($response, $page);
+
+        }
+        return array($response, $page);
+    }
+
+    /**
+     * @param $page
+     * @param $response
+     * @return Response
+     */
+    protected function renderPage($page, $response)
+    {
+        return $this->render(
+            'NamiCoreBundle:default:layout.html.twig',
+            array(
+                'menu' => $this->processMenu(),
+                'page' => $page
+            ),
+            $response
+        );
+    }
+
+    protected function processMenu()
+    {
+        $links = $this->menuRepo->getMenuTree();
+
+        $factory = new MenuFactory();
+        $menu = $factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'nav navbar-nav');
+        foreach ($links as $link) {
+            $this->processMenuLink($menu, $link);
+        }
+        return $menu;
+    }
+
+    protected function processMenuLink($menuRoot, $link)
+    {
+        $menuItem = $menuRoot->addChild(
+            $link->getName(), [
+                'uri' => $link->getLink(),
+                'label' => $link->getTitle()
+            ]
+        );
+        if (count($link->getItems())) {
+            $menuItem->setAttribute('dropdown', true);
+            foreach ($link->getItems() as $subLink) {
+                $this->processMenuLink($menuItem, $subLink);
+            }
+        }
     }
 }

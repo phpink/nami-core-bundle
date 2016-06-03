@@ -5,6 +5,8 @@ namespace PhpInk\Nami\CoreBundle\Model\Orm;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
@@ -20,6 +22,7 @@ use PhpInk\Nami\CoreBundle\Model\Orm\Page;
  *     name="category"
  * )
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  *
  * @Gedmo\Tree(type="materializedPath")
  *
@@ -91,6 +94,7 @@ class Category extends Core\Entity implements CategoryInterface
      * @Gedmo\TreePathSource
      * @ORM\Column(name="name", type="string", length=255)
      * @JMS\Expose
+     * @Assert\NotBlank()
      */
     private $name;
 

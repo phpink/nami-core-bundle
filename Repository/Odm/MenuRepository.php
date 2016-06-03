@@ -84,7 +84,7 @@ class MenuRepository extends OdmRepository implements MenuRepositoryInterface
     {
         /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
         $query = $this->getItemsQuery();
-        $query->field('active')->equals(true);
+        //$query->field('active')->equals(true);
         $menu = $query->getQuery()->toArray();
         return $menu;
     }
@@ -151,12 +151,12 @@ class MenuRepository extends OdmRepository implements MenuRepositoryInterface
      */
     public function applyRoleFiltering($query, UserInterface $user = null)
     {
-        if (!$user || !$user->isAdmin()) {
-            /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
-            $query = $this->addWhereClause(
-                $query, 'active', 'true'
-            );
-        }
+//        if (!$user || !$user->isAdmin()) {
+//            /** @var \Doctrine\ODM\MongoDB\Query\Builder $query */
+//            $query = $this->addWhereClause(
+//                $query, 'active', 'true'
+//            );
+//        }
         return $query;
     }
 

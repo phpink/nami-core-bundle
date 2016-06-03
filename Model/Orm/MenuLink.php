@@ -51,14 +51,6 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
     protected $id;
 
     /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     * @JMS\Expose
-     * @JMS\Groups({"full"})
-     */
-    protected $active;
-
-    /**
      * @var int
      * @Gedmo\TreeLevel
      * @ORM\Column(type="integer")
@@ -87,6 +79,7 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
      * @var string
      * @Gedmo\TreePathSource
      * @ORM\Column(name="name", type="string", length=255)
+     * @JMS\Expose
      */
     private $name;
 
@@ -108,7 +101,7 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
      * @var Collection<Menu>
      * @JMS\Expose
      * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Orm\MenuLink>")
-     * @JMS\Groups({"standard", "full"})
+     * @JMS\Groups({"menu"})
      */
     protected $items;
 
@@ -125,7 +118,6 @@ class MenuLink extends Core\Entity implements MenuLinkInterface
      */
     public function __construct()
     {
-        $this->active = false;
         $this->items = new ArrayCollection();
     }
 

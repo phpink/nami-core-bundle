@@ -2,16 +2,16 @@ _ping:
     resource: "@NamiCoreBundle/Controller/IndexController.php"
     type:     rest
 
-_user:
-    resource: "@NamiCoreBundle/Controller/UserController.php"
-    type:     rest
-
 _login:
     resource: "@NamiCoreBundle/Controller/LoginController.php"
     type:     rest
 
 _reset:
     resource: "@NamiCoreBundle/Controller/ResetController.php"
+    type:     rest
+
+_user:
+    resource: "@NamiCoreBundle/Controller/UserController.php"
     type:     rest
 
 _category:

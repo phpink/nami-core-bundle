@@ -1,4 +1,7 @@
 # Registration
+validation:
+    user:
+        username_regex: The username can only contain letters, and '-', '_', '.'
 emails:
     registration:
         subject: Welcome %username%!

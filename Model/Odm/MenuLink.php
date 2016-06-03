@@ -41,14 +41,6 @@ class MenuLink extends Core\Document implements MenuLinkInterface
     protected $id;
 
     /**
-     * @var bool
-     * @ODM\Boolean
-     * @JMS\Expose
-     * @JMS\Groups({"full"})
-     */
-    protected $active;
-
-    /**
      * @var int
      * @Gedmo\TreeLevel
      * @ODM\Int
@@ -75,6 +67,7 @@ class MenuLink extends Core\Document implements MenuLinkInterface
     /**
      * @var string
      * @ODM\String
+     * @JMS\Expose
      */
     private $name;
 
@@ -114,7 +107,6 @@ class MenuLink extends Core\Document implements MenuLinkInterface
      */
     public function __construct()
     {
-        $this->active = false;
         $this->items = new ArrayCollection();
     }
 

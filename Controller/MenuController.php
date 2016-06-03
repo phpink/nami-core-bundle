@@ -30,7 +30,39 @@ class MenuController extends AbstractController
      * mapped by this controller
      * @var string
      */
-    protected $modelName = 'Menu';
+    protected $modelName = 'MenuLink';
+
+    /**
+     * List all users.
+     *
+     * @ApiDoc(
+     *   description = "Get the collection of users.",
+     *   output = "PhpInk\Nami\CoreBundle\Util\PaginatedCollection<PhpInk\Nami\CoreBundle\Model\User>",
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @Annotations\QueryParam(name="offset", requirements="\d+", default="0", description="Offset from which to start listing items.")
+     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many items to return.")
+     * @Annotations\QueryParam(name="orderBy", map=true, requirements="[a-zA-Z0-9-\.]+", description="Sort by fields")
+     * @Annotations\QueryParam(name="filterBy", map=true, requirements="[a-zA-Z0-9-:\.\<\>\!\%+]+", description="Filters")
+     *
+     * ie: ?offset=2&limit=10&orderBy[createdAt]=0&filterBy[active]=true
+     *
+     *
+     * @param Request               $request      the request object
+     * @param ParamFetcherInterface $paramFetcher param fetcher service
+     *
+     * @return array
+     *
+     * @throws AccessDeniedException
+     */
+    public function getMenusAction(Request $request, ParamFetcherInterface $paramFetcher)
+    {
+        return $this->getAllItems($request, $paramFetcher);
+    }
 
     /**
      * List all menus.
@@ -53,12 +85,37 @@ class MenuController extends AbstractController
      *
      * @return array
      */
-    public function getMenuAction(Request $request, ParamFetcherInterface $paramFetcher)
+    public function getMenusTreeAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
         /** @var \PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface $menuRepo */
         $menuRepo = $this->getRepository('MenuLink');
         $menus = $menuRepo->getMenuTree();
-        return $this->restView($menus);
+        return $this->restView($menus, null, 'menu', 'menu');
+    }
+
+    /**
+     * Get a single category.
+     *
+     * @ApiDoc(
+     *   description = "Get a single menu link.",
+     *   output = "PhpInk\Nami\CoreBundle\Model\MenuInterface",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the menu link is not found"
+     *   }
+     * )
+     *
+     *
+     * @param Request $request The request object
+     * @param int     $id      The menu link id
+     *
+     * @return array
+     *
+     * @throws NotFoundHttpException when menu link not exist
+     */
+    public function getMenuAction(Request $request, $id)
+    {
+        return $this->getOneItem($request, $id);
     }
 
     /**

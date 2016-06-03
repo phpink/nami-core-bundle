@@ -6,6 +6,8 @@ use PhpInk\Nami\CoreBundle\Model\CategoryInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use PhpInk\Nami\CoreBundle\Model\Odm\Core;
@@ -18,6 +20,7 @@ use PhpInk\Nami\CoreBundle\Model\Odm\Core;
  *     repositoryClass="PhpInk\Nami\CoreBundle\Repository\Odm\CategoryRepository"
  * )
  * @ODM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  *
  * @Gedmo\Tree(type="materializedPath")
  *
@@ -78,6 +81,7 @@ class Category extends Core\Document implements CategoryInterface
      * @var string
      * @ODM\String
      * @JMS\Expose
+     * @Assert\NotBlank()
      */
     private $name;
 

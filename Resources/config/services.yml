@@ -54,6 +54,12 @@ services:
       tags:
         - { name: twig.extension  }
 
+    nami_core.menu_voter_request:
+        class: PhpInk\Nami\CoreBundle\Menu\RequestVoter
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.voter }
+
     # Gedmo doctrine extensions listeners
     nami_core.listener.tree:
       class: Gedmo\Tree\TreeListener

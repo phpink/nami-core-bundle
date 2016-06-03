@@ -240,12 +240,12 @@ class CategoryRepository extends OrmRepository implements CategoryRepositoryInte
     public function getCategoryFromSlug($slug)
     {
         $query = $this->createQueryBuilder('this')
-            ->where('this.level = :level')
+            //->where('this.level = :level')
             ->andWhere('this.slug = :slug')
             ->setParameters(
                 array(
                     'slug' => $slug,
-                    'level' => 0
+                    //'level' => 0
                 )
             );
 

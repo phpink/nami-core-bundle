@@ -6,6 +6,8 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
@@ -17,8 +19,14 @@ use PhpInk\Nami\CoreBundle\Model\UserInterface;
 /**
  * User
  *
- * @ORM\Table(name="users")
+ * @ORM\Table(
+ *     name="users",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="username_unique",columns={"username"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="email_unique",columns={"email"})},
+ * )
  * @ORM\Entity(repositoryClass="PhpInk\Nami\CoreBundle\Repository\Orm\UserRepository")
+ * @UniqueEntity("email")
+ * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks()
  *
  * @JMS\ExclusionPolicy("all")
@@ -63,6 +71,14 @@ class User extends Core\Entity implements AdvancedUserInterface,UserInterface
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     *     pattern = "/^[a-zA-Z0-9-_\\.]+/",
+     *     message = "The username can only contain letters, and '-', '_', '.'"
+     * )
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 255
+     * )
      * @JMS\Expose
      */
     protected $username;
@@ -88,6 +104,11 @@ class User extends Core\Entity implements AdvancedUserInterface,UserInterface
      * Used for validation. Must not be persisted.
      *
      * @var string
+     * @Assert\NotBlank(groups={"registration"})
+     * @Assert\Length(
+     *     min = 6,
+     *     groups={"registration"}
+     * )
      */
     protected $plainPassword;
 
@@ -103,6 +124,11 @@ class User extends Core\Entity implements AdvancedUserInterface,UserInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255
+     * )
      * @JMS\Expose
      */
     protected $firstName;
@@ -110,6 +136,11 @@ class User extends Core\Entity implements AdvancedUserInterface,UserInterface
     /**
      * @var string
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255
+     * )
      * @JMS\Expose
      */
     protected $lastName;
@@ -170,6 +201,7 @@ class User extends Core\Entity implements AdvancedUserInterface,UserInterface
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\Email()
      * @JMS\Expose
      */
     protected $email;
