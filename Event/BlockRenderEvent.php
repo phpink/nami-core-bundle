@@ -3,7 +3,6 @@
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use PhpInk\Nami\CoreBundle\Model\BlockInterface;
-use PhpInk\Nami\CoreBundle\Controller\FrontendController;
 
 /**
  * The block.render event is dispatched each time a block is rendered

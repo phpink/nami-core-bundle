@@ -90,7 +90,7 @@ class MenuController extends AbstractController
         /** @var \PhpInk\Nami\CoreBundle\Repository\Core\MenuRepositoryInterface $menuRepo */
         $menuRepo = $this->getRepository('MenuLink');
         $menus = $menuRepo->getMenuTree();
-        return $this->restView($menus, null, 'menu', 'menu');
+        return $this->restView($menus, null, 'tree', 'tree');
     }
 
     /**

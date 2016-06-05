@@ -177,7 +177,9 @@ class FrontendController extends Controller
         $menuItem = $menuRoot->addChild(
             $link->getName(), [
                 'uri' => $link->getLink(),
-                'label' => $link->getTitle()
+                'attributes' => [
+                    'title' => $link->getTitle()
+                ]
             ]
         );
         if (count($link->getItems())) {

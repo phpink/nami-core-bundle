@@ -89,7 +89,7 @@ class MenuLink extends Core\Document implements MenuLinkInterface
      * @var Collection<MenuLink>
      * @JMS\Expose
      * @JMS\Type("array<PhpInk\Nami\CoreBundle\Model\Odm\MenuLink>")
-     * @JMS\Groups({"standard", "full"})
+     * @JMS\Groups({"tree"})
      */
     protected $items;
 

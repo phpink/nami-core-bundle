@@ -7,8 +7,10 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use PhpInk\Nami\CoreBundle\Event\PluginRegisterEvent;
 use PhpInk\Nami\CoreBundle\Plugin\Registry as PluginRegistry;
 use PhpInk\Nami\CoreBundle\Util\Globals;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -151,11 +153,13 @@ class IndexController extends AbstractController
     public function getPluginsAction()
     {
         $this->checkIsAdmin();
-        return View::create(
-            PluginRegistry::getInstance(
-                $this->getParameter('nami_core.plugin_path')
-            )->scanPlugins()
-        );
+        $registeredPlugins = [];
+        $event = new PluginRegisterEvent($registeredPlugins);
+        /** @var EventDispatcher $dispatcher */
+        $dispatcher = $this->get('event_dispatcher');
+        $dispatcher->dispatch(PluginRegisterEvent::NAME, $event);
+        
+        return View::create($registeredPlugins);
     }
 
     /**

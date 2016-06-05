@@ -85,7 +85,7 @@ class CategoryController extends AbstractController
             $paramFetcher->get('orderBy'),
             $paramFetcher->get('filterBy')
         );
-        return $this->restView($categories);
+        return $this->restView($categories, null, 'tree', 'tree');
     }
 
     /**
